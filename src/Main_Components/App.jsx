@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+
 import SignUp from "../Auth/SignUp";
 import { ToastContainer } from "react-toastify";
 
@@ -6,10 +6,10 @@ import "../Auth/Cloudinary_Confic"
 
 const App = () => {
   return (
-    <Fragment>
+    <div className="App bg-white dark:bg-black">
       <SignUp />
       <ToastContainer />
-    </Fragment>
+    </div>
   );
 };
 

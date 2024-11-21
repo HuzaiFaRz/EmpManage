@@ -9,5 +9,4 @@ const cloudinaryConfig = {
   apiKey: VITE_EMPMANAGE_CLOUDINARY_API_KEY,
   apiSecret: VITE_EMPMANAGE_CLOUDINARY_API_SECRET,
 };
-
-console.log(cloudinaryConfig);
+export { cloudinaryConfig };
