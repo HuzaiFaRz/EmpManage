@@ -1,7 +1,7 @@
 import { ToastContainer } from "react-toastify";
-import SignUp from "../Auth/SignUp";
+import EmployeeForm from "../Auth/EmployeeForm";
 import Navbar from "../Navbar/Navbar";
-
+import DefaultProfilePic from "../assets/Images/Default_Profile_Pic.jpg";
 const ThemeLightToDark =
   "bg-lightBg dark:bg-darkBg text-lightText dark:text-darkText";
 const ThemeDarkToLight =
@@ -10,11 +10,11 @@ const App = () => {
   return (
     <div className={`App transition-all`}>
       <Navbar />
-      <SignUp />
+      <EmployeeForm />
       <ToastContainer />
     </div>
   );
 };
 
-export { ThemeLightToDark, ThemeDarkToLight };
+export { ThemeLightToDark, ThemeDarkToLight, DefaultProfilePic };
 export default App;

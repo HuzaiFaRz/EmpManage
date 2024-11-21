@@ -18,3 +18,19 @@ body {
   overflow-x: hidden;
   font-family: "Lato", sans-serif !important;
 }
+
+#Employee_Profile_Pic::-webkit-file-upload-button {
+  background-color: #101820;
+  color: #fee715;
+  border: none;
+  padding: 8px 15px;
+  box-sizing: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dark #Employee_Profile_Pic::-webkit-file-upload-button {
+  background-color: #fee715; /* Style for dark theme */
+  color: #101820;
+}
