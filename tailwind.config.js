@@ -17,8 +17,3 @@ export default {
   },
   plugins: [],
 };
-const ThemeLightDark =
-  "bg-lightBg dark:bg-darkBg text-lightText dark:text-darkText";
-const ThemeDarkLight =
-  "bg-darkBg text-darkText dark:bg-lightBg  dark:text-lightText";
-export { ThemeLightDark, ThemeDarkLight };

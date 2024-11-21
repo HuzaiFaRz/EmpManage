@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IoSunny } from "react-icons/io5";
 
 import { IoMoon } from "react-icons/io5";
-import { ThemeLightDark } from "../../tailwind.config";
+import { ThemeLightToDark } from "../Main_Components/App";
 
 const ThemeChangerButton = () => {
   const [dark, setDark] = useState(false);
@@ -13,7 +13,7 @@ const ThemeChangerButton = () => {
   return (
     <button
       onClick={themeChangerHandler}
-      className={`w-[40px] h-[40px] flex justify-center items-center rounded-full ${ThemeLightDark}`}
+      className={`w-[40px] h-[40px] flex justify-center items-center rounded-full ${ThemeLightToDark}`}
     >
       {dark ? (
         <IoSunny className="text-2xl" />

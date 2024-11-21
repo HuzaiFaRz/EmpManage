@@ -1,11 +1,14 @@
 import { ToastContainer } from "react-toastify";
 import SignUp from "../Auth/SignUp";
 import Navbar from "../Navbar/Navbar";
-import {  ThemeLightDark } from "../../tailwind.config";
 
+const ThemeLightToDark =
+  "bg-lightBg dark:bg-darkBg text-lightText dark:text-darkText";
+const ThemeDarkToLight =
+  "bg-darkBg text-darkText dark:bg-lightBg dark:text-lightText";
 const App = () => {
   return (
-    <div className={`App ${ThemeLightDark} transition-all`}>
+    <div className={`App transition-all`}>
       <Navbar />
       <SignUp />
       <ToastContainer />
@@ -13,4 +16,5 @@ const App = () => {
   );
 };
 
+export { ThemeLightToDark, ThemeDarkToLight };
 export default App;
