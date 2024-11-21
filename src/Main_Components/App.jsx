@@ -1,12 +1,12 @@
-
-import SignUp from "../Auth/SignUp";
 import { ToastContainer } from "react-toastify";
-
-import "../Auth/Cloudinary_Confic"
+import SignUp from "../Auth/SignUp";
+import Navbar from "../Navbar/Navbar";
+import {  ThemeLightDark } from "../../tailwind.config";
 
 const App = () => {
   return (
-    <div className="App bg-white dark:bg-black">
+    <div className={`App ${ThemeLightDark} transition-all`}>
+      <Navbar />
       <SignUp />
       <ToastContainer />
     </div>
