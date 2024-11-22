@@ -3,12 +3,12 @@ import EmployeeForm from "../Auth/EmployeeForm";
 import Navbar from "../Navbar/Navbar";
 import DefaultProfilePic from "../assets/Images/Default_Profile_Pic.jpg";
 const ThemeLightToDark =
-  "bg-lightBg dark:bg-darkBg text-lightText dark:text-darkText";
+  "bg-colorOne dark:bg-colorTwo text-colorTwo dark:text-colorOne";
 const ThemeDarkToLight =
-  "bg-darkBg text-darkText dark:bg-lightBg dark:text-lightText";
+  "bg-colorTwo text-colorOne dark:bg-colorOne dark:text-colorTwo";
 const App = () => {
   return (
-    <div className={`App transition-all`}>
+    <div className={`App transition-all flex items-center justify-center`}>
       <Navbar />
       <EmployeeForm />
       <ToastContainer />
@@ -18,3 +18,4 @@ const App = () => {
 
 export { ThemeLightToDark, ThemeDarkToLight, DefaultProfilePic };
 export default App;
+

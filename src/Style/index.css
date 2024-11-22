@@ -10,28 +10,18 @@
 }
 
 body {
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden;
   font-family: "Lato", sans-serif !important;
 }
 
-/ :root {
-  --bg-color: #fee715;
-  --text-color: #101820;
+:root {
+  --colorOne: "#E4EA8C";
+  --colorTwo: "#D09683";
 }
 
-:root.dark {
-  --bg-color: #101820;
-  --text-color: #fee715;
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  display: none;
 }
-
-#Employee_Profile_Pic::-webkit-file-upload-button {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  border: none;
-  padding: 8px 15px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 14px;
+#Employee_Form_Submit_Button:disabled {
+  cursor: default;
 }

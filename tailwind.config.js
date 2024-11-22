@@ -8,10 +8,13 @@ export default {
         sans: ["Lato", "sans-serif"],
       },
       colors: {
-        lightBg: "#FEE715",
-        darkBg: "#101820",
-        lightText: "#101820",
-        darkText: "#FEE715",
+        colorOne: "#D09683",
+        colorTwo: "#330000",
+      },
+      screens: {
+        sm: "600px",
+        md: "1000px",
+        lg: "1500px",
       },
     },
   },

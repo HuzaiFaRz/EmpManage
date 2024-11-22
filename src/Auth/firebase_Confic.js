@@ -50,7 +50,8 @@ const db = getFirestore(app);
 const MessageStyle = {
   style: { width: "100%", lineHeight: "20px" },
   autoClose: 2000,
-  theme: "light",
+  theme: "dark",
+  
   position: "top-center",
   draggablePercent: 100,
 };
