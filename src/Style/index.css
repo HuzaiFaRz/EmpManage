@@ -1,17 +1,14 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: Lato;
-  src: url(../../src/assets/Fonts/Lato/Lato-Black.ttf);
+/* Global font styles */
+* {
+  font-family: "Lato", sans-serif;
 }
 
-* {
-  font-family: Lato;
-}
 body {
   width: 100%;
   height: 100%;
@@ -19,18 +16,22 @@ body {
   font-family: "Lato", sans-serif !important;
 }
 
+/ :root {
+  --bg-color: #fee715;
+  --text-color: #101820;
+}
+
+:root.dark {
+  --bg-color: #101820;
+  --text-color: #fee715;
+}
+
 #Employee_Profile_Pic::-webkit-file-upload-button {
-  background-color: #101820;
-  color: #fee715;
+  background-color: var(--bg-color);
+  color: var(--text-color);
   border: none;
   padding: 8px 15px;
-  box-sizing: none;
   border-radius: 20px;
   cursor: pointer;
   font-size: 14px;
-}
-
-.dark #Employee_Profile_Pic::-webkit-file-upload-button {
-  background-color: #fee715; /* Style for dark theme */
-  color: #101820;
 }
