@@ -8,7 +8,9 @@ const ThemeDarkToLight =
   "bg-colorTwo text-colorOne dark:bg-colorOne dark:text-colorTwo";
 const App = () => {
   return (
-    <div className={`App transition-all flex items-center justify-center`}>
+    <div
+      className={`App transition-all flex flex-col justify-between items-center`}
+    >
       <Navbar />
       <EmployeeForm />
       <ToastContainer />
@@ -18,4 +20,3 @@ const App = () => {
 
 export { ThemeLightToDark, ThemeDarkToLight, DefaultProfilePic };
 export default App;
-

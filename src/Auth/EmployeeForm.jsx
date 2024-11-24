@@ -23,6 +23,7 @@ const EmployeeForm = () => {
     { ID: "Employee_First_Name", Placeholder: "First Name", Type: "text" },
     { ID: "Employee_Last_Name", Placeholder: "Last Name", Type: "text" },
     { ID: "Employee_Email", Placeholder: "Email", Type: "email" },
+    { ID: "Employee_Password", Placeholder: "Password", Type: "password" },
     {
       ID: "Employee_Phone_Number",
       Placeholder: "Phone Number",
@@ -38,6 +39,11 @@ const EmployeeForm = () => {
       Placeholder: "Experience Year",
       Type: "number",
     },
+    {
+      ID: "Empolyee_Profile",
+      Placeholder: "Profile Pic",
+      Type: "file",
+    },
   ];
   const {
     register,
@@ -47,12 +53,16 @@ const EmployeeForm = () => {
     formState: { errors },
   } = useForm();
 
-  console.log(errors);
-
   const Employee_Form_Handler = async (employee_Data) => {
     try {
       event.preventDefault();
+      if (employee_Data?.Empolyee_Profile[0]?.type !== "image/jpeg") {
+        RejectMessage("File Extension Not Supported");
+        return;
+      }
+      employee_Data.Empolyee_Profile = employee_Data.Empolyee_Profile[0].name;
       console.log(employee_Data);
+      setError("test", { type: "focus" }, { shouldFocus: true });
       setEmployeeSubmitLoading(true);
       const employeDataAdding = await addDoc(
         collection(db, "Employees"),
@@ -72,9 +82,9 @@ const EmployeeForm = () => {
   return (
     <Fragment>
       <ToastContainer />
-      <div className="Employee_Page w-full h-full min-h-screen flex flex-col justify-evenly items-center p-1">
+      <div className="Employee_Page w-full h-full flex flex-col justify-center items-center p-2">
         <form
-          className={`Employee_Form flex flex-wrap items-center justify-evenly gap-4 w-[1000px] max-w-full min-h-max p-8  ${ThemeDarkToLight}`}
+          className={`Employee_Form flex flex-wrap items-center justify-evenly gap-4 w-[1000px] max-w-full p-8 ${ThemeDarkToLight}`}
           onSubmit={handleSubmit(Employee_Form_Handler)}
         >
           <AuthHeading HeadingText={"Employee"} />
@@ -84,21 +94,34 @@ const EmployeeForm = () => {
             return (
               <React.Fragment key={index}>
                 <label htmlFor={ID} className={EmployeeLabel}>
-                  Enter {Placeholder}
+                  {Type === "file"
+                    ? "Select"
+                    : Type === "password"
+                    ? "Create"
+                    : "Enter"}{" "}
+                  {Placeholder}
                   <input
                     type={Type}
                     placeholder={Placeholder}
-                    id={Placeholder}
-                    className={EmployeeInput}
+                    id={Type === "file" ? ID : Placeholder}
+                    className={`${EmployeeInput} ${
+                      Type === "file" && "hidden"
+                    }`}
                     {...register(ID, {
                       required: `${Placeholder} is required.`,
                     })}
                   />
-                  {errors[ID] && (
-                    <p className="text-[red] font-normal text-[13px] tracking-wider">
-                      {errors?.[ID]?.message}
-                    </p>
+                  {Type === "file" && (
+                    <div className="cursor-pointer bg-colorOne dark:bg-colorTwo text-colorTwo dark:text-colorOne  border-0 px-[15px] py-[8px] text-1xl">
+                      Profile Photo
+                    </div>
                   )}
+                  <p
+                    className="text-[red] dark:text-white text-[13px] tracking-wider py-2 w-full h-[20px] flex items-center"
+                    id="Error_Para"
+                  >
+                    {errors[ID] && errors?.[ID]?.message}
+                  </p>
                 </label>
               </React.Fragment>
             );
@@ -106,12 +129,9 @@ const EmployeeForm = () => {
           <div className="w-full p-2 m-2 flex items-center justify-center">
             <button
               type="submit"
-              className="cursor-pointer bg-colorOne dark:bg-colorTwo text-colorTwo dark:text-colorOne border-0 px-[15px] py-[8px] rounded-[20px] text-1xln hover:translate-y-1 transition-all flex justify-center items-center gap-5"
+              className="cursor-pointer bg-colorOne dark:bg-colorTwo text-colorTwo dark:text-colorOne border-0 px-[15px] py-[8px] text-1xln hover:translate-y-1 transition-all flex justify-center items-center gap-5"
               id="Employee_Form_Submit_Button"
               disabled={employeeSubmitLoading && true}
-              onClick={() => {
-                setError("test", { type: "focus" }, { shouldFocus: true });
-              }}
             >
               <span>Add Employee</span>
               {employeeSubmitLoading ? (

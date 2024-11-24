@@ -25,3 +25,22 @@ input[type="number"]::-webkit-inner-spin-button {
 #Employee_Form_Submit_Button:disabled {
   cursor: default;
 }
+
+.dark {
+  background-color: #d09683 !important;
+}
+#Error_Para {
+  font-weight: 300 !important;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: red;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b30000;
+}

@@ -9,7 +9,7 @@ export default {
       },
       colors: {
         colorOne: "#D09683",
-        colorTwo: "#330000",
+        colorTwo: "black",
       },
       screens: {
         sm: "600px",
