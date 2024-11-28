@@ -16,9 +16,9 @@ const ThemeChangerButton = () => {
       className={`w-[40px] h-[40px] flex justify-center items-center rounded-full ${ThemeLightToDark}`}
     >
       {dark ? (
-        <IoSunny className="text-2xl" />
-      ) : (
         <IoMoon className="text-2xl" />
+      ) : (
+        <IoSunny className="text-2xl" />
       )}
     </button>
   );

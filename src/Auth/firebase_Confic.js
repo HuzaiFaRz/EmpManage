@@ -25,7 +25,7 @@ import {
   deleteField,
   limit,
 } from "firebase/firestore";
-import { toast } from "react-toastify";
+
 const {
   VITE_EMPMANAGE_apiKey,
   VITE_EMPMANAGE_authDomain,
@@ -35,6 +35,7 @@ const {
   VITE_EMPMANAGE_appId,
   VITE_EMPMANAGE_measurementId,
 } = import.meta.env;
+
 const firebaseConfig = {
   apiKey: VITE_EMPMANAGE_apiKey,
   authDomain: VITE_EMPMANAGE_authDomain,
@@ -44,22 +45,11 @@ const firebaseConfig = {
   appId: VITE_EMPMANAGE_appId,
   measurementId: VITE_EMPMANAGE_measurementId,
 };
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const MessageStyle = {
-  style: { width: "100%", lineHeight: "20px" },
-  autoClose: 2000,
-  theme: "dark",
-  position: "top-center",
-  draggablePercent: 100,
-};
-const RejectMessage = (message) => {
-  toast.error(message, MessageStyle);
-};
-const ResolveMessage = (message) => {
-  toast.success(message, MessageStyle);
-};
+
 export {
   auth,
   createUserWithEmailAndPassword,
@@ -83,6 +73,5 @@ export {
   orderBy,
   serverTimestamp,
   limit,
-  RejectMessage,
-  ResolveMessage,
+  firebaseConfig
 };
