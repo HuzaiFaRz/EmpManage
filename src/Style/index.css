@@ -47,7 +47,6 @@ input:focus #Error_Para {
 }
 
 .dark ::-webkit-scrollbar {
-  width: 5px;
   background-color: #d09683;
 }
 

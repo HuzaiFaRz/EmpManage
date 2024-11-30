@@ -15,6 +15,7 @@ import { BiArrowFromLeft } from "react-icons/bi";
 import { ToastContainer } from "react-toastify";
 import { cloudinaryConfig } from "../Auth/Cloudinary_Confic";
 import Employee_Heading from "./Employee_Heading";
+import Navbar from "../Navbar/Navbar";
 
 const Create_Employee_Form = () => {
   const [createEmployeeLoading, setCreateEmployeeLoading] = useState(false);
@@ -96,6 +97,7 @@ const Create_Employee_Form = () => {
   return (
     <Fragment>
       <ToastContainer />
+      <Navbar />
       <div className="Employee_Page w-full h-full flex flex-col justify-center items-center p-2">
         <form
           className={`Employee_Form flex flex-wrap items-center justify-evenly gap-4 w-[1000px] max-w-full p-8 ${ThemeDarkToLight} ${

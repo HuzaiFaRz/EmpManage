@@ -10,7 +10,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/create_employee" element={<Create_Employee_Form />} />
+        <Route path="/" element={<Create_Employee_Form />} />
       </Routes>
     </BrowserRouter>
     // <div
