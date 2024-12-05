@@ -1,16 +1,18 @@
-import Navbar from "../Navbar/Navbar";
+import Navbar from "../Components/Navbar";
 import DefaultProfilePic from "../assets/Images/Default_Profile_Pic.jpg";
-import Create_Employee_Form from "../Employee/Create_Employee_Form";
+import Create_Employee from "../Employee_CRUD/Employee_Create";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 const ThemeLightToDark =
-  "bg-colorOne dark:bg-colorTwo text-colorTwo dark:text-colorOne";
+  "bg-light_Bg dark:bg-dark_Bg text-light_Text dark:text-dark_Text";
+
 const ThemeDarkToLight =
-  "bg-colorTwo text-colorOne dark:bg-colorOne dark:text-colorTwo";
+  "bg-dark_Bg text-dark_Text dark:bg-light_Bg dark:text-light_Text";
+
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Create_Employee_Form />} />
+        <Route path="/" element={<Create_Employee />} />
       </Routes>
     </BrowserRouter>
     // <div

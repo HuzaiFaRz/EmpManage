@@ -7,10 +7,15 @@ export default {
       fontFamily: {
         sans: ["Lato", "sans-serif"],
       },
+
       colors: {
-        colorOne: "#D09683",
-        colorTwo: "black",
+        light_Bg: "#f4f4f4", // Light background
+        light_Text: "#333333", // Light text color
+
+        dark_Bg: "#1e1e1e", // Dark background
+        dark_Text: "#f5f5f5", // Dark text color
       },
+
       screens: {
         sm: "600px",
         md: "1000px",

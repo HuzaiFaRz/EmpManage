@@ -13,11 +13,6 @@ body {
   font-family: "Lato", sans-serif !important;
 }
 
-:root {
-  --colorOne: "#E4EA8C";
-  --colorTwo: "#D09683";
-}
-
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   display: none;
@@ -26,11 +21,9 @@ input[type="number"]::-webkit-inner-spin-button {
   cursor: default;
 }
 
-.dark {
-  background-color: #d09683 !important;
-}
+
 #Error_Para {
-  font-weight: 400 !important;
+  font-weight: 300 !important;
 }
 
 input:focus #Error_Para {
@@ -39,17 +32,17 @@ input:focus #Error_Para {
 
 ::-webkit-scrollbar {
   width: 5px;
-  background-color: black;
+  background-color: #1e1e1e;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d09683;
+  background: #f4f4f4;
 }
 
-.dark ::-webkit-scrollbar {
-  background-color: #d09683;
+.dark::-webkit-scrollbar {
+  background: #f4f4f4;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: black;
+.dark::-webkit-scrollbar-thumb {
+  background: #1e1e1e;
 }

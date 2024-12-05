@@ -3,44 +3,38 @@ import { ThemeDarkToLight } from "../Main_Components/App";
 import { useForm } from "react-hook-form";
 import {
   addDoc,
-  auth,
   collection,
-  createUserWithEmailAndPassword,
   db,
   serverTimestamp,
 } from "../Auth/firebase_Confic";
-import { rejectMessage, resolveMessage } from "../Global_Files/index";
+import { rejectMessage, resolveMessage } from "../Script/index";
 import { ClipLoader } from "react-spinners";
 import { BiArrowFromLeft } from "react-icons/bi";
 import { ToastContainer } from "react-toastify";
 import { cloudinaryConfig } from "../Auth/Cloudinary_Confic";
-import Employee_Heading from "./Employee_Heading";
-import Navbar from "../Navbar/Navbar";
+import Navbar from "../Components/Navbar";
 
-const Create_Employee_Form = () => {
+const Create_Employee = () => {
   const [createEmployeeLoading, setCreateEmployeeLoading] = useState(false);
   const createEmployeeInputs = [
-    { ID: "Employee_First_Name", Placeholder: "First Name", Type: "text" },
-    { ID: "Employee_Last_Name", Placeholder: "Last Name", Type: "text" },
-    { ID: "Employee_Email", Placeholder: "Email", Type: "email" },
-    { ID: "Employee_Password", Placeholder: "Password", Type: "password" },
+    { ID: "employeeName", Placeholder: "Name", Type: "text" },
+    { ID: "employeeEmail", Placeholder: "Email", Type: "email" },
     {
-      ID: "Employee_Phone_Number",
+      ID: "employeePhone_Number",
       Placeholder: "Phone Number",
       Type: "number",
     },
-    { ID: "Employee_Address", Placeholder: "Address", Type: "text" },
-    { ID: "Employee_City", Placeholder: "City", Type: "text" },
-    { ID: "Employee_State", Placeholder: "State", Type: "text" },
-    { ID: "Employee_Age", Placeholder: "Age", Type: "number" },
-    { ID: "Empolyee_Profession", Placeholder: "Profession", Type: "text" },
+    { ID: "employeeAddress", Placeholder: "Address", Type: "text" },
+    { ID: "employeeCity", Placeholder: "City", Type: "text" },
+    { ID: "employeeAge", Placeholder: "Age", Type: "number" },
+    { ID: "employeeProfession", Placeholder: "Profession", Type: "text" },
     {
-      ID: "Empolyee_Experience",
+      ID: "employeeExperience",
       Placeholder: "Experience",
       Type: "number",
     },
     {
-      ID: "Empolyee_Profile",
+      ID: "employeeProfile",
       Placeholder: "Profile Pic",
       Type: "file",
     },
@@ -55,12 +49,12 @@ const Create_Employee_Form = () => {
   const Create_Employee_Form_Handler = async (create_Employee_Data) => {
     try {
       event.preventDefault();
-      if (!create_Employee_Data.Empolyee_Profile[0].type.includes("image")) {
+      if (!create_Employee_Data.employeeProfile[0].type.includes("image")) {
         rejectMessage("File Extension Not Supported");
         return;
       }
       setCreateEmployeeLoading(true);
-      const employeeProfile = create_Employee_Data.Empolyee_Profile[0];
+      const employeeProfile = create_Employee_Data.employeeProfile[0];
       const employeeProfileData = new FormData();
       employeeProfileData.append("file", employeeProfile);
       employeeProfileData.append(
@@ -73,22 +67,17 @@ const Create_Employee_Form = () => {
       );
       const data = await response.json();
       const { url } = data;
-      create_Employee_Data.Empolyee_Profile = url;
-      await createUserWithEmailAndPassword(
-        auth,
-        create_Employee_Data.Employee_Email,
-        create_Employee_Data.Employee_Password
-      );
-      const create_Employee_Main_Data = {
-        employee_Data: create_Employee_Data,
-        Employee_Sign_Up_Time: serverTimestamp(),
+      create_Employee_Data.employeeProfile = url;
+      await addDoc(collection(db, "Employees"), {
+        create_Employee_Data,
+        employeeCreatingTime: serverTimestamp(),
         role: "Employee",
-      };
-      await addDoc(collection(db, "Employees"), create_Employee_Main_Data);
-      resolveMessage("Account Created");
+      });
+      resolveMessage("Employee Created");
       reset();
       setCreateEmployeeLoading(false);
     } catch (error) {
+      console.log(error);
       setCreateEmployeeLoading(false);
       rejectMessage(error.message);
     }
@@ -98,57 +87,52 @@ const Create_Employee_Form = () => {
     <Fragment>
       <ToastContainer />
       <Navbar />
-      <div className="Employee_Page w-full h-full flex flex-col justify-center items-center p-2">
+
+      <div className="Employee_Create_Page w-full h-full flex flex-col justify-center items-center p-2">
         <form
-          className={`Employee_Form flex flex-wrap items-center justify-evenly gap-4 w-[1000px] max-w-full p-8 ${ThemeDarkToLight} ${
-            createEmployeeLoading && "select-none cursor-not-allowed"
-          }`}
+          className={`Employee_Create_Form flex flex-wrap items-center justify-evenly gap-4 w-[1000px] max-w-full p-8 border-2 border-dark_Bg dark:border-dark_Text 
+            
+            ${createEmployeeLoading && "select-none cursor-not-allowed"}`}
           onSubmit={handleSubmit(Create_Employee_Form_Handler)}
         >
-          <Employee_Heading HeadingText={"Create Employee"} />
+          <h1 className="font-semibold tracking-tighter text-4xl w-[100%] py-2 text-center">
+            Create Employee
+          </h1>
           {createEmployeeInputs.map((elem, index) => {
             const { ID, Placeholder, Type } = elem;
             return (
               <React.Fragment key={index}>
                 <label
                   htmlFor={ID}
-                  className={`flex flex-col items-start justify-center gap-2 font-light ${
+                  className={`flex flex-col items-start justify-center gap-2 font-normal ${
                     createEmployeeLoading && "cursor-not-allowed"
-                  } `}
+                  }`}
                 >
-                  {Type === "file"
-                    ? "Select Profile"
-                    : Type === "password"
-                    ? "Create Password"
-                    : ID === "Empolyee_Experience"
-                    ? "Experience"
-                    : Placeholder}
+                  {Placeholder}
                   <input
                     disabled={createEmployeeLoading && true}
                     type={Type}
                     placeholder={Placeholder}
                     id={Type === "file" ? ID : Placeholder}
-                    autoComplete="on"
-                    className={`p-2 bg-transparent border-2 border-colorOne color-colorOne font-light tracking-[1px] placeholder:text-colorOne focus:outline-0 dark:border-colorTwo w-[300px] dark:placeholder:text-colorTwo placeholder:opacity-60 ${
+                    className={`p-2 bg-transparent border-2 border-light_Bg color-light_Bg font-light tracking-[1px] placeholder:text-light_Bg   focus:outline-0 dark:border-dark_Bg w-[300px] dark:placeholder:text-dark_Bg  ${
                       createEmployeeLoading && "cursor-not-allowed"
-                    } `}
+                    }`}
                     {...register(ID, {
                       required: `${Placeholder} is required.`,
-                      minLength:
-                        ID === "Employee_Password"
-                          ? {
-                              value: 8,
-                              message: "8 Characters required",
-                            }
-                          : null,
-                      maxLength:
-                        ID === "Employee_Age" || ID === "Empolyee_Experience"
-                          ? {
-                              value: 2,
-                              message: "2 Characters required",
-                            }
-                          : null,
-
+                      min: {
+                        value:
+                          ID === "employeeAge"
+                            ? 18
+                            : ID === "employeeExperience"
+                            ? 1
+                            : null,
+                        message:
+                          ID === "employeeAge"
+                            ? "Age must be 18+"
+                            : ID === "employeeExperience"
+                            ? "Experience too low"
+                            : null,
+                      },
                       pattern: {
                         value: /^[^\s]+(?:$|.*[^\s]+$)/,
                         message: "Remove Blank Space",
@@ -157,12 +141,12 @@ const Create_Employee_Form = () => {
                     hidden={Type === "file" && true}
                   />
                   {Type === "file" && (
-                    <div className="p-2 cursor-pointer bg-transparent border-2 border-colorOne color-colorOne font-light tracking-[1px] dark:border-colorTwo w-[300px]">
-                      <span className="opacity-60">Profile</span>
+                    <div className="p-2 cursor-pointer bg-transparent border-2 border-light_Bg color-light_Bg font-light tracking-[1px] dark:border-dark_Bg w-[300px]">
+                      Profile
                     </div>
                   )}
                   <p
-                    className={`text-[red] dark:text-white text-[13px] tracking-wider py-2 w-full h-[20px] flex items-center font-normal ${
+                    className={`text-[red] dark:text-white text-[13px] tracking-wider py-2 w-full h-[20px] flex items-center font-light ${
                       errors[ID]?.message &&
                       "z-50 cursor-not-allowed select-none"
                     }`}
@@ -177,7 +161,7 @@ const Create_Employee_Form = () => {
           <div className="w-full p-2 m-2 flex items-center justify-center">
             <button
               type="submit"
-              className={`cursor-pointer bg-colorOne dark:bg-colorTwo text-colorTwo dark:text-colorOne border-0 px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5 ${
+              className={`cursor-pointer bg-light_Bg dark:bg-dark_Bg text-light_Text dark:text-dark_Text border-0 px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5 ${
                 createEmployeeLoading && "cursor-not-allowed"
               }`}
               id="Employee_Form_Submit_Button"
@@ -201,4 +185,4 @@ const Create_Employee_Form = () => {
   );
 };
 
-export default Create_Employee_Form;
+export default Create_Employee;

@@ -1,5 +1,5 @@
 import { ThemeDarkToLight } from "../Main_Components/App";
-import ThemeChangerButton from "../Theme_Changer/ThemeChangerButton";
+import ThemeChangerButton from "./ThemeChangerButton";
 
 const Navbar = () => {
   return (
