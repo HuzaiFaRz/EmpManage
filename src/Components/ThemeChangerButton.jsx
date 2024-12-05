@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IoSunny } from "react-icons/io5";
 
 import { IoMoon } from "react-icons/io5";
-import { ThemeLightToDark } from "../Main_Components/App";
+import { ThemeDarkToLight, ThemeLightToDark } from "../Main_Components/App";
 
 const ThemeChangerButton = () => {
   const [dark, setDark] = useState(false);

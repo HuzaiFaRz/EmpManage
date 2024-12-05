@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { ThemeDarkToLight } from "../Main_Components/App";
+import { ThemeDarkToLight, ThemeLightToDark } from "../Main_Components/App";
 import { useForm } from "react-hook-form";
 import {
   addDoc,
@@ -50,7 +50,7 @@ const Create_Employee = () => {
     try {
       event.preventDefault();
       if (!create_Employee_Data.employeeProfile[0].type.includes("image")) {
-        rejectMessage("File Extension Not Supported");
+        rejectMessage("Profile Extension Not Supported");
         return;
       }
       setCreateEmployeeLoading(true);
@@ -88,14 +88,16 @@ const Create_Employee = () => {
       <ToastContainer />
       <Navbar />
 
-      <div className="Employee_Create_Page w-full h-full flex flex-col justify-center items-center p-2">
+      <div
+        className={`Employee_Create_Page w-full h-screen flex flex-col justify-center items-center p-2  ${ThemeLightToDark}`}
+      >
         <form
-          className={`Employee_Create_Form flex flex-wrap items-center justify-evenly gap-4 w-[1000px] max-w-full p-8 border-2 border-dark_Bg dark:border-dark_Text 
+          className={`Employee_Create_Form flex flex-wrap items-center justify-evenly gap-4 w-[1000px] max-w-full p-8 border border-colorTwo dark:border-colorOne
             
             ${createEmployeeLoading && "select-none cursor-not-allowed"}`}
           onSubmit={handleSubmit(Create_Employee_Form_Handler)}
         >
-          <h1 className="font-semibold tracking-tighter text-4xl w-[100%] py-2 text-center">
+          <h1 className="font-semibold tracking-tighter text-4xl w-[100%] py-2 text-center text-colorTwo dark:text-colorOne">
             Create Employee
           </h1>
           {createEmployeeInputs.map((elem, index) => {
@@ -104,7 +106,7 @@ const Create_Employee = () => {
               <React.Fragment key={index}>
                 <label
                   htmlFor={ID}
-                  className={`flex flex-col items-start justify-center gap-2 font-normal ${
+                  className={`flex flex-col items-start justify-center gap-2 font-normal text-colorTwo dark:text-colorOne ${
                     createEmployeeLoading && "cursor-not-allowed"
                   }`}
                 >
@@ -114,7 +116,7 @@ const Create_Employee = () => {
                     type={Type}
                     placeholder={Placeholder}
                     id={Type === "file" ? ID : Placeholder}
-                    className={`p-2 bg-transparent border-2 border-light_Bg color-light_Bg font-light tracking-[1px] placeholder:text-light_Bg   focus:outline-0 dark:border-dark_Bg w-[300px] dark:placeholder:text-dark_Bg  ${
+                    className={`p-2 bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo font-light tracking-[1px] placeholder:text-colorTwo dark:placeholder:text-colorOne focus:outline-0  w-[300px]   ${
                       createEmployeeLoading && "cursor-not-allowed"
                     }`}
                     {...register(ID, {
@@ -141,12 +143,12 @@ const Create_Employee = () => {
                     hidden={Type === "file" && true}
                   />
                   {Type === "file" && (
-                    <div className="p-2 cursor-pointer bg-transparent border-2 border-light_Bg color-light_Bg font-light tracking-[1px] dark:border-dark_Bg w-[300px]">
+                    <div className="p-2 cursor-pointer bg-transparent border border-colorTwo color-light_Bg font-light tracking-[1px] dark:border-colorOne w-[300px]">
                       Profile
                     </div>
                   )}
                   <p
-                    className={`text-[red] dark:text-white text-[13px] tracking-wider py-2 w-full h-[20px] flex items-center font-light ${
+                    className={`text-[#a63232] text-[13px] tracking-wider py-2 w-full h-[20px] flex items-center font-normal ${
                       errors[ID]?.message &&
                       "z-50 cursor-not-allowed select-none"
                     }`}
@@ -161,18 +163,19 @@ const Create_Employee = () => {
           <div className="w-full p-2 m-2 flex items-center justify-center">
             <button
               type="submit"
-              className={`cursor-pointer bg-light_Bg dark:bg-dark_Bg text-light_Text dark:text-dark_Text border-0 px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5 ${
+              className={`cursor-pointer ${ThemeDarkToLight} border-0 px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5 ${
                 createEmployeeLoading && "cursor-not-allowed"
               }`}
               id="Employee_Form_Submit_Button"
               disabled={createEmployeeLoading && true}
             >
               <span>Create Employee</span>
+
               {createEmployeeLoading ? (
                 <ClipLoader
                   loading={createEmployeeLoading}
                   size={20}
-                  color="white"
+                  color="#f5f5f5"
                 />
               ) : (
                 <BiArrowFromLeft size={20} />

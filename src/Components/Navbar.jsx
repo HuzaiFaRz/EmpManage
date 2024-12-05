@@ -1,4 +1,4 @@
-import { ThemeDarkToLight } from "../Main_Components/App";
+import { ThemeDarkToLight, ThemeLightToDark } from "../Main_Components/App";
 import ThemeChangerButton from "./ThemeChangerButton";
 
 const Navbar = () => {

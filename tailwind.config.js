@@ -9,11 +9,8 @@ export default {
       },
 
       colors: {
-        light_Bg: "#f4f4f4", // Light background
-        light_Text: "#333333", // Light text color
-
-        dark_Bg: "#1e1e1e", // Dark background
-        dark_Text: "#f5f5f5", // Dark text color
+        colorOne: "#f5f5f5",
+        colorTwo: "#333333",
       },
 
       screens: {
