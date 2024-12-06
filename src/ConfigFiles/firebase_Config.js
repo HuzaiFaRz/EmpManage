@@ -50,11 +50,11 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export {
+export  {
   auth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  onAuthStateChanged,
+  
   signOut,
   deleteField,
   db,
@@ -75,3 +75,4 @@ export {
   limit,
   firebaseConfig
 };
+export default onAuthStateChanged

@@ -6,17 +6,16 @@ import {
   collection,
   db,
   serverTimestamp,
-} from "../Auth/firebase_Confic";
+} from "../ConfigFiles/firebase_Config";
 import { rejectMessage, resolveMessage } from "../Script/index";
 import { ClipLoader } from "react-spinners";
 import { BiArrowFromLeft } from "react-icons/bi";
 import { ToastContainer } from "react-toastify";
-import { cloudinaryConfig } from "../Auth/Cloudinary_Confic";
-import Navbar from "../Components/Navbar";
+import { cloudinaryConfig } from "../ConfigFiles/Cloudinary_Config";
 
-const Create_Employee = () => {
-  const [createEmployeeLoading, setCreateEmployeeLoading] = useState(false);
-  const createEmployeeInputs = [
+const EmployeeCreate = () => {
+  const [employeeCreateLoading, setEmployeeCreateLoading] = useState(false);
+  const employeecCreateInputs = [
     { ID: "employeeName", Placeholder: "Name", Type: "text" },
     { ID: "employeeEmail", Placeholder: "Email", Type: "email" },
     {
@@ -46,15 +45,15 @@ const Create_Employee = () => {
     formState: { errors },
   } = useForm();
 
-  const Create_Employee_Form_Handler = async (create_Employee_Data) => {
+  const Employee_Create_Form_Handler = async (employee_created_Data) => {
     try {
       event.preventDefault();
-      if (!create_Employee_Data.employeeProfile[0].type.includes("image")) {
+      if (!employee_created_Data.employeeProfile[0].type.includes("image")) {
         rejectMessage("Profile Extension Not Supported");
         return;
       }
-      setCreateEmployeeLoading(true);
-      const employeeProfile = create_Employee_Data.employeeProfile[0];
+      setEmployeeCreateLoading(true);
+      const employeeProfile = employee_created_Data.employeeProfile[0];
       const employeeProfileData = new FormData();
       employeeProfileData.append("file", employeeProfile);
       employeeProfileData.append(
@@ -67,18 +66,18 @@ const Create_Employee = () => {
       );
       const data = await response.json();
       const { url } = data;
-      create_Employee_Data.employeeProfile = url;
+      employee_created_Data.employeeProfile = url;
       await addDoc(collection(db, "Employees"), {
-        create_Employee_Data,
+        employee_created_Data,
         employeeCreatingTime: serverTimestamp(),
         role: "Employee",
       });
       resolveMessage("Employee Created");
+      setEmployeeCreateLoading(false);
       reset();
-      setCreateEmployeeLoading(false);
     } catch (error) {
       console.log(error);
-      setCreateEmployeeLoading(false);
+      setEmployeeCreateLoading(false);
       rejectMessage(error.message);
     }
   };
@@ -89,35 +88,35 @@ const Create_Employee = () => {
       <Navbar />
 
       <div
-        className={`Employee_Create_Page w-full h-screen flex flex-col justify-center items-center p-2  ${ThemeLightToDark}`}
+        className={`Employee_Create_Page w-full h-[90svh] flex flex-col justify-center items-center p-2  ${ThemeLightToDark}`}
       >
         <form
           className={`Employee_Create_Form flex flex-wrap items-center justify-evenly gap-4 w-[1000px] max-w-full p-8 border border-colorTwo dark:border-colorOne
             
-            ${createEmployeeLoading && "select-none cursor-not-allowed"}`}
-          onSubmit={handleSubmit(Create_Employee_Form_Handler)}
+            ${employeeCreateLoading && "select-none cursor-not-allowed"}`}
+          onSubmit={handleSubmit(Employee_Create_Form_Handler)}
         >
           <h1 className="font-semibold tracking-tighter text-4xl w-[100%] py-2 text-center text-colorTwo dark:text-colorOne">
             Create Employee
           </h1>
-          {createEmployeeInputs.map((elem, index) => {
+          {employeecCreateInputs.map((elem, index) => {
             const { ID, Placeholder, Type } = elem;
             return (
               <React.Fragment key={index}>
                 <label
                   htmlFor={ID}
                   className={`flex flex-col items-start justify-center gap-2 font-normal text-colorTwo dark:text-colorOne ${
-                    createEmployeeLoading && "cursor-not-allowed"
+                    employeeCreateLoading && "cursor-not-allowed"
                   }`}
                 >
                   {Placeholder}
                   <input
-                    disabled={createEmployeeLoading && true}
+                    disabled={employeeCreateLoading && true}
                     type={Type}
                     placeholder={Placeholder}
                     id={Type === "file" ? ID : Placeholder}
                     className={`p-2 bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo font-light tracking-[1px] placeholder:text-colorTwo dark:placeholder:text-colorOne focus:outline-0  w-[300px]   ${
-                      createEmployeeLoading && "cursor-not-allowed"
+                      employeeCreateLoading && "cursor-not-allowed"
                     }`}
                     {...register(ID, {
                       required: `${Placeholder} is required.`,
@@ -164,18 +163,19 @@ const Create_Employee = () => {
             <button
               type="submit"
               className={`cursor-pointer ${ThemeDarkToLight} border-0 px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5 ${
-                createEmployeeLoading && "cursor-not-allowed"
+                employeeCreateLoading && "cursor-not-allowed"
               }`}
               id="Employee_Form_Submit_Button"
-              disabled={createEmployeeLoading && true}
+              disabled={employeeCreateLoading && true}
             >
               <span>Create Employee</span>
 
-              {createEmployeeLoading ? (
+              {true ? (
                 <ClipLoader
-                  loading={createEmployeeLoading}
+                  // loading={true}
                   size={20}
-                  color="#f5f5f5"
+                  className="border-colorTwo dark:border-colorOne"
+                  // color="red"
                 />
               ) : (
                 <BiArrowFromLeft size={20} />
@@ -188,4 +188,4 @@ const Create_Employee = () => {
   );
 };
 
-export default Create_Employee;
+export default EmployeeCreate;
