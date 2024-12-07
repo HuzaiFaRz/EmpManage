@@ -3,7 +3,7 @@ import { IoMoon, IoSunny } from "react-icons/io5";
 import { ThemeLightToDark } from "../../Main_Components/App";
 
 const ThemeChangerButton = () => {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
   const themeChangerHandler = () => {
     setDark(!dark);
     document.body.classList.toggle("dark");

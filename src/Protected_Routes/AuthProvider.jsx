@@ -6,35 +6,38 @@ import onAuthStateChanged, { auth } from "../ConfigFiles/firebase_Config";
 
 const AuthCreateContext = createContext();
 export const AuthUseContext = () => useContext(AuthCreateContext);
-// eslint-disable-next-line react/prop-types
 const AuthProvider = ({ children }) => {
   const [isAdminLogged, setIsAdminLogged] = useState(null);
   const [isEmployeeLogged, setIsEmployeeLogged] = useState(null);
   const [authLoading, setAuthLoading] = useState(false);
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        if (user.email === "huzaifaadmin@gmail.com") {
-          setIsAdminLogged(user);
-        } else {
-          setIsEmployeeLogged(user);
-        }
-      } else {
-        setIsEmployeeLogged(null);
-        setIsAdminLogged(null);
-      }
-    });
-  }, []);
+
+  console.log(isAdminLogged, "isAdminLogged============");
+  console.log(isEmployeeLogged, "isEmployeeLogged==========");
+
+  // useEffect(() => {
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       if (user.email === "huzaifaadmin@gmail.com") {
+  //         setIsAdminLogged(user);
+  //       } else {
+  //         setIsEmployeeLogged(user);
+  //       }
+  //     } else {
+  //       setIsEmployeeLogged(null);
+  //       setIsAdminLogged(null);
+  //     }
+  //   });
+  // }, []);
   return (
     <AuthCreateContext.Provider
-      value={
-        (isAdminLogged,
+      value={{
+        isAdminLogged,
         setIsAdminLogged,
         authLoading,
         setAuthLoading,
         isEmployeeLogged,
-        setIsEmployeeLogged)
-      }
+        setIsEmployeeLogged,
+      }}
     >
       {children}
     </AuthCreateContext.Provider>

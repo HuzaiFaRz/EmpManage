@@ -3,7 +3,9 @@ import { ThemeDarkToLight, ThemeLightToDark } from "../Main_Components/App";
 import { useForm } from "react-hook-form";
 import {
   addDoc,
+  auth,
   collection,
+  createUserWithEmailAndPassword,
   db,
   serverTimestamp,
 } from "../ConfigFiles/firebase_Config";
@@ -12,17 +14,20 @@ import { ClipLoader } from "react-spinners";
 import { BiArrowFromLeft } from "react-icons/bi";
 import { ToastContainer } from "react-toastify";
 import { cloudinaryConfig } from "../ConfigFiles/Cloudinary_Config";
+import { PiEyeClosedBold, PiEyeFill } from "react-icons/pi";
 
 const EmployeeCreate = () => {
   const [employeeCreateLoading, setEmployeeCreateLoading] = useState(false);
+  const [signInPasswordEye, setSignInPasswordEye] = useState(false);
   const employeecCreateInputs = [
     { ID: "employeeName", Placeholder: "Name", Type: "text" },
     { ID: "employeeEmail", Placeholder: "Email", Type: "email" },
     {
-      ID: "employeePhone_Number",
-      Placeholder: "Phone Number",
-      Type: "number",
+      ID: "employeePassword",
+      Placeholder: "Password",
+      Type: signInPasswordEye ? "text" : "password",
     },
+
     { ID: "employeeAddress", Placeholder: "Address", Type: "text" },
     { ID: "employeeCity", Placeholder: "City", Type: "text" },
     { ID: "employeeAge", Placeholder: "Age", Type: "number" },
@@ -67,11 +72,17 @@ const EmployeeCreate = () => {
       const data = await response.json();
       const { url } = data;
       employee_created_Data.employeeProfile = url;
-      await addDoc(collection(db, "Employees"), {
+      await createUserWithEmailAndPassword(
+        auth,
+        employee_created_Data.employeeEmail,
+        employee_created_Data.employeePassword
+      );
+      const employeeData = {
         employee_created_Data,
         employeeCreatingTime: serverTimestamp(),
         role: "Employee",
-      });
+      };
+      await addDoc(collection(db, "Employees"), employeeData);
       resolveMessage("Employee Created");
       setEmployeeCreateLoading(false);
       reset();
@@ -85,7 +96,6 @@ const EmployeeCreate = () => {
   return (
     <Fragment>
       <ToastContainer />
-      <Navbar />
 
       <div
         className={`Employee_Create_Page w-full h-[90svh] flex flex-col justify-center items-center p-2  ${ThemeLightToDark}`}
@@ -107,7 +117,7 @@ const EmployeeCreate = () => {
                   htmlFor={ID}
                   className={`flex flex-col items-start justify-center gap-2 font-normal text-colorTwo dark:text-colorOne ${
                     employeeCreateLoading && "cursor-not-allowed"
-                  }`}
+                  } ${ID === "employeePassword" && "relative overflow-hidden"}`}
                 >
                   {Placeholder}
                   <input
@@ -120,12 +130,18 @@ const EmployeeCreate = () => {
                     }`}
                     {...register(ID, {
                       required: `${Placeholder} is required.`,
+                      minLength: {
+                        value: ID === "employeePassword" && 8,
+                        message:
+                          ID === "employeePassword" &&
+                          "Password At Least Eight Character",
+                      },
                       min: {
                         value:
                           ID === "employeeAge"
                             ? 18
                             : ID === "employeeExperience"
-                            ? 1
+                            ? 2
                             : null,
                         message:
                           ID === "employeeAge"
@@ -145,6 +161,22 @@ const EmployeeCreate = () => {
                     <div className="p-2 cursor-pointer bg-transparent border border-colorTwo color-light_Bg font-light tracking-[1px] dark:border-colorOne w-[300px]">
                       Profile
                     </div>
+                  )}
+
+                  {ID === "employeePassword" && (
+                    <button
+                      className="absolute right-2 cursor-pointer"
+                      type="button"
+                      onClick={() => {
+                        setSignInPasswordEye(!signInPasswordEye);
+                      }}
+                    >
+                      {signInPasswordEye ? (
+                        <PiEyeFill size={22} />
+                      ) : (
+                        <PiEyeClosedBold size={22} />
+                      )}
+                    </button>
                   )}
                   <p
                     className={`text-[#a63232] text-[13px] tracking-wider py-2 w-full h-[20px] flex items-center font-normal ${
@@ -170,12 +202,12 @@ const EmployeeCreate = () => {
             >
               <span>Create Employee</span>
 
-              {true ? (
+              {employeeCreateLoading ? (
                 <ClipLoader
-                  // loading={true}
+                  loading={employeeCreateLoading}
                   size={20}
                   className="border-colorTwo dark:border-colorOne"
-                  // color="red"
+                  color="red"
                 />
               ) : (
                 <BiArrowFromLeft size={20} />
