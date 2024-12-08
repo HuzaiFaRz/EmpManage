@@ -4,8 +4,19 @@ import { Navigate } from "react-router-dom";
 import EmpManage from "../Components/EmpManage/EmpManage";
 
 const ProtectedRoute = () => {
-  const { isAdminLogged, setIsAdminLogged } = AuthUseContext();
-  return isAdminLogged === null ? <Navigate to={"login"} /> : <EmpManage />;
+  const {
+    isAdminLogged,
+    setIsAdminLogged,
+    authLoading,
+    setAuthLoading,
+    isEmployeeLogged,
+    setIsEmployeeLogged,
+  } = AuthUseContext();
+  return isAdminLogged === null && isEmployeeLogged === null ? (
+    <Navigate to={"login"} />
+  ) : (
+<Navigate to={"empmanage"} />
+  );
 };
 
 export default ProtectedRoute;

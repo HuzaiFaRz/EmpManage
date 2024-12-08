@@ -9,6 +9,7 @@ import EmpManage from "../Components/EmpManage/EmpManage";
 import ProtectedRoute from "../Protected_Routes/ProtectedRoute";
 import LayOut from "../Components/LayOut/LayOut";
 import AuthProvider from "../Protected_Routes/AuthProvider";
+import { ToastContainer } from "react-toastify";
 
 const ThemeLightToDark =
   "bg-colorOne dark:bg-colorTwo text-colorTwo dark:text-colorOne";
@@ -21,14 +22,14 @@ const App = () => {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<LogIn />} />
-
-          <Route path="/" element={<LayOut />} />
-          <Route path="/empmanage" element={<EmpManage />} />
-          <Route path="/admindashBoard" element={<AdminDashBoard />} />
-          <Route path="/employeedashBoard" element={<EmployeeDashBoard />} />
-          <Route path="/employeecreate" element={<EmployeeCreate />} />
-          <Route path="/employeeupdate" element={<EmployeeUpdate />} />
+          <Route path="/" element={<LayOut />}>
+            <Route path="login" element={<LogIn />} />
+            <Route path="empmanage" element={<EmpManage />} />
+            <Route path="admindashBoard" element={<AdminDashBoard />} />
+            <Route path="employeedashBoard" element={<EmployeeDashBoard />} />
+            <Route path="employeecreate" element={<EmployeeCreate />} />
+            <Route path="employeeupdate" element={<EmployeeUpdate />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>

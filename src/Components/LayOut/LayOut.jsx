@@ -4,7 +4,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import ThemeChangerButton from "../ThemeChanger/ThemeChangerButton";
 
 const LayOut = () => {
-  const [isSideBarOpen, setIsSideBarOpen] = useState(true);
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const links = [
     { name: "Dashboard", to: "dashboard" },
     { name: "Employees", to: "employees" },
@@ -15,7 +15,7 @@ const LayOut = () => {
   return (
     <Fragment>
       <nav className="fixed top-0 w-full flex items-center justify-between bg-colorTwo dark:bg-colorOne text-colorOne dark:text-colorTwo px-4 py-3 h-[10svh] z-50">
-        <div className="flex flex-row justify-center items-center gap-5">
+        <div className="flex flex-row justify-center items-center gap-5 h-full">
           {isSideBarOpen === true ? (
             <RiMenuFold3Line
               size={30}
@@ -35,6 +35,12 @@ const LayOut = () => {
             />
           )}
 
+          <div className="w-[100px] h-full flex flex-col justify-center items-end gap-3 cursor-pointer">
+            <span className="w-[50px] h-[2px] bg-colorOne"></span>
+            <span className="w-[70px] h-[2px] bg-colorOne nav-menu-bar-line-2 relative"></span>
+            <span className="w-[50px] h-[2px] bg-colorOne"></span>
+          </div>
+
           <span className="self-center text-lg font-semibold sm:text-2xl whitespace-nowrap">
             EmpManage
           </span>
@@ -43,8 +49,8 @@ const LayOut = () => {
         <ThemeChangerButton />
       </nav>
       <div
-        className={`bg-colorTwo dark:bg-colorOne text-colorOne dark:text-colorTwo p-4 h-[90svh] flex flex-col w-[50%] md:w-[30%] z-50 fixed top-[10svh] bottom-0 left-0 transition-all ${
-          isSideBarOpen ? "left-0" : "left-[-50%] "
+        className={`bg-colorTwo dark:bg-colorOne text-colorOne dark:text-colorTwo p-4 h-[90svh] flex flex-col w-[50%] md:w-[30%] z-50 fixed top-[10svh] bottom-0 left-0 ${
+          isSideBarOpen ? "left-[50%]" : "left-[50%]"
         }`}
       >
         <h2 className="text-[14px] md:text-[20px] font-bold mb-6 tracking-normal py-1 md:py-3 px-1 md:px-2">

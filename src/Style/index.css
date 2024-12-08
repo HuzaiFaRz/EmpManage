@@ -7,6 +7,7 @@
 /* Global font styles */
 * {
   font-family: "Lato", sans-serif;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
@@ -44,4 +45,24 @@ input:focus #Error_Para {
 
 .dark::-webkit-scrollbar-thumb {
   background: #1e1e1e;
+}
+.nav-menu-bar-line-2::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -30%;
+  transform: rotate(-45deg) translate(50%, 30%);
+  width: 25px;
+  height: 2px;
+  background-color: white;
+}
+.nav-menu-bar-line-2::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -30%;
+  transform: rotate(45deg) translate(50%, 30%);
+  width: 25px;
+  height: 2px;
+  background-color: white;
 }

@@ -7,18 +7,13 @@ import { ClipLoader } from "react-spinners";
 import { PiEyeClosedBold, PiEyeFill } from "react-icons/pi";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../ConfigFiles/firebase_Config";
-import { useNavigate } from "react-router-dom";
+import { Navigate, replace, useNavigate } from "react-router-dom";
 import { AuthUseContext } from "../Protected_Routes/AuthProvider";
+import LayOut from "./LayOut/LayOut";
+import { ToastContainer } from "react-toastify";
 
 const LogIn = () => {
-  const {
-    setIsAdminLogged,
-    isAdminLogged,
-    isEmployeeLogged,
-    setIsEmployeeLogged,
-    authLoading,
-    setAuthLoading,
-  } = AuthUseContext();
+  const { setIsAdminLogged, setIsEmployeeLogged } = AuthUseContext();
   const [logInLoading, setLogInLoading] = useState(false);
   const [logInPasswordEye, setLogInPasswordEye] = useState(false);
   const navigate = useNavigate();
@@ -50,11 +45,13 @@ const LogIn = () => {
       if (loggedIn.user.email === "huzaifa.admin.a@gmail.com") {
         setIsAdminLogged(loggedIn.user);
         setIsEmployeeLogged(null);
+        resolveMessage("Admin Login SuccessFully");
       } else {
         setIsEmployeeLogged(loggedIn.user);
         setIsAdminLogged(null);
+        resolveMessage("Login SuccessFully");
       }
-      resolveMessage("SignIn SuccessFully");
+      // navigate("/empmanage", { replace: true });
       reset();
       setLogInLoading(false);
     } catch (error) {
@@ -67,13 +64,12 @@ const LogIn = () => {
 
   return (
     <Fragment>
-      {/* <Navbar /> */}
-
+      <ToastContainer />
       <div
-        className={`Sign_In_Page w-full h-[90svh] flex flex-col justify-center items-center p-2  ${ThemeLightToDark}`}
+        className={`Log_In_Page w-full h-[100svh] flex flex-col justify-center items-center p-2  ${ThemeLightToDark}`}
       >
         <form
-          className={`Sign_In_Form flex flex-col items-center justify-evenly gap-4 w-[500px] max-w-full p-8 border border-colorTwo dark:border-colorOne
+          className={`Log_In_Form flex flex-col items-center justify-evenly gap-4 w-[500px] max-w-full p-8 border border-colorTwo dark:border-colorOne
             
             ${logInLoading && "select-none cursor-not-allowed"}`}
           onSubmit={handleSubmit(logIn_Form_Handler)}
@@ -81,7 +77,7 @@ const LogIn = () => {
           <h1 className="font-semibold tracking-tighter text-4xl w-[100%] py-2 text-center text-colorTwo dark:text-colorOne">
             Log In
           </h1>
-          {loginInputs.map((elem, index) => {
+          {loginInputs.map((elem, index) => {T
             const { ID, Placeholder, Type } = elem;
             return (
               <React.Fragment key={index}>
@@ -89,7 +85,7 @@ const LogIn = () => {
                   htmlFor={ID}
                   className={`flex flex-col items-start justify-center gap-2 font-normal text-colorTwo dark:text-colorOne w-full ${
                     logInLoading && "cursor-not-allowed"
-                  } ${ID === "signInPassword" && "relative overflow-hidden"}`}
+                  } ${ID === "logInPassword" && "relative overflow-hidden"}`}
                 >
                   {Placeholder}
                   <input
@@ -109,7 +105,7 @@ const LogIn = () => {
                     })}
                   />
 
-                  {ID === "signInPassword" && (
+                  {ID === "logInPassword" && (
                     <button
                       className="absolute right-2 cursor-pointer"
                       type="button"

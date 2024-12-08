@@ -14,20 +14,21 @@ const AuthProvider = ({ children }) => {
   console.log(isAdminLogged, "isAdminLogged============");
   console.log(isEmployeeLogged, "isEmployeeLogged==========");
 
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       if (user.email === "huzaifaadmin@gmail.com") {
-  //         setIsAdminLogged(user);
-  //       } else {
-  //         setIsEmployeeLogged(user);
-  //       }
-  //     } else {
-  //       setIsEmployeeLogged(null);
-  //       setIsAdminLogged(null);
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        if (user.email === "huzaifaadmin@gmail.com") {
+          setIsAdminLogged(user);
+        } else {
+          setIsEmployeeLogged(user);
+        }
+      } else {
+        setIsEmployeeLogged(null);
+        setIsAdminLogged(null);
+      }
+    });
+  }, []);
+
   return (
     <AuthCreateContext.Provider
       value={{
