@@ -55,6 +55,9 @@ const LayOut = () => {
           <div className="space-y-8 w-full flex flex-col">
             {sideBarsLinks.map((link) => (
               <NavLink
+                onClick={() => {
+                  setIsSideBarOpen(!isSideBarOpen);
+                }}
                 key={link.name}
                 to={link.to}
                 className={`py-1 md:py-3 px-1 md:px-3 w-full hover:bg-colorTwo hover:text-colorOne dark:hover:bg-colorOne dark:hover:text-colorTwo rounded-lg text-sm md:text-lg`}

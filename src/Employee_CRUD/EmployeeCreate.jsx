@@ -67,17 +67,14 @@ const EmployeeCreate = () => {
       const data = await response.json();
       const { url } = data;
       employee_created_Data.employeeProfile = url;
+      employee_created_Data.employeeCreatingTime = serverTimestamp();
+      employee_created_Data.role = "Employee";
       await createUserWithEmailAndPassword(
         auth,
         employee_created_Data.employeeEmail,
         employee_created_Data.employeePassword
       );
-      const employeeData = {
-        employee_created_Data,
-        employeeCreatingTime: serverTimestamp(),
-        role: "Employee",
-      };
-      await addDoc(collection(db, "Employees"), { employeeData });
+      await addDoc(collection(db, "Employees"), employee_created_Data);
       resolveMessage("Employee Created");
       setEmployeeCreateLoading(false);
       reset();
