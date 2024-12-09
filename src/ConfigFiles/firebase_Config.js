@@ -1,30 +1,6 @@
 import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
-} from "firebase/auth";
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  addDoc,
-  collection,
-  getDocs,
-  query,
-  where,
-  deleteDoc,
-  updateDoc,
-  orderBy,
-  onSnapshot,
-  serverTimestamp,
-  arrayUnion,
-  deleteField,
-  limit,
-} from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const {
   VITE_EMPMANAGE_apiKey,
@@ -50,29 +26,4 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export  {
-  auth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  
-  signOut,
-  deleteField,
-  db,
-  doc,
-  onSnapshot,
-  setDoc,
-  getDoc,
-  getDocs,
-  arrayUnion,
-  addDoc,
-  collection,
-  query,
-  where,
-  deleteDoc,
-  updateDoc,
-  orderBy,
-  serverTimestamp,
-  limit,
-  firebaseConfig
-};
-export default onAuthStateChanged
+export { auth, db };

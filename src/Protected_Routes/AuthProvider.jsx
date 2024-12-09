@@ -2,7 +2,8 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-import onAuthStateChanged, { auth } from "../ConfigFiles/firebase_Config";
+import  { auth } from "../ConfigFiles/firebase_Config";
+import { onAuthStateChanged } from "firebase/auth";
 
 const AuthCreateContext = createContext();
 export const AuthUseContext = () => useContext(AuthCreateContext);
@@ -11,8 +12,8 @@ const AuthProvider = ({ children }) => {
   const [isEmployeeLogged, setIsEmployeeLogged] = useState(null);
   const [authLoading, setAuthLoading] = useState(false);
 
-  console.log(isAdminLogged, "isAdminLogged============");
-  console.log(isEmployeeLogged, "isEmployeeLogged==========");
+  // console.log(isAdminLogged, "isAdminLogged============");
+  // console.log(isEmployeeLogged, "isEmployeeLogged==========");
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {

@@ -1,19 +1,15 @@
 import React, { Fragment, useState } from "react";
 import { ThemeDarkToLight, ThemeLightToDark } from "../Main_Components/App";
 import { useForm } from "react-hook-form";
-import {
-  addDoc,
-  auth,
-  collection,
-  createUserWithEmailAndPassword,
-  db,
-  serverTimestamp,
-} from "../ConfigFiles/firebase_Config";
+
 import { rejectMessage, resolveMessage } from "../Script/index";
 import { ClipLoader } from "react-spinners";
 import { BiArrowFromLeft } from "react-icons/bi";
 import { cloudinaryConfig } from "../ConfigFiles/Cloudinary_Config";
 import { PiEyeClosedBold, PiEyeFill } from "react-icons/pi";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../ConfigFiles/firebase_Config";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 const EmployeeCreate = () => {
   const [employeeCreateLoading, setEmployeeCreateLoading] = useState(false);
