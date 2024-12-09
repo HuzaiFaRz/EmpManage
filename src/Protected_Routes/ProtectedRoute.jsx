@@ -12,10 +12,11 @@ const ProtectedRoute = () => {
     isEmployeeLogged,
     setIsEmployeeLogged,
   } = AuthUseContext();
+
   return isAdminLogged === null && isEmployeeLogged === null ? (
     <Navigate to={"login"} />
   ) : (
-<Navigate to={"empmanage"} />
+    <Navigate to={"empmanage"} />
   );
 };
 

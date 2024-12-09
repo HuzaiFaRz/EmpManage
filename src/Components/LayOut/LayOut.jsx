@@ -1,75 +1,78 @@
-import React, { Fragment, useState } from "react";
-import { RiMenuFold3Line, RiMenuUnfold3Line } from "react-icons/ri";
+import { Fragment, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import ThemeChangerButton from "../ThemeChanger/ThemeChangerButton";
+import { ThemeDarkToLight, ThemeLightToDark } from "../../Main_Components/App";
 
 const LayOut = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const links = [
     { name: "Dashboard", to: "dashboard" },
     { name: "Employees", to: "employees" },
-    { name: "Settings", to: "settings" },
-    { name: "Log Out", to: null },
+    { name: "Create Employee", to: "employeecreate" },
   ];
 
   return (
     <Fragment>
-      <nav className="fixed top-0 w-full flex items-center justify-between bg-colorTwo dark:bg-colorOne text-colorOne dark:text-colorTwo px-4 py-3 h-[10svh] z-50">
-        <div className="flex flex-row justify-center items-center gap-5 h-full">
-          {isSideBarOpen === true ? (
-            <RiMenuFold3Line
-              size={30}
-              className="cursor-pointer"
-              onClick={() => {
-                setIsSideBarOpen(!isSideBarOpen);
-                console.log(isSideBarOpen);
-              }}
-            />
-          ) : (
-            <RiMenuUnfold3Line
-              size={30}
-              className="cursor-pointer"
-              onClick={() => {
-                setIsSideBarOpen(!isSideBarOpen);
-              }}
-            />
-          )}
-
-          <div className="w-[100px] h-full flex flex-col justify-center items-end gap-3 cursor-pointer">
-            <span className="w-[50px] h-[2px] bg-colorOne"></span>
-            <span className="w-[70px] h-[2px] bg-colorOne nav-menu-bar-line-2 relative"></span>
-            <span className="w-[50px] h-[2px] bg-colorOne"></span>
+      <nav className="fixed top-0 w-full flex items-center justify-between bg-colorTwo dark:bg-colorOne text-colorOne dark:text-colorTwo px-5 py-3 h-[10svh] z-50">
+        <div className="flex flex-row justify-between items-center h-full">
+          <div
+            className={`w-[70px] md:w-[80px] h-full flex flex-col justify-center items-center gap-2 cursor-pointer ${
+              isSideBarOpen ? "setIsSideBarOpen" : null
+            }`}
+            onClick={(e) => {
+              e.currentTarget.classList.toggle("setIsSideBarOpen");
+              setIsSideBarOpen(!isSideBarOpen);
+            }}
+          >
+            <span className="w-[30px] md:w-[40px] h-[2px] bg-colorOne dark:bg-colorTwo"></span>
+            <span
+              className={`w-[50px] md:w-[60px] h-[2px] bg-colorOne dark:bg-colorTwo nav-menu-bar-line-2 relative transition-all ${
+                isSideBarOpen ? "-ml-5 " : "ml-5 "
+              }`}
+            ></span>
+            <span className="w-[30px] md:w-[40px] h-[2px] bg-colorOne dark:bg-colorTwo"></span>
           </div>
 
-          <span className="self-center text-lg font-semibold sm:text-2xl whitespace-nowrap">
+          <span className="self-center text-lg font-semibold sm:text-2xl whitespace-nowrap px-10">
             EmpManage
           </span>
         </div>
 
         <ThemeChangerButton />
       </nav>
+
       <div
-        className={`bg-colorTwo dark:bg-colorOne text-colorOne dark:text-colorTwo p-4 h-[90svh] flex flex-col w-[50%] md:w-[30%] z-50 fixed top-[10svh] bottom-0 left-0 ${
-          isSideBarOpen ? "left-[50%]" : "left-[50%]"
+        className={`bg-colorTwo dark:bg-colorOne text-colorOne dark:text-colorTwo p-4 h-[90svh] flex flex-col justify-between w-[80%] md:w-[30%] z-[22222222222222] fixed top-[10svh] bottom-0 left-0 ${
+          isSideBarOpen ? "left-[0%]" : "left-[-80%]"
         }`}
       >
-        <h2 className="text-[14px] md:text-[20px] font-bold mb-6 tracking-normal py-1 md:py-3 px-1 md:px-2">
-          Employee Management System
-        </h2>
-        <div className="space-y-8 w-full flex flex-col">
-          {links.map((link) => (
-            <NavLink
-              key={link.name}
-              to={link.to}
-              className={`py-1 md:py-3 px-1 md:px-2 w-full hover:bg-colorOne hover:text-colorTwo dark:hover:bg-colorTwo dark:hover:text-colorOne rounded-lg text-sm md:text-lg`}
-            >
-              {link.name}
-            </NavLink>
-          ))}
+        <div>
+          <h2 className="text-[14px] md:text-[20px] font-bold mb-6 tracking-normal py-1 md:py-3 px-1 md:px-2">
+            Employee Management System
+          </h2>
+          <div className="space-y-8 w-full flex flex-col">
+            {links.map((link) => (
+              <NavLink
+                key={link.name}
+                to={link.to}
+                className={`py-1 md:py-3 px-1 md:px-3 w-full hover:bg-colorOne hover:text-colorTwo dark:hover:bg-colorTwo dark:hover:text-colorOne rounded-lg text-sm md:text-lg`}
+              >
+                {link.name}
+              </NavLink>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex justify-end">
+          <button
+            className={`logOutBtn p-3 ${ThemeLightToDark} rounded-md w-28`}
+          >
+            Log Out
+          </button>
         </div>
       </div>
       <div
-        className={`w-full h-[100svh] bg-colorTwo bg-opacity-10 absolute z-30 ${
+        className={`w-full h-[100svh] bg-none bg-opacity-50 filter absolute z-30 bg-colorTwo ${
           isSideBarOpen ? "block" : "hidden"
         }`}
         onClick={() => {

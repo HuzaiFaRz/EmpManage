@@ -10,6 +10,8 @@ import ProtectedRoute from "../Protected_Routes/ProtectedRoute";
 import LayOut from "../Components/LayOut/LayOut";
 import AuthProvider from "../Protected_Routes/AuthProvider";
 import { ToastContainer } from "react-toastify";
+import EmployeeRead from "../Employee_CRUD/EmployeeRead";
+import { Fragment } from "react";
 
 const ThemeLightToDark =
   "bg-colorOne dark:bg-colorTwo text-colorTwo dark:text-colorOne";
@@ -19,20 +21,25 @@ const ThemeDarkToLight =
 
 const App = () => {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LayOut />}>
-            <Route path="login" element={<LogIn />} />
-            <Route path="empmanage" element={<EmpManage />} />
-            <Route path="admindashBoard" element={<AdminDashBoard />} />
-            <Route path="employeedashBoard" element={<EmployeeDashBoard />} />
-            <Route path="employeecreate" element={<EmployeeCreate />} />
-            <Route path="employeeupdate" element={<EmployeeUpdate />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+    <Fragment>
+      <ToastContainer />
+
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<LayOut />}>
+              <Route path="login" element={<LogIn />} />
+              <Route path="empmanage" element={<EmpManage />} />
+              <Route path="admindashBoard" element={<AdminDashBoard />} />
+              <Route path="employeedashBoard" element={<EmployeeDashBoard />} />
+              <Route path="employeecreate" element={<EmployeeCreate />} />
+              <Route path="employees" element={<EmployeeRead />} />
+              <Route path="employeeupdate" element={<EmployeeUpdate />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </Fragment>
   );
 };
 

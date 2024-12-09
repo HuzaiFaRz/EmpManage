@@ -14,7 +14,7 @@ import { ToastContainer } from "react-toastify";
 
 const LogIn = () => {
   const { setIsAdminLogged, setIsEmployeeLogged } = AuthUseContext();
-  const [logInLoading, setLogInLoading] = useState(false);
+  const [logInLoading, setLogInLoading] = useState(true);
   const [logInPasswordEye, setLogInPasswordEye] = useState(false);
   const navigate = useNavigate();
   const loginInputs = [
@@ -77,7 +77,7 @@ const LogIn = () => {
           <h1 className="font-semibold tracking-tighter text-4xl w-[100%] py-2 text-center text-colorTwo dark:text-colorOne">
             Log In
           </h1>
-          {loginInputs.map((elem, index) => {T
+          {loginInputs.map((elem, index) => {
             const { ID, Placeholder, Type } = elem;
             return (
               <React.Fragment key={index}>
@@ -146,7 +146,7 @@ const LogIn = () => {
               <span>Log In </span>
 
               {logInLoading ? (
-                <ClipLoader loading={logInLoading} size={20} color="#f5f5f5" />
+                <ClipLoader loading={logInLoading} size={20} className="LoadingLoader" />
               ) : (
                 <BiArrowFromLeft size={20} />
               )}
