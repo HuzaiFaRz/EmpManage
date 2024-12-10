@@ -11,7 +11,9 @@ const LayOut = () => {
     { name: "Create Employee", to: "employeecreate" },
   ];
 
-  isSideBarOpen ? (document.body.style.overflow = "hidden") : null;
+  isSideBarOpen
+    ? (document.body.style.overflowY = "hidden")
+    : (document.body.style.overflowY = "scroll");
 
   return (
     <Fragment>
@@ -49,7 +51,7 @@ const LayOut = () => {
         }`}
       >
         <div>
-          <h2 className="text-[14px] md:text-[20px] font-bold mb-6 tracking-normal py-1 md:py-3 px-1 md:px-2">
+          <h2 className="text-[14px] sm:text-[20px] font-bold mb-6 tracking-normal py-1 sm:py-3 px-1 sm:px-2">
             Employee Management System
           </h2>
           <div className="space-y-8 w-full flex flex-col">
@@ -60,7 +62,7 @@ const LayOut = () => {
                 }}
                 key={link.name}
                 to={link.to}
-                className={`py-1 md:py-3 px-1 md:px-3 w-full hover:bg-colorTwo hover:text-colorOne dark:hover:bg-colorOne dark:hover:text-colorTwo rounded-lg text-sm md:text-lg`}
+                className={`py-1 sm:py-3 px-1 sm:px-3 w-full hover:bg-colorTwo hover:text-colorOne dark:hover:bg-colorOne dark:hover:text-colorTwo rounded-lg text-sm sm:text-lg`}
               >
                 {link.name}
               </NavLink>
@@ -77,7 +79,7 @@ const LayOut = () => {
         </div>
       </div>
       <div
-        className={`w-full h-[100svh] bg-none bg-opacity-50 filter absolute z-30 bg-colorTwo ${
+        className={`w-full h-[100svh] bg-none bg-opacity-50 filter fixed z-30 bg-colorTwo ${
           isSideBarOpen ? "block" : "hidden"
         }`}
         onClick={() => {

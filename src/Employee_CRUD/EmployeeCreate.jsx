@@ -88,15 +88,15 @@ const EmployeeCreate = () => {
   return (
     <Fragment>
       <div
-        className={`Employee_Create_Page w-full h-full md:h-[90svh]  flex flex-col justify-center items-center p-2 mt-[10svh] ${ThemeDarkToLight}`}
+        className={`Employee_Create_Page w-full h-full md:h-[90svh]  flex flex-col justify-center items-center p-2 mt-[10svh] ${ThemeLightToDark}`}
       >
         <form
-          className={`Employee_Create_Form flex flex-wrap items-center justify-evenly gap-4 w-[1000px] max-w-full p-8 border dark:border-colorTwo dborder-colorOne
+          className={`Employee_Create_Form flex flex-wrap items-center justify-evenly gap-4 w-[1000px] max-w-full p-8 border border-colorTwo dark:border-colorOne
             
             ${employeeCreateLoading && "select-none cursor-not-allowed"}`}
           onSubmit={handleSubmit(Employee_Create_Form_Handler)}
         >
-          <h1 className="font-semibold tracking-tighter text-4xl w-[100%] py-2 text-center dark:text-colorTwo text-colorOne">
+          <h1 className="font-semibold tracking-tighter text-4xl w-[100%] py-2 text-center text-colorTwo dark:text-colorOne">
             Create Employee
           </h1>
           {employeecCreateInputs.map((elem, index) => {
@@ -105,7 +105,7 @@ const EmployeeCreate = () => {
               <React.Fragment key={index}>
                 <label
                   htmlFor={ID}
-                  className={`flex flex-col items-start justify-center gap-2 font-normal dark:text-colorTwo text-colorOne ${
+                  className={`flex flex-col items-start justify-center gap-2 font-normal text-colorTwo dark:text-colorOne ${
                     employeeCreateLoading && "cursor-not-allowed"
                   } ${ID === "employeePassword" && "relative overflow-hidden"}`}
                 >
@@ -115,7 +115,7 @@ const EmployeeCreate = () => {
                     type={Type}
                     placeholder={Placeholder}
                     id={Type === "file" ? ID : Placeholder}
-                    className={`p-2 bg-transparent border dark:border-colorTwo border-colorOne color-colorTwo font-light tracking-[1px] dark:placeholder:text-colorTwo placeholder:text-colorOne focus:outline-0  w-[300px]   ${
+                    className={`p-2 bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo font-light tracking-[1px] placeholder:text-colorTwo dark:placeholder:text-colorOne focus:outline-0 w-[300px] ${
                       employeeCreateLoading && "cursor-not-allowed"
                     }`}
                     {...register(ID, {
@@ -148,7 +148,7 @@ const EmployeeCreate = () => {
                     hidden={Type === "file" && true}
                   />
                   {Type === "file" && (
-                    <div className="p-2 cursor-pointer bg-transparent border dark:border-colorTwo color-light_Bg font-light tracking-[1px] border-colorOne w-[300px]">
+                    <div className="p-2 cursor-pointer bg-transparent border border-colorTwo color-light_Bg font-light tracking-[1px] dark:border-colorOne w-[300px]">
                       Profile
                     </div>
                   )}
@@ -184,7 +184,7 @@ const EmployeeCreate = () => {
           <div className="w-full p-2 m-2 flex items-center justify-center">
             <button
               type="submit"
-              className={`cursor-pointer ${ThemeLightToDark} border-0 px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5 ${
+              className={`cursor-pointer ${ThemeDarkToLight} border-0 px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5 ${
                 employeeCreateLoading && "cursor-not-allowed"
               }`}
               id="Employee_Form_Submit_Button"
