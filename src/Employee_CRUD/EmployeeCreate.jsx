@@ -10,6 +10,7 @@ import { PiEyeClosedBold, PiEyeFill } from "react-icons/pi";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../ConfigFiles/firebase_Config";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { IoIosWarning } from "react-icons/io";
 
 const EmployeeCreate = () => {
   const [employeeCreateLoading, setEmployeeCreateLoading] = useState(false);
@@ -105,9 +106,8 @@ const EmployeeCreate = () => {
               <React.Fragment key={index}>
                 <label
                   htmlFor={ID}
-                  className={`flex flex-col items-start justify-center gap-2 font-normal text-colorTwo dark:text-colorOne ${
-                    employeeCreateLoading && "cursor-not-allowed"
-                  } ${ID === "employeePassword" && "relative overflow-hidden"}`}
+                  className={`flex flex-col items-start justify-center gap-2 font-normal text-colorTwo dark:text-colorOne ${employeeCreateLoading && "cursor-not-allowed"
+                    } ${ID === "employeePassword" && "relative overflow-hidden"}`}
                 >
                   {Placeholder}
                   <input
@@ -115,9 +115,8 @@ const EmployeeCreate = () => {
                     type={Type}
                     placeholder={Placeholder}
                     id={Type === "file" ? ID : Placeholder}
-                    className={`p-2 bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo font-light tracking-[1px] placeholder:text-colorTwo dark:placeholder:text-colorOne focus:outline-0 w-[300px] ${
-                      employeeCreateLoading && "cursor-not-allowed"
-                    }`}
+                    className={`p-2 bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo font-light tracking-[1px] placeholder:text-colorTwo dark:placeholder:text-colorOne focus:outline-0 w-[300px] ${employeeCreateLoading && "cursor-not-allowed"
+                      }`}
                     {...register(ID, {
                       required: `${Placeholder} is required.`,
                       minLength: {
@@ -131,14 +130,14 @@ const EmployeeCreate = () => {
                           ID === "employeeAge"
                             ? 18
                             : ID === "employeeExperience"
-                            ? 2
-                            : null,
+                              ? 2
+                              : null,
                         message:
                           ID === "employeeAge"
                             ? "Age must be 18+"
                             : ID === "employeeExperience"
-                            ? "Experience too low"
-                            : null,
+                              ? "Experience too low"
+                              : null,
                       },
                       pattern: {
                         value: /^[^\s]+(?:$|.*[^\s]+$)/,
@@ -169,13 +168,21 @@ const EmployeeCreate = () => {
                     </button>
                   )}
                   <p
-                    className={`text-[#a63232] text-[13px] tracking-wider py-2 w-full h-[20px] flex items-center font-normal ${
-                      errors[ID]?.message &&
+                    className={`text-[#a63232] text-[13px] tracking-wider py-2 w-full h-[20px] flex items-center font-normal ${errors[ID]?.message &&
                       "z-50 cursor-not-allowed select-none"
-                    }`}
+                      }`}
                     id="Error_Para"
                   >
-                    {errors[ID]?.message}
+
+
+                    {
+                      errors[ID] && (<span className="flex flex-row justify-center items-center gap-2">  <IoIosWarning />{errors[ID]?.message} </span>)
+                    }
+
+
+
+
+
                   </p>
                 </label>
               </React.Fragment>
@@ -184,9 +191,8 @@ const EmployeeCreate = () => {
           <div className="w-full p-2 m-2 flex items-center justify-center">
             <button
               type="submit"
-              className={`cursor-pointer ${ThemeDarkToLight} border-0 px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5 ${
-                employeeCreateLoading && "cursor-not-allowed"
-              }`}
+              className={`cursor-pointer ${ThemeDarkToLight} border-0 px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5 ${employeeCreateLoading && "cursor-not-allowed"
+                }`}
               id="Employee_Form_Submit_Button"
               disabled={employeeCreateLoading && true}
             >
