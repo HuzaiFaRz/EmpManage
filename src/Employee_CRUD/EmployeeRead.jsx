@@ -1,37 +1,70 @@
 import { FaCheck } from "react-icons/fa";
 import { ThemeDarkToLight, ThemeLightToDark } from "../Main_Components/App";
 import React, { useEffect, useState } from "react";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  disableNetwork,
+  doc,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import { db } from "../ConfigFiles/firebase_Config";
 import LoadingArrows from "../Components/LoadingArrows";
 import { useRef } from "react";
+import { CgClose } from "react-icons/cg";
+import { IoIosWarning } from "react-icons/io";
+import LoadingSpinner from "../Components/LoadingSpinner";
 
 const EmployeeRead = () => {
   const [employeeSelectID, setEmployeeSelectID] = useState([]);
-  const [isAllEmployeeSelect, setIsAllEmployeeSelect] = useState(false);
   const [employees, setEmployees] = useState();
   const [employeeSearchInput, setEmployeeSearchInput] = useState("");
   const employeeCardRef = useRef([]);
-  // const employeeCardPushing = (element) => {
-  //   employeeCardRef.current.push(element);
-  // };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [scrollCount, setScrollCount] = useState(3);
+  const [employeeLoading, setEmployeeLoading] = useState(false);
 
   useEffect(() => {
-    const q = query(collection(db, "Employees"));
+    isModalOpen
+      ? (document.body.style.overflowY = "hidden")
+      : (document.body.style.overflowY = "scroll");
+
+    const employeeScrollHandler = () => {
+      if (
+        window.scrollY + window.innerHeight >=
+        document.documentElement.scrollHeight
+      ) {
+        setScrollCount((prevSetScrollCount) => prevSetScrollCount + 1);
+        return;
+      }
+    };
+    document.addEventListener("scroll", employeeScrollHandler);
+    return () => document.removeEventListener("scroll", employeeScrollHandler);
+  }, [isModalOpen, scrollCount]);
+
+  useEffect(() => {
+    setEmployeeLoading(true);
+    const q = query(
+      collection(db, "Employees"),
+      orderBy("employeeCreatingTime", "asc"),
+      limit(scrollCount)
+    );
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const a = querySnapshot.docs.map((data) => {
+      const realTimeEmployee = querySnapshot.docs.map((data) => {
         return {
           Id: data.id,
           ...data.data(),
         };
       });
-      setEmployees(a);
+      setEmployees(realTimeEmployee);
+      setEmployeeLoading(false);
     });
+
     return () => unsubscribe();
-  }, []);
-  if (!employees) {
-    return <LoadingArrows />;
-  }
+  }, [scrollCount]);
 
   const employeeSelectHandler = (Id) => {
     setEmployeeSelectID((prevSetEmployeeSelectId) =>
@@ -41,26 +74,11 @@ const EmployeeRead = () => {
     );
   };
 
-  const employeeAllSelectHandler = (event) => {
-    const isChecked = event.currentTarget.checked;
-    setIsAllEmployeeSelect(isChecked);
-    console.log(isAllEmployeeSelect);
-    if (isChecked) {
-      setEmployeeSelectID(employees.map((data) => data.Id));
+  const employeeAllSelectHandler = () => {
+    if (employeeSelectID.length === employees?.length) {
+      setEmployeeSelectID([]);
     } else {
-      if (isAllEmployeeSelect) {
-        setEmployeeSelectID([]);
-        return;
-      }
-      employees.forEach((data) => {
-        setEmployeeSelectID((prevSetEmployeeSelectId) =>
-          prevSetEmployeeSelectId?.includes(data.Id)
-            ? prevSetEmployeeSelectId.filter(
-                (existingId) => existingId === data.Id
-              )
-            : [...prevSetEmployeeSelectId, data.Id]
-        );
-      });
+      setEmployeeSelectID(employees.map((data) => data.Id));
     }
   };
 
@@ -84,16 +102,27 @@ const EmployeeRead = () => {
     });
   };
 
+  const employeeDeleteHandler = async () => {
+    console.log(employeeSelectID);
+    try {
+      const docRef = doc(db, "Todos", employeeSelectID);
+      await deleteDoc(docRef);
+      console.log(this);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div
       className={`Employee_Read_Page w-full h-full md:h-full  flex flex-col justify-center items-center p-2 mt-[10svh] ${ThemeLightToDark}`}
     >
-      <div className="Employee_Header flex w-full p-2 flex-wrap justify-evenly items-center gap-5">
+      <div className="Employee_Header flex flex-wrap w-full p-2  justify-evenly items-center gap-5">
         <h1 className="font-semibold tracking-tighter text-4xl py-2 text-center text-colorTwo dark:text-colorOne w-full">
           Employees
         </h1>
 
-        <div className="flex flex-row justify-evenly items-center w-full p-5">
+        <div className="flex flex-wrap justify-evenly items-center w-full p-5 gap-5">
           <input
             type="text"
             id="employeeSearch"
@@ -105,24 +134,87 @@ const EmployeeRead = () => {
           <button
             className={`${ThemeDarkToLight} cursor-pointer border-0 relative px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5`}
           >
-            {employeeSelectID.length === employees.length
-              ? "Unselect All"
+            {employeeSelectID.length === employees?.length
+              ? "UnSelect All"
               : "Select All"}
             <input
               type="checkbox"
               className="absolute w-full h-full opacity-0 cursor-pointer"
-              onChange={(event) => {
-                employeeAllSelectHandler(event);
+              onChange={() => {
+                employeeAllSelectHandler();
               }}
             />
             <p>{employeeSelectID.length}</p>
           </button>
+          <button
+            className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative px-[15px] py-[8px] text-[15px] flex flex-row hover:rounded-xl transition-all justify-center items-center gap-1"
+            disabled={employeeSelectID.length === 0 && true}
+            onClick={() => {
+              employeeSelectID.length === 0 || setIsModalOpen(true);
+              console.log(isModalOpen);
+            }}
+          >
+            <IoIosWarning /> Delete
+          </button>
         </div>
       </div>
 
-      <ul className="flex flex-wrap justify-evenly items-center p-2 w-full h-full min-h-[500px] list-none gap-y-12 mt-5 gap-6">
+      <div
+        className={`modal w-full h-[100svh] z-[80] fixed top-0 left-0 bg-colorTwo bg-opacity-50 ${
+          isModalOpen ? "flex" : "hidden"
+        } justify-center items-center`}
+        onClick={() => {
+          setIsModalOpen(false);
+          console.log(this);
+        }}
+      >
+        {" "}
+      </div>
+      <div
+        className={`${ThemeLightToDark} w-full sm:w-[600px] h-[300px] rounded-sm cursor-pointer z-[100] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-start ${
+          isModalOpen ? "flex" : "hidden"
+        }`}
+      >
+        <div className="modal-header flex flex-row justify-between items-center p-2 w-full">
+          <div></div>
+          <CgClose
+            size={25}
+            onClick={() => {
+              setIsModalOpen(false);
+            }}
+          />
+        </div>
+        <div className="modal-body">
+          <span className="text-lg text-colorTwo dark:text-colorOne font-bold p-5">
+            Do you Really Want to Delete {employeeSelectID.length} Employees
+          </span>
+        </div>
+        <div className="modal-footer flex flex-row justify-evenly gap-5 items-center p-2 mb-5 w-full">
+          <button
+            className="bg-[#5cb85c] text-colorOne cursor-pointer border-0 px-[15px] py-[8px] text-[15px] hover:rounded-xl transition-all"
+            onClick={() => {
+              setIsModalOpen(false);
+            }}
+          >
+            Cancle
+          </button>
+          <button
+            className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
+            disabled={employeeSelectID.length === 0 && true}
+            onClick={() => {
+              employeeDeleteHandler();
+            }}
+          >
+            <IoIosWarning /> Delete
+          </button>
+        </div>
+      </div>
+
+      <ul className="flex flex-wrap justify-evenly items-center p-2 w-full h-full min-h-[70svh] list-none gap-y-12 mt-5 gap-6">
         <>
-          {employees?.length === 0 ? (
+          {!employees ? (
+            <LoadingArrows />
+          ) : employees?.length === 0 ? (
             <h1 className="text-xl text-colorTwo dark:text-colorOne">
               No Employee Found
             </h1>
@@ -227,6 +319,10 @@ const EmployeeRead = () => {
               );
             })
           )}
+
+
+          
+          {employeeLoading && <LoadingSpinner />}
         </>
       </ul>
     </div>
