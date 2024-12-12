@@ -7,15 +7,14 @@ import { ClipLoader } from "react-spinners";
 import { BiArrowFromLeft } from "react-icons/bi";
 import { cloudinaryConfig } from "../ConfigFiles/Cloudinary_Config";
 import { PiEyeClosedBold, PiEyeFill } from "react-icons/pi";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../ConfigFiles/firebase_Config";
+import { db } from "../ConfigFiles/firebase_Config";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { IoIosWarning } from "react-icons/io";
 
-const EmployeeCreate = () => {
-  const [employeeCreateLoading, setEmployeeCreateLoading] = useState(false);
+const Employee_Add = () => {
+  const [employeeAddLoading, setEmployeeAddLoading] = useState(false);
   const [signInPasswordEye, setSignInPasswordEye] = useState(false);
-  const employeecCreateInputs = [
+  const employeeAddInputs = [
     { ID: "employeeName", Placeholder: "Name", Type: "text" },
     { ID: "employeeEmail", Placeholder: "Email", Type: "email" },
     {
@@ -46,15 +45,15 @@ const EmployeeCreate = () => {
     formState: { errors },
   } = useForm();
 
-  const Employee_Create_Form_Handler = async (employee_created_Data) => {
+  const employee_Add_Form_Handler = async (employee_Added_Data) => {
     try {
       event.preventDefault();
-      if (!employee_created_Data.employeeProfile[0].type.includes("image")) {
+      if (!employee_Added_Data.employeeProfile[0].type.includes("image")) {
         rejectMessage("Profile Extension Not Supported");
         return;
       }
-      setEmployeeCreateLoading(true);
-      const employeeProfile = employee_created_Data.employeeProfile[0];
+      setEmployeeAddLoading(true);
+      const employeeProfile = employee_Added_Data.employeeProfile[0];
       const employeeProfileData = new FormData();
       employeeProfileData.append("file", employeeProfile);
       employeeProfileData.append(
@@ -67,21 +66,16 @@ const EmployeeCreate = () => {
       );
       const data = await response.json();
       const { url } = data;
-      employee_created_Data.employeeProfile = url;
-      employee_created_Data.employeeCreatingTime = serverTimestamp();
-      employee_created_Data.role = "Employee";
-      await createUserWithEmailAndPassword(
-        auth,
-        employee_created_Data.employeeEmail,
-        employee_created_Data.employeePassword
-      );
-      await addDoc(collection(db, "Employees"), employee_created_Data);
-      resolveMessage("Employee Created");
-      setEmployeeCreateLoading(false);
-      // reset();
+      employee_Added_Data.employeeProfile = url;
+      employee_Added_Data.employeeAddingTime = serverTimestamp();
+      employee_Added_Data.role = "Employee";
+      await addDoc(collection(db, "Employees"), employee_Added_Data);
+      resolveMessage("Employee Added");
+      setEmployeeAddLoading(false);
     } catch (error) {
+      reset();
       console.log(error);
-      setEmployeeCreateLoading(false);
+      setEmployeeAddLoading(false);
       rejectMessage(error.message);
     }
   };
@@ -89,35 +83,35 @@ const EmployeeCreate = () => {
   return (
     <Fragment>
       <div
-        className={`Employee_Create_Page w-full h-full md:h-[90svh]  flex flex-col justify-center items-center p-2 mt-[10svh] ${ThemeLightToDark}`}
+        className={`Employee_Add_Page w-full h-full md:h-[90svh]  flex flex-col justify-center items-center p-2 mt-[10svh] ${ThemeLightToDark}`}
       >
         <form
-          className={`Employee_Create_Form flex flex-wrap items-center justify-evenly gap-4 w-[1000px] max-w-full p-8 border border-colorTwo dark:border-colorOne
+          className={`Employee_Add_Form flex flex-wrap items-center justify-evenly gap-4 w-[1000px] max-w-full p-8 border border-colorTwo dark:border-colorOne
             
-            ${employeeCreateLoading && "select-none cursor-not-allowed"}`}
-          onSubmit={handleSubmit(Employee_Create_Form_Handler)}
+            ${employeeAddLoading && "select-none cursor-not-allowed"}`}
+          onSubmit={handleSubmit(employee_Add_Form_Handler)}
         >
           <h1 className="font-semibold tracking-tighter text-4xl w-[100%] py-2 text-center text-colorTwo dark:text-colorOne">
-            Create Employee
+            Add Employee
           </h1>
-          {employeecCreateInputs.map((elem, index) => {
+          {employeeAddInputs.map((elem, index) => {
             const { ID, Placeholder, Type } = elem;
             return (
               <React.Fragment key={index}>
                 <label
                   htmlFor={ID}
                   className={`flex flex-col items-start justify-center gap-2 font-normal text-colorTwo dark:text-colorOne ${
-                    employeeCreateLoading && "cursor-not-allowed"
+                    employeeAddLoading && "cursor-not-allowed"
                   } ${ID === "employeePassword" && "relative overflow-hidden"}`}
                 >
                   {Placeholder}
                   <input
-                    disabled={employeeCreateLoading && true}
+                    disabled={employeeAddLoading && true}
                     type={Type}
                     placeholder={Placeholder}
                     id={Type === "file" ? ID : Placeholder}
                     className={`p-2 bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo font-light tracking-[1px] placeholder:text-colorTwo dark:placeholder:text-colorOne focus:outline-0 w-[300px] ${
-                      employeeCreateLoading && "cursor-not-allowed"
+                      employeeAddLoading && "cursor-not-allowed"
                     }`}
                     {...register(ID, {
                       required: `${Placeholder} is required.`,
@@ -192,16 +186,16 @@ const EmployeeCreate = () => {
             <button
               type="submit"
               className={`cursor-pointer ${ThemeDarkToLight} border-0 px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5 ${
-                employeeCreateLoading && "cursor-not-allowed"
+                employeeAddLoading && "cursor-not-allowed"
               }`}
               id="Employee_Form_Submit_Button"
-              disabled={employeeCreateLoading && true}
+              disabled={employeeAddLoading && true}
             >
-              <span>Create Employee</span>
+              <span>Add Employee</span>
 
-              {employeeCreateLoading ? (
+              {employeeAddLoading ? (
                 <ClipLoader
-                  loading={employeeCreateLoading}
+                  loading={employeeAddLoading}
                   size={20}
                   className="LoadingLoader"
                 />
@@ -216,4 +210,4 @@ const EmployeeCreate = () => {
   );
 };
 
-export default EmployeeCreate;
+export default Employee_Add;

@@ -2,29 +2,23 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-import  { auth } from "../ConfigFiles/firebase_Config";
+import { auth } from "../ConfigFiles/firebase_Config";
 import { onAuthStateChanged } from "firebase/auth";
 
 const AuthCreateContext = createContext();
 export const AuthUseContext = () => useContext(AuthCreateContext);
 const AuthProvider = ({ children }) => {
   const [isAdminLogged, setIsAdminLogged] = useState(null);
-  const [isEmployeeLogged, setIsEmployeeLogged] = useState(null);
   const [authLoading, setAuthLoading] = useState(false);
-
-  // console.log(isAdminLogged, "isAdminLogged============");
-  // console.log(isEmployeeLogged, "isEmployeeLogged==========");
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        if (user.email === "huzaifaadmin@gmail.com") {
+        if (user.email === "huzaifa.admin.a@gmail.com") {
           setIsAdminLogged(user);
         } else {
-          setIsEmployeeLogged(user);
+          setIsAdminLogged(null);
         }
-      } else {
-        setIsEmployeeLogged(null);
         setIsAdminLogged(null);
       }
     });
@@ -37,8 +31,6 @@ const AuthProvider = ({ children }) => {
         setIsAdminLogged,
         authLoading,
         setAuthLoading,
-        isEmployeeLogged,
-        setIsEmployeeLogged,
       }}
     >
       {children}

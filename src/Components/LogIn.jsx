@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
 import { rejectMessage, resolveMessage } from "../Script";
 import { ThemeDarkToLight, ThemeLightToDark } from "../Main_Components/App";
@@ -7,9 +7,8 @@ import { ClipLoader } from "react-spinners";
 import { PiEyeClosedBold, PiEyeFill } from "react-icons/pi";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../ConfigFiles/firebase_Config";
-import { Navigate, replace, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthUseContext } from "../Protected_Routes/AuthProvider";
-import LayOut from "./LayOut/LayOut";
 import { ToastContainer } from "react-toastify";
 
 const LogIn = () => {
@@ -44,12 +43,9 @@ const LogIn = () => {
       );
       if (loggedIn.user.email === "huzaifa.admin.a@gmail.com") {
         setIsAdminLogged(loggedIn.user);
-        setIsEmployeeLogged(null);
         resolveMessage("Admin Login SuccessFully");
       } else {
-        setIsEmployeeLogged(loggedIn.user);
         setIsAdminLogged(null);
-        resolveMessage("Login SuccessFully");
       }
       // navigate("/empmanage", { replace: true });
       reset();
@@ -146,7 +142,11 @@ const LogIn = () => {
               <span>Log In </span>
 
               {logInLoading ? (
-                <ClipLoader loading={logInLoading} size={20} className="LoadingLoader" />
+                <ClipLoader
+                  loading={logInLoading}
+                  size={20}
+                  className="LoadingLoader"
+                />
               ) : (
                 <BiArrowFromLeft size={20} />
               )}

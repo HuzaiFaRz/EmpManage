@@ -1,6 +1,6 @@
 import { FaCheck } from "react-icons/fa";
 import { ThemeDarkToLight, ThemeLightToDark } from "../Main_Components/App";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import {
   collection,
   deleteDoc,
@@ -11,21 +11,26 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
-import { db } from "../ConfigFiles/firebase_Config";
+import { auth, db } from "../ConfigFiles/firebase_Config";
 import LoadingArrows from "../Components/LoadingArrows";
 import { useRef } from "react";
 import { CgClose } from "react-icons/cg";
 import { IoIosWarning } from "react-icons/io";
 import LoadingSpinner from "../Components/LoadingSpinner";
+import { rejectMessage, resolveMessage } from "../Script";
+import { ClipLoader } from "react-spinners";
+import { getAuth } from "firebase/auth";
 
-const EmployeeRead = () => {
+const Employees = () => {
   const [employeeSelectID, setEmployeeSelectID] = useState([]);
   const [employees, setEmployees] = useState();
   const [employeeSearchInput, setEmployeeSearchInput] = useState("");
   const employeeCardRef = useRef([]);
+  const employeeNameRef = useRef([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [scrollCount, setScrollCount] = useState(3);
   const [employeeLoading, setEmployeeLoading] = useState(false);
+  const [employeeDeleteLoading, setEmployeeDeleteLoading] = useState(false);
 
   useEffect(() => {
     isModalOpen
@@ -87,29 +92,47 @@ const EmployeeRead = () => {
       .toLowerCase()
       .replaceAll(" ", "");
     setEmployeeSearchInput(employeeSearchInput);
-    employees?.forEach((data, index) => {
-      const employeeName = data?.employeeName
-        ?.toLowerCase()
-        .replaceAll(" ", "");
+    employeeNameRef.current.forEach((data, index) => {
       if (employeeCardRef.current[index]) {
-        const cardElement = employeeCardRef.current[index];
-        if (employeeName.includes(employeeSearchInput)) {
-          cardElement.style.display = "block";
+        const employeeCardElement = employeeCardRef.current[index];
+        if (data?.textContent.includes(employeeSearchInput)) {
+          employeeCardElement.style.transition =
+            "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
+          employeeCardElement.style.opacity = "1";
+          employeeCardElement.style.width = "400px";
+          employeeCardElement.style.height = "auto";
+          employeeCardElement.style.overflow = "auto";
+          employeeCardElement.style.visibility = "visible";
         } else {
-          cardElement.style.display = "none";
+          employeeCardElement.style.visibility = "hidden";
+          employeeCardElement.style.opacity = "0";
+          employeeCardElement.style.width = "0";
+          employeeCardElement.style.height = "0";
+          employeeCardElement.style.overflow = "hidden";
+          employeeCardElement.style.appearance = "none";
+          employeeCardElement.style.transition =
+            "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
         }
       }
     });
   };
-
-  const employeeDeleteHandler = async () => {
+  const employeeDeleteHandler = () => {
     console.log(employeeSelectID);
     try {
-      const docRef = doc(db, "Todos", employeeSelectID);
-      await deleteDoc(docRef);
-      console.log(this);
+      console.log(employeeSelectID);
+      employeeSelectID.forEach(async (data) => {
+        console.log(data);
+        const docRef = doc(db, "Employees", data);
+        setEmployeeDeleteLoading(true);
+        await deleteDoc(docRef);
+        setEmployeeDeleteLoading(false);
+        setEmployeeSelectID([]);
+        setIsModalOpen(false);
+        resolveMessage("Employee Deleted");
+      });
     } catch (error) {
       console.log(error);
+      rejectMessage(error.messege);
     }
   };
 
@@ -129,14 +152,22 @@ const EmployeeRead = () => {
             className="p-2 bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo font-light tracking-[1px] placeholder:text-colorTwo dark:placeholder:text-colorOne focus:outline-0 w-[300px]"
             placeholder="Search Employee By Name"
             value={employeeSearchInput}
-            onChange={employeeSearchHandler}
+            onChange={(event) => {
+              employeeSearchHandler(event);
+            }}
           />
           <button
-            className={`${ThemeDarkToLight} cursor-pointer border-0 relative px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5`}
+            className={`${ThemeDarkToLight} cursor-pointer border-0 relative px-3 py-2 sm:px-6 text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5`}
+            disabled={
+              employeeSelectID.length === 0 && employees?.length === 0 && true
+            }
           >
-            {employeeSelectID.length === employees?.length
+            {employees?.length === 0
+              ? "Select All"
+              : employeeSelectID.length === employees?.length
               ? "UnSelect All"
               : "Select All"}
+
             <input
               type="checkbox"
               className="absolute w-full h-full opacity-0 cursor-pointer"
@@ -147,8 +178,10 @@ const EmployeeRead = () => {
             <p>{employeeSelectID.length}</p>
           </button>
           <button
-            className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative px-[15px] py-[8px] text-[15px] flex flex-row hover:rounded-xl transition-all justify-center items-center gap-1"
-            disabled={employeeSelectID.length === 0 && true}
+            className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative text-[15px] flex flex-row hover:rounded-xl transition-all justify-center items-center gap-1 px-3 py-2 sm:px-6"
+            disabled={
+              employeeSelectID.length === 0 && employees?.length === 0 && true
+            }
             onClick={() => {
               employeeSelectID.length === 0 || setIsModalOpen(true);
               console.log(isModalOpen);
@@ -160,7 +193,7 @@ const EmployeeRead = () => {
       </div>
 
       <div
-        className={`modal w-full h-[100svh] z-[80] fixed top-0 left-0 bg-colorTwo bg-opacity-50 ${
+        className={`modal w-full h-[100svh] z-[80] fixed top-0 left-0 bg-colorTwo backdrop-blur-lg bg-opacity-50 ${
           isModalOpen ? "flex" : "hidden"
         } justify-center items-center`}
         onClick={() => {
@@ -170,8 +203,9 @@ const EmployeeRead = () => {
       >
         {" "}
       </div>
+
       <div
-        className={`${ThemeLightToDark} w-full sm:w-[600px] h-[300px] rounded-sm cursor-pointer z-[100] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-start ${
+        className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[300px] rounded-sm cursor-pointer z-[100] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-start ${
           isModalOpen ? "flex" : "hidden"
         }`}
       >
@@ -185,7 +219,7 @@ const EmployeeRead = () => {
           />
         </div>
         <div className="modal-body">
-          <span className="text-lg text-colorTwo dark:text-colorOne font-bold p-5">
+          <span className="text-sm sm:text-lg font-bold p-5 w-full">
             Do you Really Want to Delete {employeeSelectID.length} Employees
           </span>
         </div>
@@ -200,12 +234,17 @@ const EmployeeRead = () => {
           </button>
           <button
             className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
-            disabled={employeeSelectID.length === 0 && true}
-            onClick={() => {
-              employeeDeleteHandler();
-            }}
+            disabled={
+              employeeSelectID.length === 0 && employees?.length === 0 && true
+            }
+            onClick={employeeDeleteHandler}
           >
-            <IoIosWarning /> Delete
+            {employeeDeleteLoading ? (
+              <ClipLoader color="white" size={20} />
+            ) : (
+              <IoIosWarning size={20} />
+            )}{" "}
+            Delete
           </button>
         </div>
       </div>
@@ -264,7 +303,12 @@ const EmployeeRead = () => {
                           className="w-20 h-20 rounded-full object-cover border-2 dark:border-colorOne border-colorTwo"
                         />
                         <div className="flex flex-col justify-center items-start">
-                          <h2 className="text-lg font-bold tracking-wide">
+                          <h2
+                            className="text-lg font-bold tracking-wide"
+                            ref={(el) => {
+                              employeeNameRef.current.push(el);
+                            }}
+                          >
                             {employeeName}
                           </h2>
                           <p className="text-sm">{employeeProfession}</p>
@@ -291,7 +335,7 @@ const EmployeeRead = () => {
                         <span className="capitalize font-bold text-lg">
                           Email:{" "}
                         </span>
-                        <p> {employeeEmail}</p>
+                        <p className="lowercase"> {employeeEmail}</p>
                       </li>
                       <li className="capitalize flex flex-row justify-start items-center gap-1">
                         <span className="font-bold text-lg">Age: </span>{" "}
@@ -320,8 +364,6 @@ const EmployeeRead = () => {
             })
           )}
 
-
-          
           {employeeLoading && <LoadingSpinner />}
         </>
       </ul>
@@ -329,4 +371,4 @@ const EmployeeRead = () => {
   );
 };
 
-export default EmployeeRead;
+export default Employees;

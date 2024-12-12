@@ -2,16 +2,14 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LogIn from "../Components/LogIn";
 import AdminDashBoard from "../Components/AdminDashBoard";
-import EmployeeDashBoard from "../Employee_CRUD/EmployeeDashBoard";
-import EmployeeCreate from "../Employee_CRUD/EmployeeCreate";
-import EmployeeUpdate from "../Employee_CRUD/EmployeeUpdate";
+import Employee_Add from "../Employee_CRUD/Employee_Add.jsx";
 import EmpManage from "../Components/EmpManage/EmpManage";
-import ProtectedRoute from "../Protected_Routes/ProtectedRoute";
 import LayOut from "../Components/LayOut/LayOut";
 import AuthProvider from "../Protected_Routes/AuthProvider";
 import { ToastContainer } from "react-toastify";
-import EmployeeRead from "../Employee_CRUD/EmployeeRead";
+import Employees from "../Employee_CRUD/Employees";
 import { Fragment } from "react";
+import EmployeeEdit from "../Employee_CRUD/Employee_Edit.jsx";
 
 const ThemeLightToDark =
   "bg-colorOne dark:bg-colorTwo text-colorTwo dark:text-colorOne";
@@ -30,11 +28,10 @@ const App = () => {
             <Route path="/" element={<LayOut />}>
               <Route path="login" element={<LogIn />} />
               <Route path="empmanage" element={<EmpManage />} />
-              <Route path="admindashBoard" element={<AdminDashBoard />} />
-              <Route path="employeedashBoard" element={<EmployeeDashBoard />} />
-              <Route path="employeecreate" element={<EmployeeCreate />} />
-              <Route path="employees" element={<EmployeeRead />} />
-              <Route path="employeeupdate" element={<EmployeeUpdate />} />
+              <Route path="admin_dashBoard" element={<AdminDashBoard />} />
+              <Route path="employee_edit" element={<EmployeeEdit />} />
+              <Route path="employee_add" element={<Employee_Add />} />
+              <Route path="employees" element={<Employees />} />
             </Route>
           </Routes>
         </BrowserRouter>

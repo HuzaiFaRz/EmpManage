@@ -3,15 +3,15 @@ import { NavLink, Outlet } from "react-router-dom";
 import ThemeChangerButton from "../ThemeChanger/ThemeChangerButton";
 import { ThemeDarkToLight, ThemeLightToDark } from "../../Main_Components/App";
 import { MdDashboard } from "react-icons/md";
-import { IoIosCreate } from "react-icons/io";
+import { IoIosCreate, IoIosPersonAdd } from "react-icons/io";
 import { FaBookReader } from "react-icons/fa";
 
 const LayOut = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const sideBarsLinks = [
-    { name: "Dashboard", to: "dashboard" },
-    { name: "Read Employees", to: "employees" },
-    { name: "Create Employee", to: "employeecreate" },
+    { name: "Admin Dashboard", to: "admin_dashBoard" },
+    { name: "Employees", to: "employees" },
+    { name: "Add Employee", to: "employee_add" },
   ];
   useEffect(() => {
     isSideBarOpen
@@ -21,10 +21,10 @@ const LayOut = () => {
 
   return (
     <Fragment>
-      <nav className="fixed top-0 w-full flex items-center justify-between bg-colorOne dark:bg-colorTwo dark:text-colorOne text-colorTwo px-5 py-3 h-[10svh] z-20">
+      <nav className="fixed top-0 w-full flex items-center justify-between bg-colorOne dark:bg-colorTwo dark:text-colorOne text-colorTwo px-5 py-3 h-[10svh] z-[50]">
         <div className="flex flex-row justify-center items-center h-full gap-5">
           <div
-            className={`w-[80px] h-full flex flex-col justify-center items-center gap-2 cursor-pointer scale-50 xs:scale-75 sm:scale-90 ${
+            className={`w-[80px] h-full flex flex-col justify-center items-center gap-3 cursor-pointer scale-50 xs:scale-75 sm:scale-90 ${
               isSideBarOpen ? "setIsSideBarOpen" : null
             }`}
             onClick={(e) => {
@@ -48,7 +48,7 @@ const LayOut = () => {
       </nav>
 
       <div
-        className={`dark:bg-colorTwo bg-colorOne dark:text-colorOne text-colorTwo p-4 h-[90svh] flex flex-col justify-between w-[80%] md:w-[50%] z-[50] fixed top-[10svh] bottom-0 transition-all ${
+        className={`dark:bg-colorTwo bg-colorOne dark:text-colorOne text-colorTwo p-4 h-[90svh] flex flex-col justify-between w-[80%] md:w-[50%] z-[100] fixed top-[10svh] bottom-0 transition-all ${
           isSideBarOpen ? "left-[0%]" : "left-[-80%]"
         }`}
       >
@@ -67,12 +67,12 @@ const LayOut = () => {
                   to={link.to}
                   className={`py-1 sm:py-3 px-1 sm:px-3 w-full hover:bg-colorTwo hover:text-colorOne dark:hover:bg-colorOne dark:hover:text-colorTwo rounded-lg text-sm sm:text-lg flex flex-row justify-start items-center gap-5`}
                 >
-                  {link.name === "Dashboard" ? (
+                  {link.name === "Admin Dashboard" ? (
                     <MdDashboard size={25} />
-                  ) : link.name === "Read Employees" ? (
-                    <FaBookReader />
-                  ) : link.name === "Create Employee" ? (
-                    <IoIosCreate />
+                  ) : link.name === "Employees" ? (
+                    <FaBookReader size={25} />
+                  ) : link.name === "Add Employee" ? (
+                    <IoIosPersonAdd size={25}  />
                   ) : undefined}{" "}
                   {link.name}
                 </NavLink>
@@ -83,14 +83,14 @@ const LayOut = () => {
 
         <div className="flex justify-end">
           <button
-            className={`logOutBtn p-3 ${ThemeDarkToLight} rounded-md w-28`}
+            className={`logOutBtn p-2 sm:p-3 ${ThemeDarkToLight} rounded-md w-20 sm:w-28`}
           >
             Log Out
           </button>
         </div>
       </div>
       <div
-        className={`w-full h-[100svh] bg-none bg-opacity-50 filter fixed z-30 bg-colorTwo ${
+        className={`w-full h-[100svh] bg-none bg-opacity-50 filter fixed z-40 bg-colorTwo ${
           isSideBarOpen ? "block" : "hidden"
         }`}
         onClick={() => {

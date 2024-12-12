@@ -1,11 +1,11 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import 'react-toastify/ReactToastify.css';
-import '../Style/index.css'
-import App from '../Main_Components/App'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "react-toastify/ReactToastify.css";
+import "../Style/index.css";
+import App from "../Main_Components/App";
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
     <App />
-  </StrictMode>,
-)
+  </StrictMode>
+);
