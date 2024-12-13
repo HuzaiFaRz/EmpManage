@@ -1,25 +1,23 @@
 import { FaCheck } from "react-icons/fa";
-import { ThemeDarkToLight, ThemeLightToDark } from "../Main_Components/App";
-import React, { useEffect, useState, useTransition } from "react";
+import { ThemeDarkToLight, ThemeLightToDark } from "../Script/index";
+import React, { useEffect, useState } from "react";
 import {
   collection,
   deleteDoc,
-  disableNetwork,
   doc,
   limit,
   onSnapshot,
   orderBy,
   query,
 } from "firebase/firestore";
-import { auth, db } from "../ConfigFiles/firebase_Config";
-import LoadingArrows from "../Components/LoadingArrows";
+import { db } from "../ConfigFiles/firebase_Config";
+import LoadingArrows from "../Components/Loading_Arrows";
 import { useRef } from "react";
 import { CgClose } from "react-icons/cg";
 import { IoIosWarning } from "react-icons/io";
-import LoadingSpinner from "../Components/LoadingSpinner";
+import LoadingSpinner from "../Components/Loading_Spinner";
 import { rejectMessage, resolveMessage } from "../Script";
 import { ClipLoader } from "react-spinners";
-import { getAuth } from "firebase/auth";
 
 const Employees = () => {
   const [employeeSelectID, setEmployeeSelectID] = useState([]);

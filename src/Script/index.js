@@ -8,10 +8,16 @@ const MessageStyle = {
   draggablePercent: 100,
 };
 
+const ThemeLightToDark =
+  "bg-colorOne dark:bg-colorTwo text-colorTwo dark:text-colorOne";
+
+const ThemeDarkToLight =
+  "bg-colorTwo text-colorOne dark:bg-colorOne dark:text-colorTwo";
+
 const rejectMessage = (message) => {
   toast.error(message, MessageStyle);
 };
 const resolveMessage = (message) => {
   toast.success(message, MessageStyle);
 };
-export { rejectMessage, resolveMessage };
+export { rejectMessage, resolveMessage, ThemeLightToDark, ThemeDarkToLight };

@@ -1,19 +1,23 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { rejectMessage, resolveMessage } from "../Script";
-import { ThemeDarkToLight, ThemeLightToDark } from "../Main_Components/App";
+import {
+  rejectMessage,
+  resolveMessage,
+  ThemeDarkToLight,
+  ThemeLightToDark,
+} from "../Script";
 import { BiArrowFromLeft } from "react-icons/bi";
 import { ClipLoader } from "react-spinners";
 import { PiEyeClosedBold, PiEyeFill } from "react-icons/pi";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../ConfigFiles/firebase_Config";
 import { useNavigate } from "react-router-dom";
-import { AuthUseContext } from "../Protected_Routes/AuthProvider";
+import { AuthUseContext } from "../Utilities/Auth_Provider";
 import { ToastContainer } from "react-toastify";
 
 const LogIn = () => {
-  const { setIsAdminLogged, setIsEmployeeLogged } = AuthUseContext();
-  const [logInLoading, setLogInLoading] = useState(true);
+  const { setIsAdminLogged, isAdminLogged } = AuthUseContext();
+  const [logInLoading, setLogInLoading] = useState(false);
   const [logInPasswordEye, setLogInPasswordEye] = useState(false);
   const navigate = useNavigate();
   const loginInputs = [
@@ -24,6 +28,11 @@ const LogIn = () => {
       Type: logInPasswordEye ? "text" : "password",
     },
   ];
+  useEffect(() => {
+    if (isAdminLogged) {
+      navigate("/", { replace: true });
+    }
+  }, [isAdminLogged, navigate]);
   const {
     register,
     handleSubmit,
@@ -44,10 +53,11 @@ const LogIn = () => {
       if (loggedIn.user.email === "huzaifa.admin.a@gmail.com") {
         setIsAdminLogged(loggedIn.user);
         resolveMessage("Admin Login SuccessFully");
+        navigate("/", { replace: true });
       } else {
         setIsAdminLogged(null);
+        resolveMessage("Login SuccessFully");
       }
-      // navigate("/empmanage", { replace: true });
       reset();
       setLogInLoading(false);
     } catch (error) {

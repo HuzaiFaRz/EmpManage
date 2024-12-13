@@ -1,21 +1,15 @@
 // import DefaultProfilePic from "../assets/Images/Default_Profile_Pic.jpg";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import LogIn from "../Components/LogIn";
-import AdminDashBoard from "../Components/AdminDashBoard";
+import LogIn from "../Auth/LogIn.jsx";
+import AdminDashBoard from "../AdminDashBoard/Admin_DashBoard.jsx";
 import Employee_Add from "../Employee_CRUD/Employee_Add.jsx";
-import EmpManage from "../Components/EmpManage/EmpManage";
-import LayOut from "../Components/LayOut/LayOut";
-import AuthProvider from "../Protected_Routes/AuthProvider";
+import EmpManage from "../EmpManage/Emp_Manage.jsx";
+import AuthProvider from "../Utilities/Auth_Provider.jsx";
 import { ToastContainer } from "react-toastify";
 import Employees from "../Employee_CRUD/Employees";
 import { Fragment } from "react";
 import EmployeeEdit from "../Employee_CRUD/Employee_Edit.jsx";
-
-const ThemeLightToDark =
-  "bg-colorOne dark:bg-colorTwo text-colorTwo dark:text-colorOne";
-
-const ThemeDarkToLight =
-  "bg-colorTwo text-colorOne dark:bg-colorOne dark:text-colorTwo";
+import ProtectedRoute from "../ProtectedRoutes/Protected_Route.jsx";
 
 const App = () => {
   return (
@@ -25,13 +19,15 @@ const App = () => {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<LayOut />}>
-              <Route path="login" element={<LogIn />} />
-              <Route path="empmanage" element={<EmpManage />} />
-              <Route path="admin_dashBoard" element={<AdminDashBoard />} />
-              <Route path="employee_edit" element={<EmployeeEdit />} />
-              <Route path="employee_add" element={<Employee_Add />} />
-              <Route path="employees" element={<Employees />} />
+            <Route path="login" element={<LogIn />} />
+
+            <Route path="/" element={<ProtectedRoute />}>
+              <Route path="/" element={<EmpManage />}>
+                <Route path="admin_dashBoard" element={<AdminDashBoard />} />
+                <Route path="employee_edit" element={<EmployeeEdit />} />
+                <Route path="employee_add" element={<Employee_Add />} />
+                <Route path="employees" element={<Employees />} />
+              </Route>
             </Route>
           </Routes>
         </BrowserRouter>
@@ -40,5 +36,4 @@ const App = () => {
   );
 };
 
-export { ThemeLightToDark, ThemeDarkToLight };
 export default App;

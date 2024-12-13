@@ -1,10 +1,11 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
-import ThemeChangerButton from "../ThemeChanger/ThemeChangerButton";
-import { ThemeDarkToLight, ThemeLightToDark } from "../../Main_Components/App";
+import ThemeChangerButton from "../ThemeChanger/Theme_Changer_Button";
+
 import { MdDashboard } from "react-icons/md";
-import { IoIosCreate, IoIosPersonAdd } from "react-icons/io";
+import { IoIosPersonAdd } from "react-icons/io";
 import { FaBookReader } from "react-icons/fa";
+import { ThemeDarkToLight } from "../Script";
 
 const LayOut = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
@@ -72,7 +73,7 @@ const LayOut = () => {
                   ) : link.name === "Employees" ? (
                     <FaBookReader size={25} />
                   ) : link.name === "Add Employee" ? (
-                    <IoIosPersonAdd size={25}  />
+                    <IoIosPersonAdd size={25} />
                   ) : undefined}{" "}
                   {link.name}
                 </NavLink>
@@ -97,8 +98,7 @@ const LayOut = () => {
           setIsSideBarOpen(!isSideBarOpen);
         }}
       ></div>
-
-      <Outlet />
+        <Outlet />
     </Fragment>
   );
 };

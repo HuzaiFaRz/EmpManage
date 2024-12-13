@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { ThemeDarkToLight, ThemeLightToDark } from "../Main_Components/App";
+import { ThemeDarkToLight, ThemeLightToDark } from "../Script/index";
 import { useForm } from "react-hook-form";
 
 import { rejectMessage, resolveMessage } from "../Script/index";
