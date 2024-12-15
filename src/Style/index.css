@@ -99,11 +99,10 @@ input:focus #Error_Para {
   border-color: #f5f5f5 transparent !important;
 }
 
-@media (min-width:600px){
-  #Employee{
+@media (min-width: 600px) {
+  #Employee {
     width: 100% !important;
   }
-
 }
 
 @media (max-width: 900px) {
@@ -144,4 +143,12 @@ img {
     opacity: 0;
     transform: rotate(45deg) translate(20px, 20px);
   }
+}
+#employee_id_generate_icons {
+  background-color: #333333;
+}
+
+.dark #employee_id_generate_icons {
+  background-color: #f5f5f5;
+  color: #333333;
 }

@@ -18,6 +18,8 @@ import { IoIosWarning } from "react-icons/io";
 import LoadingSpinner from "../Components/Loading_Spinner";
 import { rejectMessage, resolveMessage } from "../Script";
 import { ClipLoader } from "react-spinners";
+import { Cloudinary, CloudinaryImage } from "@cloudinary/url-gen/index";
+import { cloudinaryConfig } from "../ConfigFiles/Cloudinary_Config";
 
 const Employees = () => {
   const [employeeSelectID, setEmployeeSelectID] = useState([]);
@@ -46,13 +48,13 @@ const Employees = () => {
     };
     document.addEventListener("scroll", employeeScrollHandler);
     return () => document.removeEventListener("scroll", employeeScrollHandler);
-  }, [isModalOpen, scrollCount]);
+  }, [employees, isModalOpen]);
 
   useEffect(() => {
     setEmployeeLoading(true);
     const q = query(
       collection(db, "Employees"),
-      orderBy("employeeCreatingTime", "asc"),
+      orderBy("employeeAddingTime", "asc"),
       limit(scrollCount)
     );
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -114,25 +116,133 @@ const Employees = () => {
       }
     });
   };
-  const employeeDeleteHandler = () => {
-    console.log(employeeSelectID);
-    try {
-      console.log(employeeSelectID);
-      employeeSelectID.forEach(async (data) => {
-        console.log(data);
-        const docRef = doc(db, "Employees", data);
-        setEmployeeDeleteLoading(true);
-        await deleteDoc(docRef);
-        setEmployeeDeleteLoading(false);
-        setEmployeeSelectID([]);
-        setIsModalOpen(false);
-        resolveMessage("Employee Deleted");
-      });
-    } catch (error) {
-      console.log(error);
-      rejectMessage(error.messege);
-    }
-  };
+
+  // const employeeDeleteHandler = async () => {
+  //   try {
+  //     employees.forEach(async (data) => {
+  //       try {
+  //         const { Id, employeeProfilePublicID, employeeProfile } = data;
+  //         if (employeeSelectID.includes(Id)) {
+  //           const timestamp = new Date().getTime();
+
+  //           const responseSignature = await fetch(
+  //             `http://localhost:3001/generate-signature?public_id=${employeeProfilePublicID}&timestamp=${timestamp}`
+  //           );
+  //           const signature = await responseSignature.json();
+
+  //           const url = `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/destroy`;
+
+  //           const response = await fetch(url, {
+  //             method: "POST",
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //             },
+  //             body: JSON.stringify({
+  //               public_id: employeeProfilePublicID,
+  //               signature: signature.signature,
+  //               api_key: cloudinaryConfig.apiKey,
+  //               timestamp: timestamp,
+  //             }),
+  //           });
+
+  //           const data = await response.json();
+  //           console.log(data);
+
+      
+  //           console.log(res);
+  //         }
+  //       } catch (error) {
+  //         console.log(error);
+  //       }
+  //     });
+
+  //   } catch (error) {
+  //     console.log(error);
+  //     rejectMessage(error.messege);
+  //   }
+  // };
+  
+
+   // if (response.ok) {
+      //   console.log("Image deleted successfully");
+      // } else {
+      //   const errorData = await response.json();
+      //   console.error("Failed to delete image:", errorData);
+      // }
+
+      // deleteImage("y9dtdwvuniiopa9qj7pf");
+      // employeeSelectID.forEach(async (data) => {
+      //   console.log(data);
+      //   const docRef = doc(db, "Employees", data);
+      //   setEmployeeDeleteLoading(true);
+      //   await deleteDoc(docRef);
+      // });
+      // setEmployeeDeleteLoading(false);
+      // setEmployeeSelectID([]);
+      // setIsModalOpen(false);
+      // resolveMessage("Employee Deleted");
+
+
+      const employeeDeleteHandler = async () => {
+        try {
+          // Use a for...of loop to properly handle async operations
+          for (const data of employees) {
+            try {
+              const { Id, employeeProfilePublicID, employeeProfile } = data;
+              
+              // Check if the employee is selected
+              if (employeeSelectID.includes(Id)) {
+                const timestamp = new Date().getTime();
+      
+                // Generate the signature from the backend
+                const responseSignature = await fetch(
+                  `http://localhost:3001/generate-signature?public_id=${employeeProfilePublicID}&timestamp=${timestamp}`
+                );
+                const signature = await responseSignature.json();
+      
+                // Prepare the Cloudinary API URL
+                const url = `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/destroy`;
+      
+                // Send the request to Cloudinary to delete the image
+                const response = await fetch(url, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    public_id: employeeProfilePublicID,
+                    signature: signature.signature,
+                    api_key: cloudinaryConfig.apiKey,
+                    timestamp: timestamp,
+                  }),
+                });
+      
+                const data = await response.json();
+      
+                // Log the response from Cloudinary
+                console.log(data);
+      
+                // You can also perform other actions based on the response, like notifying the user
+                if (data.result === "ok") {
+                  console.log("Image deleted successfully.");
+                } else {
+                  console.log("Failed to delete image:", data);
+                }
+              }
+            } catch (error) {
+              console.error("Error processing employee:", error);
+            }
+          }
+        } catch (error) {
+          console.error("Error in employeeDeleteHandler:", error);
+          rejectMessage(error.message);  // Fixed the typo here
+        }
+      };
+      
+
+
+
+
 
   return (
     <div
@@ -269,8 +379,8 @@ const Employees = () => {
                 employeeProfile,
                 role,
               } = data;
-              const { seconds, nanoseconds } = data.employeeCreatingTime;
-              const employeeCreatingTimeConvert = new Date(
+              const { seconds, nanoseconds } = data.employeeAddingTime;
+              const employeeAddingTimeConvert = new Date(
                 seconds * 1000 + nanoseconds / 1000000
               )?.toLocaleString("en-US", {
                 hour: "numeric",
@@ -353,7 +463,7 @@ const Employees = () => {
                       </li>
                       <li className="capitalize flex flex-row justify-start items-center gap-1">
                         <span className="font-bold text-lg">Apply time: </span>{" "}
-                        <p> {employeeCreatingTimeConvert}</p>
+                        <p> {employeeAddingTimeConvert}</p>
                       </li>
                     </ul>
                   </div>

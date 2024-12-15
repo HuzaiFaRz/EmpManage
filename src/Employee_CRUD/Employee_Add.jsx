@@ -6,21 +6,31 @@ import { rejectMessage, resolveMessage } from "../Script/index";
 import { ClipLoader } from "react-spinners";
 import { BiArrowFromLeft } from "react-icons/bi";
 import { cloudinaryConfig } from "../ConfigFiles/Cloudinary_Config";
-import { PiEyeClosedBold, PiEyeFill } from "react-icons/pi";
-import { db } from "../ConfigFiles/firebase_Config";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { auth, db } from "../ConfigFiles/firebase_Config";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
+import uuid from "react-uuid";
 import { IoIosWarning } from "react-icons/io";
+import { VscDebugRestart } from "react-icons/vsc";
+
+import { Tooltip } from "react-tooltip";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const Employee_Add = () => {
   const [employeeAddLoading, setEmployeeAddLoading] = useState(false);
-  const [signInPasswordEye, setSignInPasswordEye] = useState(false);
+  const [employeeID, setEmployeeID] = useState(uuid().slice(0, 15));
   const employeeAddInputs = [
     { ID: "employeeName", Placeholder: "Name", Type: "text" },
     { ID: "employeeEmail", Placeholder: "Email", Type: "email" },
     {
-      ID: "employeePassword",
-      Placeholder: "Password",
-      Type: signInPasswordEye ? "text" : "password",
+      ID: "employeeID",
+      Placeholder: "ID",
+      Type: "text",
     },
 
     { ID: "employeeAddress", Placeholder: "Address", Type: "text" },
@@ -45,6 +55,11 @@ const Employee_Add = () => {
     formState: { errors },
   } = useForm();
 
+  const employee_ID_Handler = () => {
+    const id = uuid().slice(0, 15);
+    setEmployeeID(id);
+  };
+
   const employee_Add_Form_Handler = async (employee_Added_Data) => {
     try {
       event.preventDefault();
@@ -65,15 +80,17 @@ const Employee_Add = () => {
         { method: "POST", body: employeeProfileData }
       );
       const data = await response.json();
-      const { url } = data;
+      const { url, public_id } = data;
+      employee_Added_Data.employeeProfilePublicID = public_id;
       employee_Added_Data.employeeProfile = url;
       employee_Added_Data.employeeAddingTime = serverTimestamp();
       employee_Added_Data.role = "Employee";
       await addDoc(collection(db, "Employees"), employee_Added_Data);
       resolveMessage("Employee Added");
       setEmployeeAddLoading(false);
+      employee_ID_Handler();
     } catch (error) {
-      reset();
+      // reset();
       console.log(error);
       setEmployeeAddLoading(false);
       rejectMessage(error.message);
@@ -102,25 +119,20 @@ const Employee_Add = () => {
                   htmlFor={ID}
                   className={`flex flex-col items-start justify-center gap-2 font-normal text-colorTwo dark:text-colorOne ${
                     employeeAddLoading && "cursor-not-allowed"
-                  } ${ID === "employeePassword" && "relative overflow-hidden"}`}
+                  } ${ID === "employeeID" && "relative overflow-hidden"}`}
                 >
                   {Placeholder}
                   <input
                     disabled={employeeAddLoading && true}
                     type={Type}
                     placeholder={Placeholder}
+                    value={ID === "employeeID" ? employeeID : null}
                     id={Type === "file" ? ID : Placeholder}
                     className={`p-2 bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo font-light tracking-[1px] placeholder:text-colorTwo dark:placeholder:text-colorOne focus:outline-0 w-[300px] ${
                       employeeAddLoading && "cursor-not-allowed"
                     }`}
                     {...register(ID, {
                       required: `${Placeholder} is required.`,
-                      minLength: {
-                        value: ID === "employeePassword" && 8,
-                        message:
-                          ID === "employeePassword" &&
-                          "Password At Least Eight Character",
-                      },
                       min: {
                         value:
                           ID === "employeeAge"
@@ -148,21 +160,28 @@ const Employee_Add = () => {
                     </div>
                   )}
 
-                  {ID === "employeePassword" && (
-                    <button
-                      className="absolute right-2 cursor-pointer"
-                      type="button"
-                      onClick={() => {
-                        setSignInPasswordEye(!signInPasswordEye);
-                      }}
-                    >
-                      {signInPasswordEye ? (
-                        <PiEyeFill size={22} />
-                      ) : (
-                        <PiEyeClosedBold size={22} />
-                      )}
-                    </button>
+                  {ID === "employeeID" && (
+                    <>
+                      <Tooltip
+                        anchorSelect=".employee_id_generate_icons"
+                        id="employee_id_generate_icons"
+                        place="top"
+                        content="Generte Unique ID"
+                        position="top"
+                      />
+                      <button
+                        className="absolute right-2 cursor-pointer employee_id_generate_icons"
+                        type="button"
+                        onClick={() => {
+                          employee_ID_Handler();
+                        }}
+                        disabled={employeeAddLoading && true}
+                      >
+                        <VscDebugRestart size={22} />
+                      </button>
+                    </>
                   )}
+
                   <p
                     className={`text-[#a63232] text-[13px] tracking-wider py-2 w-full h-[20px] flex items-center font-normal ${
                       errors[ID]?.message &&

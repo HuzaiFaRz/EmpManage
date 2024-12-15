@@ -9,20 +9,18 @@ const AuthCreateContext = createContext();
 export const AuthUseContext = () => useContext(AuthCreateContext);
 const AuthProvider = ({ children }) => {
   const [isAdminLogged, setIsAdminLogged] = useState(null);
-  const [authLoading, setAuthLoading] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        if (user.email === "huzaifa.admin.a@gmail.com") {
-          setIsAdminLogged(user);
-        } else {
-          setIsAdminLogged(null);
-        }
+      setAuthLoading(false);
+      if (user?.email === "huzaifa.admin.a@gmail.com") {
+        setIsAdminLogged(user);
+      } else {
         setIsAdminLogged(null);
       }
     });
-  }, []);
+  }, [authLoading]);
 
   return (
     <AuthCreateContext.Provider

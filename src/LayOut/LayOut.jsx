@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import ThemeChangerButton from "../ThemeChanger/Theme_Changer_Button";
 
 import { MdDashboard } from "react-icons/md";
@@ -10,7 +10,7 @@ import { ThemeDarkToLight } from "../Script";
 const LayOut = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const sideBarsLinks = [
-    { name: "Admin Dashboard", to: "admin_dashBoard" },
+    { name: "Dashboard", to: "admin_dashBoard" },
     { name: "Employees", to: "employees" },
     { name: "Add Employee", to: "employee_add" },
   ];
@@ -42,7 +42,9 @@ const LayOut = () => {
             <span className="w-[40px] h-[2px] dark:bg-colorOne bg-colorTwo"></span>
           </div>
 
-          <span className="text-lg sm:text-2xl font-semibold">EmpManage</span>
+          <Link to={"/"} className="text-lg sm:text-2xl font-semibold">
+            EmpManage
+          </Link>
         </div>
 
         <ThemeChangerButton />
@@ -68,7 +70,7 @@ const LayOut = () => {
                   to={link.to}
                   className={`py-1 sm:py-3 px-1 sm:px-3 w-full hover:bg-colorTwo hover:text-colorOne dark:hover:bg-colorOne dark:hover:text-colorTwo rounded-lg text-sm sm:text-lg flex flex-row justify-start items-center gap-5`}
                 >
-                  {link.name === "Admin Dashboard" ? (
+                  {link.name === "Dashboard" ? (
                     <MdDashboard size={25} />
                   ) : link.name === "Employees" ? (
                     <FaBookReader size={25} />
@@ -98,7 +100,7 @@ const LayOut = () => {
           setIsSideBarOpen(!isSideBarOpen);
         }}
       ></div>
-        <Outlet />
+      <Outlet />
     </Fragment>
   );
 };
