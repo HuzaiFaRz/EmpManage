@@ -54,12 +54,12 @@ const Employees = () => {
 
   useEffect(() => {
     setEmployeeLoading(true);
-    const q = query(
+    const employeessCollection = query(
       collection(db, "Employees"),
       orderBy("employeeAddingTime", "asc"),
       limit(scrollCount)
     );
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const unsubscribe = onSnapshot(employeessCollection, (querySnapshot) => {
       const realTimeEmployee = querySnapshot.docs.map((data) => {
         return {
           Id: data.id,

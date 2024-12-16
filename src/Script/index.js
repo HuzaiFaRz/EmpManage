@@ -5,7 +5,7 @@ const MessageStyle = {
   autoClose: 2000,
   theme: "dark",
   position: "top-center",
-  draggablePercent: 100,
+  draggablePercent: 60,
 };
 
 const ThemeLightToDark =
@@ -20,4 +20,26 @@ const rejectMessage = (message) => {
 const resolveMessage = (message) => {
   toast.success(message, MessageStyle);
 };
-export { rejectMessage, resolveMessage, ThemeLightToDark, ThemeDarkToLight };
+
+let loadingToastId;
+
+const loadingMessage = (message) => {
+  loadingToastId = toast.loading(message, MessageStyle);
+};
+
+const dismissLoadingMessage = () => {
+  if (loadingToastId) {
+    toast.dismiss(loadingToastId);
+    loadingToastId = null;
+  }
+};
+
+export {
+  rejectMessage,
+  resolveMessage,
+  loadingMessage,
+  dismissLoadingMessage,
+  ThemeLightToDark,
+  ThemeDarkToLight,
+  MessageStyle,
+};

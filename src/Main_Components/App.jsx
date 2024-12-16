@@ -16,7 +16,11 @@ import LayOut from "../LayOut/LayOut.jsx";
 const App = () => {
   return (
     <Fragment>
-      <ToastContainer />
+      <ToastContainer
+        draggable="mouse"
+        progressClassName="toastify__progress-bar"
+        style={{ lineHeight: "20px" }}
+      />
       <AuthProvider>
         <BrowserRouter>
           <Routes>

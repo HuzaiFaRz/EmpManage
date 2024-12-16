@@ -1,5 +1,10 @@
 import React, { Fragment, useState } from "react";
-import { ThemeDarkToLight, ThemeLightToDark } from "../Script/index";
+import {
+  dismissLoadingMessage,
+  loadingMessage,
+  ThemeDarkToLight,
+  ThemeLightToDark,
+} from "../Script/index";
 import { useForm } from "react-hook-form";
 
 import { rejectMessage, resolveMessage } from "../Script/index";
@@ -13,6 +18,7 @@ import { IoIosWarning } from "react-icons/io";
 import { VscDebugRestart } from "react-icons/vsc";
 
 import { Tooltip } from "react-tooltip";
+import { toast } from "react-toastify";
 
 const Employee_Add = () => {
   const [employeeAddLoading, setEmployeeAddLoading] = useState(false);
@@ -60,6 +66,7 @@ const Employee_Add = () => {
         rejectMessage("Profile Extension Not Supported");
         return;
       }
+      loadingMessage("Employee Adding");
       setEmployeeAddLoading(true);
       const employeeProfile = employee_Added_Data.employeeProfile[0];
       const employeeProfileData = new FormData();
@@ -72,6 +79,9 @@ const Employee_Add = () => {
         `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
         { method: "POST", body: employeeProfileData }
       );
+      if (!response.ok) {
+        throw new Error("Failed to upload profile image");
+      }
       const data = await response.json();
       const { url, public_id } = data;
       employee_Added_Data.employeeProfilePublicID = public_id;
@@ -80,13 +90,14 @@ const Employee_Add = () => {
       employee_Added_Data.role = "Employee";
       await addDoc(collection(db, "Employees"), employee_Added_Data);
       resolveMessage("Employee Added");
+      // reset();
+    } catch (error) {
+      console.log(error);
+      rejectMessage("Failed to add Employee");
+    } finally {
+      dismissLoadingMessage();
       setEmployeeAddLoading(false);
       employee_ID_Handler();
-    } catch (error) {
-      // reset();
-      console.log(error);
-      setEmployeeAddLoading(false);
-      rejectMessage(error.message);
     }
   };
 
