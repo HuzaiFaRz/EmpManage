@@ -12,6 +12,7 @@ import EmployeeEdit from "../Employee_CRUD/Employee_Edit.jsx";
 import ProtectedRoute from "../ProtectedRoutes/Protected_Route.jsx";
 import Profile from "../Profile/Profile.jsx";
 import LayOut from "../LayOut/LayOut.jsx";
+import Sign_Up from "../Auth/Sign_Up.jsx";
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="login" element={<LogIn />} />
+            <Route path="Sign_Up" element={<Sign_Up />} />
             <Route path="/" element={<ProtectedRoute />}>
               <Route path="/" element={<LayOut />}>
                 <Route path="/" element={<EmpManage />} />

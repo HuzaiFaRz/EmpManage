@@ -11,15 +11,16 @@ import { ClipLoader } from "react-spinners";
 import { PiEyeClosedBold, PiEyeFill } from "react-icons/pi";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../ConfigFiles/firebase_Config";
-import { useNavigate } from "react-router-dom";
 import { AuthUseContext } from "../Utilities/Auth_Provider";
-import { ToastContainer } from "react-toastify";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import ThemeChangerButton from "../ThemeChanger/Theme_Changer_Button";
 
 const LogIn = () => {
-  const { setIsAdminLogged, isAdminLogged } = AuthUseContext();
+  const navigate = useNavigate();
+  const { setIsAdminLogged, isAdminLogged, setIsUserLogged, isUserLogged } =
+    AuthUseContext();
   const [logInLoading, setLogInLoading] = useState(false);
   const [logInPasswordEye, setLogInPasswordEye] = useState(false);
-  const navigate = useNavigate();
   const loginInputs = [
     { ID: "logInEmail", Placeholder: "Email", Type: "email" },
     {
@@ -29,10 +30,11 @@ const LogIn = () => {
     },
   ];
   useEffect(() => {
-    if (isAdminLogged) {
-      navigate("/", { replace: true });
+    if (isAdminLogged !== null && isUserLogged !== null) {
+      return <Navigate to="/login" replace />;
     }
-  }, [isAdminLogged, navigate]);
+    console.log(isAdminLogged, isUserLogged);
+  }, [isAdminLogged, isUserLogged, navigate]);
   const {
     register,
     handleSubmit,
@@ -52,13 +54,16 @@ const LogIn = () => {
       );
       if (loggedIn.user.email === "huzaifa.admin.a@gmail.com") {
         setIsAdminLogged(loggedIn.user);
+        setIsUserLogged(null);
         resolveMessage("Admin Login SuccessFully");
         navigate("/", { replace: true });
       } else {
+        setIsUserLogged(loggedIn.user);
         setIsAdminLogged(null);
         resolveMessage("Login SuccessFully");
+        navigate("/", { replace: true });
       }
-      reset();
+      // reset();
       setLogInLoading(false);
     } catch (error) {
       console.log(error);
@@ -70,7 +75,9 @@ const LogIn = () => {
 
   return (
     <Fragment>
-      <ToastContainer />
+      <div className="absolute top-0 right-0 p-5">
+        <ThemeChangerButton />
+      </div>
       <div
         className={`Log_In_Page w-full h-[100svh] flex flex-col justify-center items-center p-2  ${ThemeLightToDark}`}
       >
@@ -104,10 +111,6 @@ const LogIn = () => {
                     }`}
                     {...register(ID, {
                       required: `${Placeholder} is required.`,
-                      value:
-                        Type === "email"
-                          ? "huzaifa.admin.a@gmail.com"
-                          : `123456`,
                     })}
                   />
 
@@ -162,6 +165,12 @@ const LogIn = () => {
               )}
             </button>
           </div>
+          <span className="flex flex-row gap-4">
+            Don&apos;t Have an Acount?
+            <Link to={"/sign_up"} className="underline underline-offset-4">
+              Sign Up
+            </Link>{" "}
+          </span>
         </form>
       </div>
     </Fragment>

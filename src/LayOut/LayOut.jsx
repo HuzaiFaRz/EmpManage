@@ -7,6 +7,8 @@ import { IoIosPersonAdd } from "react-icons/io";
 import { FaBookReader } from "react-icons/fa";
 import { ThemeDarkToLight } from "../Script";
 import { ImProfile } from "react-icons/im";
+import { signOut } from "firebase/auth";
+import { auth } from "../ConfigFiles/firebase_Config";
 
 const LayOut = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
@@ -21,6 +23,10 @@ const LayOut = () => {
       ? (document.body.style.overflowY = "hidden")
       : (document.body.style.overflowY = "scroll");
   }, [isSideBarOpen]);
+
+  const logOutHandler = ()=>{
+    signOut(auth)
+  }
 
   return (
     <Fragment>
@@ -91,6 +97,7 @@ const LayOut = () => {
         <div className="flex justify-end">
           <button
             className={`logOutBtn p-2 sm:p-3 ${ThemeDarkToLight} rounded-md w-20 sm:w-28`}
+            onClick={logOutHandler}
           >
             Log Out
           </button>
