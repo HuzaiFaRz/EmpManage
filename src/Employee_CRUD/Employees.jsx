@@ -1,5 +1,9 @@
 import { FaCheck } from "react-icons/fa";
-import { ThemeDarkToLight, ThemeLightToDark } from "../Script/index";
+import {
+  resolveMessage,
+  ThemeDarkToLight,
+  ThemeLightToDark,
+} from "../Script/index";
 import React, { useEffect, useState } from "react";
 import {
   collection,
@@ -16,10 +20,8 @@ import { useRef } from "react";
 import { CgClose } from "react-icons/cg";
 import { IoIosWarning } from "react-icons/io";
 import LoadingSpinner from "../Components/Loading_Spinner";
-import { rejectMessage, resolveMessage } from "../Script";
+import { rejectMessage } from "../Script";
 import { ClipLoader } from "react-spinners";
-import { Cloudinary, CloudinaryImage } from "@cloudinary/url-gen/index";
-import { cloudinaryConfig } from "../ConfigFiles/Cloudinary_Config";
 
 const Employees = () => {
   const [employeeSelectID, setEmployeeSelectID] = useState([]);
@@ -117,136 +119,29 @@ const Employees = () => {
     });
   };
 
-  // const employeeDeleteHandler = async () => {
-  //   try {
-  //     employees.forEach(async (data) => {
-  //       try {
-  //         const { Id, employeeProfilePublicID, employeeProfile } = data;
-  //         if (employeeSelectID.includes(Id)) {
-  //           const timestamp = new Date().getTime();
-
-  //           const responseSignature = await fetch(
-  //             `http://localhost:3001/generate-signature?public_id=${employeeProfilePublicID}&timestamp=${timestamp}`
-  //           );
-  //           const signature = await responseSignature.json();
-
-  //           const url = `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/destroy`;
-
-  //           const response = await fetch(url, {
-  //             method: "POST",
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //             },
-  //             body: JSON.stringify({
-  //               public_id: employeeProfilePublicID,
-  //               signature: signature.signature,
-  //               api_key: cloudinaryConfig.apiKey,
-  //               timestamp: timestamp,
-  //             }),
-  //           });
-
-  //           const data = await response.json();
-  //           console.log(data);
-
-      
-  //           console.log(res);
-  //         }
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     });
-
-  //   } catch (error) {
-  //     console.log(error);
-  //     rejectMessage(error.messege);
-  //   }
-  // };
-  
-
-   // if (response.ok) {
-      //   console.log("Image deleted successfully");
-      // } else {
-      //   const errorData = await response.json();
-      //   console.error("Failed to delete image:", errorData);
-      // }
-
-      // deleteImage("y9dtdwvuniiopa9qj7pf");
-      // employeeSelectID.forEach(async (data) => {
-      //   console.log(data);
-      //   const docRef = doc(db, "Employees", data);
-      //   setEmployeeDeleteLoading(true);
-      //   await deleteDoc(docRef);
-      // });
-      // setEmployeeDeleteLoading(false);
-      // setEmployeeSelectID([]);
-      // setIsModalOpen(false);
-      // resolveMessage("Employee Deleted");
-
-
-      const employeeDeleteHandler = async () => {
-        try {
-          // Use a for...of loop to properly handle async operations
-          for (const data of employees) {
-            try {
-              const { Id, employeeProfilePublicID, employeeProfile } = data;
-              
-              // Check if the employee is selected
-              if (employeeSelectID.includes(Id)) {
-                const timestamp = new Date().getTime();
-      
-                // Generate the signature from the backend
-                const responseSignature = await fetch(
-                  `http://localhost:3001/generate-signature?public_id=${employeeProfilePublicID}&timestamp=${timestamp}`
-                );
-                const signature = await responseSignature.json();
-      
-                // Prepare the Cloudinary API URL
-                const url = `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/destroy`;
-      
-                // Send the request to Cloudinary to delete the image
-                const response = await fetch(url, {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    public_id: employeeProfilePublicID,
-                    signature: signature.signature,
-                    api_key: cloudinaryConfig.apiKey,
-                    timestamp: timestamp,
-                  }),
-                });
-      
-                const data = await response.json();
-      
-                // Log the response from Cloudinary
-                console.log(data);
-      
-                // You can also perform other actions based on the response, like notifying the user
-                if (data.result === "ok") {
-                  console.log("Image deleted successfully.");
-                } else {
-                  console.log("Failed to delete image:", data);
-                }
-              }
-            } catch (error) {
-              console.error("Error processing employee:", error);
-            }
-          }
-        } catch (error) {
-          console.error("Error in employeeDeleteHandler:", error);
-          rejectMessage(error.message);  // Fixed the typo here
-        }
-      };
-      
-
-
-
-
+  const employeeDeleteHandler = async () => {
+    try {
+      employeeSelectID.forEach(async (data) => {
+        const docRef = doc(db, "Employees", data);
+        setEmployeeDeleteLoading(true);
+        await deleteDoc(docRef);
+      });
+      setEmployeeDeleteLoading(false);
+      setEmployeeSelectID([]);
+      setIsModalOpen(false);
+      resolveMessage("Employee Deleted");
+    } catch (error) {
+      console.log(error);
+      setEmployeeDeleteLoading(false);
+      setEmployeeSelectID([]);
+      setIsModalOpen(false);
+      rejectMessage(error.message);
+    }
+  };
 
   return (
     <div
-      className={`Employee_Read_Page w-full h-full md:h-full  flex flex-col justify-center items-center p-2 mt-[10svh] ${ThemeLightToDark}`}
+      className={`Employee_Read_Page w-full h-full md:h-full flex flex-col justify-center items-center p-2 mt-[10svh] ${ThemeLightToDark}`}
     >
       <div className="Employee_Header flex flex-wrap w-full p-2  justify-evenly items-center gap-5">
         <h1 className="font-semibold tracking-tighter text-4xl py-2 text-center text-colorTwo dark:text-colorOne w-full">
@@ -292,7 +187,6 @@ const Employees = () => {
             }
             onClick={() => {
               employeeSelectID.length === 0 || setIsModalOpen(true);
-              console.log(isModalOpen);
             }}
           >
             <IoIosWarning /> Delete
@@ -306,14 +200,13 @@ const Employees = () => {
         } justify-center items-center`}
         onClick={() => {
           setIsModalOpen(false);
-          console.log(this);
         }}
       >
         {" "}
       </div>
 
       <div
-        className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[300px] rounded-sm cursor-pointer z-[100] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-start ${
+        className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[300px] rounded-sm cursor-pointer z-[100] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-center ${
           isModalOpen ? "flex" : "hidden"
         }`}
       >
@@ -326,9 +219,9 @@ const Employees = () => {
             }}
           />
         </div>
-        <div className="modal-body">
-          <span className="text-sm sm:text-lg font-bold p-5 w-full">
-            Do you Really Want to Delete {employeeSelectID.length} Employees
+        <div className="modal-body w-full flex text-center justify-center items-center">
+          <span className="text-sm sm:text-lg font-bold p-5">
+            Do you Really Want to Delete {employeeSelectID.length} Employee
           </span>
         </div>
         <div className="modal-footer flex flex-row justify-evenly gap-5 items-center p-2 mb-5 w-full">

@@ -6,20 +6,13 @@ import { rejectMessage, resolveMessage } from "../Script/index";
 import { ClipLoader } from "react-spinners";
 import { BiArrowFromLeft } from "react-icons/bi";
 import { cloudinaryConfig } from "../ConfigFiles/Cloudinary_Config";
-import { auth, db } from "../ConfigFiles/firebase_Config";
-import {
-  addDoc,
-  collection,
-  doc,
-  serverTimestamp,
-  setDoc,
-} from "firebase/firestore";
+import { db } from "../ConfigFiles/firebase_Config";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import uuid from "react-uuid";
 import { IoIosWarning } from "react-icons/io";
 import { VscDebugRestart } from "react-icons/vsc";
 
 import { Tooltip } from "react-tooltip";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const Employee_Add = () => {
   const [employeeAddLoading, setEmployeeAddLoading] = useState(false);
@@ -133,6 +126,22 @@ const Employee_Add = () => {
                     }`}
                     {...register(ID, {
                       required: `${Placeholder} is required.`,
+
+                      max: {
+                        value:
+                          ID === "employeeAge"
+                            ? 40
+                            : ID === "employeeExperience"
+                            ? 20
+                            : null,
+                        message:
+                          ID === "employeeAge"
+                            ? "Age must not exceed 40 years."
+                            : ID === "employeeExperience"
+                            ? "Experience must not exceed 20 years."
+                            : null,
+                      },
+
                       min: {
                         value:
                           ID === "employeeAge"

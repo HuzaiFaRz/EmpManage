@@ -6,11 +6,13 @@ import { MdDashboard } from "react-icons/md";
 import { IoIosPersonAdd } from "react-icons/io";
 import { FaBookReader } from "react-icons/fa";
 import { ThemeDarkToLight } from "../Script";
+import { ImProfile } from "react-icons/im";
 
 const LayOut = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const sideBarsLinks = [
-    { name: "Dashboard", to: "admin_dashBoard" },
+    { name: "Profile", to: "profile" },
+    { name: "Dashboard", to: "dashBoard" },
     { name: "Employees", to: "employees" },
     { name: "Add Employee", to: "employee_add" },
   ];
@@ -72,6 +74,8 @@ const LayOut = () => {
                 >
                   {link.name === "Dashboard" ? (
                     <MdDashboard size={25} />
+                  ) : link.name === "Profile" ? (
+                    <ImProfile size={25} />
                   ) : link.name === "Employees" ? (
                     <FaBookReader size={25} />
                   ) : link.name === "Add Employee" ? (
@@ -92,6 +96,7 @@ const LayOut = () => {
           </button>
         </div>
       </div>
+
       <div
         className={`w-full h-[100svh] bg-none bg-opacity-50 filter fixed z-40 bg-colorTwo ${
           isSideBarOpen ? "block" : "hidden"
@@ -100,6 +105,7 @@ const LayOut = () => {
           setIsSideBarOpen(!isSideBarOpen);
         }}
       ></div>
+
       <Outlet />
     </Fragment>
   );
