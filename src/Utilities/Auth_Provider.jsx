@@ -21,7 +21,9 @@ const AuthProvider = ({ children }) => {
           setIsUserLogged(user);
           setIsAdminLogged(null);
         }
-        return;
+      } else {
+        setIsUserLogged(null);
+        setIsAdminLogged(null);
       }
     });
   }, [authLoading]);

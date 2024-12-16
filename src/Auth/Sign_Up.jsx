@@ -57,8 +57,11 @@ const Sign_Up = () => {
       setSignUpLoading(true);
       const signUpProfile = sign_Up_Data.signUpProfile[0];
       const signUpProfileData = new FormData();
+
       signUpProfileData.append("file", signUpProfile);
       signUpProfileData.append("upload_preset", cloudinaryConfig.uploadPreset);
+
+      signUpProfileData.append("folder", "EmpManage/UserProfilePics");
       const response = await fetch(
         `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
         { method: "POST", body: signUpProfileData }
@@ -80,7 +83,7 @@ const Sign_Up = () => {
       await setDoc(doc(db, "Users", uid), sign_Up_Data);
       reset();
       resolveMessage("SignUp SuccessFully");
-      navigate("login", { replace: true });
+      navigate("/login");
     } catch (error) {
       console.log(error);
       rejectMessage("Someone Went Wrong");

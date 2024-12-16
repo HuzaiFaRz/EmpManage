@@ -221,7 +221,8 @@ const Employees = () => {
         </div>
         <div className="modal-body w-full flex text-center justify-center items-center">
           <span className="text-sm sm:text-lg font-bold p-5">
-            Do you Really Want to Delete {employeeSelectID.length} Employee
+            Are you sure you want to delete {employeeSelectID.length} selected
+            employess?
           </span>
         </div>
         <div className="modal-footer flex flex-row justify-evenly gap-5 items-center p-2 mb-5 w-full">

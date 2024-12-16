@@ -45,14 +45,14 @@ const DashBoard = () => {
       <div className="w-full h-[100svh] flex flex-col justify-center items-center gap-5">
         <div className="dashboard_header w-full p-3 flex flex-row justify-start items-center gap-4">
           <img
-            src={currentLoggedData?.profile}
+            src={currentLoggedData?.adminProfileURL}
             className="w-[150px] sm:w-[300px] h-[150px] sm:h-[300px] rounded-full object-cover object-center"
             alt="Profile"
           />
 
           <div className="flex flex-col justify-between items-start gap-3">
             <h1 className="text-2xl sm:text-3xl text-colorTwo dark:text-colorOne">
-              Hi! {currentLoggedData?.name}
+              Hi! {currentLoggedData?.adminName}
             </h1>
             <h3
               className={`text-sm sm:text-2xl p-1 rounded-sm shadow-2xl focus:outline-none ${ThemeDarkToLight}`}
@@ -69,6 +69,7 @@ const DashBoard = () => {
               </React.Fragment>
             );
           })}
+          <div className="w-[400px] h-[400px] rounded-full bg-slate-50"></div>
         </div>
       </div>
     </Fragment>

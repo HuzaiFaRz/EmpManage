@@ -18,7 +18,6 @@ import { IoIosWarning } from "react-icons/io";
 import { VscDebugRestart } from "react-icons/vsc";
 
 import { Tooltip } from "react-tooltip";
-import { toast } from "react-toastify";
 
 const Employee_Add = () => {
   const [employeeAddLoading, setEmployeeAddLoading] = useState(false);
@@ -75,12 +74,13 @@ const Employee_Add = () => {
         "upload_preset",
         cloudinaryConfig.uploadPreset
       );
+      employeeProfileData.append("folder", "EmpManage/EmployeeProfilePics");
       const response = await fetch(
         `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
         { method: "POST", body: employeeProfileData }
       );
       if (!response.ok) {
-        throw new Error("Failed to upload profile image");
+        throw new Error(Error);
       }
       const data = await response.json();
       const { url, public_id } = data;

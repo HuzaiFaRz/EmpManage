@@ -33,7 +33,6 @@ const LogIn = () => {
     if (isAdminLogged !== null && isUserLogged !== null) {
       return <Navigate to="/login" replace />;
     }
-    console.log(isAdminLogged, isUserLogged);
   }, [isAdminLogged, isUserLogged, navigate]);
   const {
     register,
@@ -111,6 +110,7 @@ const LogIn = () => {
                     }`}
                     {...register(ID, {
                       required: `${Placeholder} is required.`,
+                      value:ID === 'logInEmail'? 'huzaifa.admin.a@gmail.com' :"AdminA@Pass"
                     })}
                   />
 
