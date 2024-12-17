@@ -54,16 +54,14 @@ const LogIn = () => {
       if (loggedIn.user.email === "huzaifa.admin.a@gmail.com") {
         setIsAdminLogged(loggedIn.user);
         setIsUserLogged(null);
-        resolveMessage("Admin Login SuccessFully");
-        navigate("/", { replace: true });
+        resolveMessage("Admin Login Successfully");
       } else {
         setIsUserLogged(loggedIn.user);
         setIsAdminLogged(null);
-        resolveMessage("Login SuccessFully");
-        navigate("/", { replace: true });
+        resolveMessage("Login Successfully");
       }
+      navigate("/", { replace: true });
       // reset();
-      setLogInLoading(false);
     } catch (error) {
       console.log(error);
       rejectMessage(error.message);
@@ -110,7 +108,10 @@ const LogIn = () => {
                     }`}
                     {...register(ID, {
                       required: `${Placeholder} is required.`,
-                      value:ID === 'logInEmail'? 'huzaifa.admin.a@gmail.com' :"AdminA@Pass"
+                      value:
+                        ID === "logInEmail"
+                          ? "huzaifa.admin.a@gmail.com"
+                          : "AdminA@Pass",
                     })}
                   />
 

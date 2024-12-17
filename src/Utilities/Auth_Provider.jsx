@@ -9,22 +9,21 @@ const AuthProvider = ({ children }) => {
   const [isAdminLogged, setIsAdminLogged] = useState(null);
   const [isUserLogged, setIsUserLogged] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [editEmployeeId, setEditEmployeeId] = useState(null);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       setAuthLoading(false);
-      if (user) {
-        if (user.email === "huzaifa.admin.a@gmail.com") {
-          setIsAdminLogged(user);
-          setIsUserLogged(null);
-        } else {
-          setIsUserLogged(user);
-          setIsAdminLogged(null);
-        }
-      } else {
+      if (!user) {
         setIsUserLogged(null);
         setIsAdminLogged(null);
       }
+      if (user.email !== "huzaifa.admin.a@gmail.com") {
+        setIsUserLogged(user);
+        setIsAdminLogged(null);
+      }
+      setIsAdminLogged(user);
+      setIsUserLogged(null);
     });
   }, [authLoading]);
 
@@ -37,6 +36,8 @@ const AuthProvider = ({ children }) => {
         setAuthLoading,
         isUserLogged,
         setIsUserLogged,
+        editEmployeeId,
+        setEditEmployeeId,
       }}
     >
       {children}

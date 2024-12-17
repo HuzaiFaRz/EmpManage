@@ -4,7 +4,7 @@ import {
   ThemeDarkToLight,
   ThemeLightToDark,
 } from "../Script/index";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   collection,
   deleteDoc,
@@ -22,6 +22,8 @@ import { IoIosWarning } from "react-icons/io";
 import LoadingSpinner from "../Components/Loading_Spinner";
 import { rejectMessage } from "../Script";
 import { ClipLoader } from "react-spinners";
+import { AuthUseContext } from "../Utilities/Auth_Provider";
+import { replace, useNavigate } from "react-router-dom";
 
 const Employees = () => {
   const [employeeSelectID, setEmployeeSelectID] = useState([]);
@@ -33,6 +35,8 @@ const Employees = () => {
   const [scrollCount, setScrollCount] = useState(3);
   const [employeeLoading, setEmployeeLoading] = useState(false);
   const [employeeDeleteLoading, setEmployeeDeleteLoading] = useState(false);
+  const { editEmployeeId, setEditEmployeeId } = AuthUseContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
     isModalOpen
@@ -139,6 +143,11 @@ const Employees = () => {
     }
   };
 
+  const employeeEditHandler = (data) => {
+    setEditEmployeeId(data?.Id);
+    navigate("/employee_edit", { replace: true });
+  };
+
   return (
     <div
       className={`Employee_Read_Page w-full h-full md:h-full flex flex-col justify-center items-center p-2 mt-[10svh] ${ThemeLightToDark}`}
@@ -160,7 +169,7 @@ const Employees = () => {
             }}
           />
           <button
-            className={`${ThemeDarkToLight} cursor-pointer border-0 relative px-3 py-2 sm:px-6 text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5`}
+            className={`${ThemeDarkToLight} cursor-pointer border-0 relative px-3 py-2 sm:px-6 text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5`}
             disabled={
               employeeSelectID.length === 0 && employees?.length === 0 && true
             }
@@ -181,7 +190,7 @@ const Employees = () => {
             <p>{employeeSelectID.length}</p>
           </button>
           <button
-            className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative text-[15px] flex flex-row hover:rounded-xl transition-all justify-center items-center gap-1 px-3 py-2 sm:px-6"
+            className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative text-[13px] sm:text-[15px] flex flex-row hover:rounded-xl transition-all justify-center items-center gap-1 px-3 py-2 sm:px-6"
             disabled={
               employeeSelectID.length === 0 && employees?.length === 0 && true
             }
@@ -222,12 +231,12 @@ const Employees = () => {
         <div className="modal-body w-full flex text-center justify-center items-center">
           <span className="text-sm sm:text-lg font-bold p-5">
             Are you sure you want to delete {employeeSelectID.length} selected
-            employess?
+            employees?
           </span>
         </div>
         <div className="modal-footer flex flex-row justify-evenly gap-5 items-center p-2 mb-5 w-full">
           <button
-            className="bg-[#5cb85c] text-colorOne cursor-pointer border-0 px-[15px] py-[8px] text-[15px] hover:rounded-xl transition-all"
+            className="bg-[#5cb85c] text-colorOne cursor-pointer border-0 px-[15px] py-[8px] text-[13px] sm:text-[15px] hover:rounded-xl transition-all"
             onClick={() => {
               setIsModalOpen(false);
             }}
@@ -235,7 +244,7 @@ const Employees = () => {
             Cancle
           </button>
           <button
-            className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
+            className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative px-[15px] py-[8px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
             disabled={
               employeeSelectID.length === 0 && employees?.length === 0 && true
             }
@@ -302,7 +311,7 @@ const Employees = () => {
                         <img
                           src={employeeProfile}
                           alt={`${employeeName}'s profile`}
-                          className="w-20 h-20 rounded-full object-cover border-2 dark:border-colorOne border-colorTwo"
+                          className="w-14 h-14 sm:w-20 sm:h-20 rounded-full object-cover border-2 dark:border-colorOne border-colorTwo"
                         />
                         <div className="flex flex-col justify-center items-start">
                           <h2
@@ -316,6 +325,16 @@ const Employees = () => {
                           <p className="text-sm">{employeeProfession}</p>
                         </div>
                       </div>
+
+                      <button
+                        className="bg-[#32a655] text-colorOne cursor-pointer border-0 relative px-[15px] py-[5px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
+                        onClick={() => {
+                          employeeEditHandler(data);
+                        }}
+                      >
+                        Edit
+                      </button>
+
                       <span
                         className="w-[25px] h-[25px] relative bg-colorTwo dark:bg-colorOne cursor-pointer flex justify-center items-center rounded-sm"
                         id={`${Id}`}
@@ -334,32 +353,46 @@ const Employees = () => {
                     </div>
                     <ul className="flex flex-col justify-between items-start gap-5 p-3">
                       <li className="capitalize flex flex-row justify-start items-center gap-1">
-                        <span className="capitalize font-bold text-lg">
+                        <span className="capitalize font-bold text-sm sm:text-lg">
                           Email:{" "}
                         </span>
                         <p className="lowercase"> {employeeEmail}</p>
                       </li>
                       <li className="capitalize flex flex-row justify-start items-center gap-1">
-                        <span className="font-bold text-lg">Age: </span>{" "}
+                        <span className="font-bold text-sm sm:text-lg">
+                          Age:{" "}
+                        </span>{" "}
                         <p> {employeeAge}</p>
                       </li>
                       <li className="capitalize flex flex-row justify-start items-center gap-1">
-                        <span className="font-bold text-lg">Experience: </span>{" "}
+                        <span className="font-bold text-sm sm:text-lg">
+                          Experience:{" "}
+                        </span>{" "}
                         <p> {employeeExperience >= 5 ? "Senior" : "Junior"}</p>
                       </li>
                       <li className="capitalize flex flex-row justify-start items-center gap-1">
-                        <span className="font-bold text-lg">City: </span>{" "}
+                        <span className="font-bold text-sm sm:text-lg">
+                          City:{" "}
+                        </span>{" "}
                         <p> {employeeCity}</p>
                       </li>
                       <li className="capitalize flex flex-row justify-start items-center gap-1">
-                        <span className="font-bold text-lg">Address: </span>{" "}
+                        <span className="font-bold text-sm sm:text-lg">
+                          Address:{" "}
+                        </span>{" "}
                         <p> {employeeAddress}</p>
                       </li>
                       <li className="capitalize flex flex-row justify-start items-center gap-1">
-                        <span className="font-bold text-lg">Apply time: </span>{" "}
+                        <span className="font-bold text-sm sm:text-lg">
+                          Apply time:{" "}
+                        </span>{" "}
                         <p> {employeeAddingTimeConvert}</p>
                       </li>
                     </ul>
+
+                    {data?.employeeEdited && (
+                      <div className="w-full flex justify-end">Edited</div>
+                    )}
                   </div>
                 </React.Fragment>
               );

@@ -17,7 +17,7 @@ const Emp_Manage = () => {
         <h3
           className={`text-3xl p-3 rounded-sm shadow-2xl focus:outline-none ${ThemeDarkToLight}`}
         >
-          {auth.currentUser.email}
+          {auth?.currentUser?.email}
         </h3>
       </div>
     </Fragment>

@@ -3,13 +3,14 @@ import { AuthUseContext } from "../Utilities/Auth_Provider";
 import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = () => {
-  const { isAdminLogged, authLoading, isUserLogged } = AuthUseContext();
+  const { isAdminLogged, authLoading, isUserLogged, editEmployeeData } =
+    AuthUseContext();
 
   if (authLoading) {
     return <LoadingArrows />;
   }
 
-  if (isAdminLogged === null && isUserLogged === null) {
+  if (!isAdminLogged && !isUserLogged) {
     return <Navigate to="/login" replace />;
   }
 

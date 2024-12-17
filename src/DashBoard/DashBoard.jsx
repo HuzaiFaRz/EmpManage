@@ -62,13 +62,13 @@ const DashBoard = () => {
           </div>
         </div>
         <div className="dashboard_Body">
-          {allEmployeesGetting?.map((e, i) => {
+          {/* {allEmployeesGetting?.map((e, i) => {
             return (
               <React.Fragment key={i}>
                 <div className="w-[400px] h-[400px] rounded-full bg-slate-50"></div>
               </React.Fragment>
             );
-          })}
+          })} */}
           <div className="w-[400px] h-[400px] rounded-full bg-slate-50"></div>
         </div>
       </div>
