@@ -11,11 +11,11 @@ const Emp_Manage = () => {
   return (
     <Fragment>
       <div className="w-full h-[100svh] flex flex-col justify-center items-center gap-5">
-        <h1 className="text-5xl text-colorTwo dark:text-colorOne">
+        <h1 className="text-2xl sm:text-5xl text-colorTwo dark:text-colorOne">
           Welcome In EmpManage
         </h1>
         <h3
-          className={`text-3xl p-3 rounded-sm shadow-2xl focus:outline-none ${ThemeDarkToLight}`}
+          className={`text-xl sm:text-3xl p-1 sm:p-3 rounded-sm shadow-2xl focus:outline-none ${ThemeDarkToLight}`}
         >
           {auth?.currentUser?.email}
         </h3>
