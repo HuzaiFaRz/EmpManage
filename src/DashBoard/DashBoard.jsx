@@ -8,10 +8,6 @@ import { AuthUseContext } from "../Utilities/Auth_Provider";
 
 const DashBoard = () => {
   const { isAdminLogged, isUserLogged } = AuthUseContext();
-
-  console.log(isAdminLogged, "isAdminLogged =====================");
-  console.log(isUserLogged, "isUserLogged====================");
-
   const [dashBoardContentLoading, setDashBoardContentLoading] = useState(false);
   const [currentLoggedData, setCurrentLoggedData] = useState();
   const [allEmployeesGetting, setAllEmployeesGetting] = useState([]);

@@ -117,8 +117,8 @@ const Sign_Up = () => {
                 <label
                   htmlFor={ID}
                   className={`flex flex-col items-start justify-center gap-2 font-normal text-colorTwo dark:text-colorOne ${
-                    signUpLoading && "cursor-not-allowed"
-                  }`}
+                    ID === "signUpPassword" && "relative overflow-hidden"
+                  } ${signUpLoading && "cursor-not-allowed"}`}
                 >
                   {Placeholder}
                   <input
@@ -151,7 +151,7 @@ const Sign_Up = () => {
                     </div>
                   )}
 
-                  {ID === "logInPassword" && (
+                  {ID === "signUpPassword" && (
                     <button
                       className="absolute right-2 cursor-pointer"
                       type="button"
