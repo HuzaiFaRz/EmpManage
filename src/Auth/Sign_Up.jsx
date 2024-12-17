@@ -86,7 +86,7 @@ const Sign_Up = () => {
       navigate("/login");
     } catch (error) {
       console.log(error);
-      rejectMessage("Someone Went Wrong");
+      rejectMessage(error.message);
     } finally {
       dismissLoadingMessage();
       setSignUpLoading(false);
@@ -95,14 +95,14 @@ const Sign_Up = () => {
 
   return (
     <Fragment>
-      <div className="absolute top-0 right-0 p-5">
+      <div className="w-full h-[10svh] flex flex-row justify-center items-center">
         <ThemeChangerButton />
       </div>
       <div
-        className={`Sign_Up_Page w-full h-full md:h-[90svh]  flex flex-col justify-center items-center p-2 mt-[10svh] ${ThemeLightToDark}`}
+        className={`Sign_Up_Page w-full h-[90svh] flex flex-col justify-center items-center p-2 ${ThemeLightToDark}`}
       >
         <form
-          className={`Sign_Up_Form flex flex-col items-center justify-evenly gap-4 w-[600px] max-w-full p-8 border border-colorTwo dark:border-colorOne
+          className={`Sign_Up_Form flex flex-wrap items-center justify-evenly gap-4 w-[800px] max-w-full p-8 border border-colorTwo dark:border-colorOne
             
             ${signUpLoading && "select-none cursor-not-allowed"}`}
           onSubmit={handleSubmit(sign_Up_Form_Handler)}

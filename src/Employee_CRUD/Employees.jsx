@@ -4,7 +4,7 @@ import {
   ThemeDarkToLight,
   ThemeLightToDark,
 } from "../Script/index";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   collection,
   deleteDoc,
@@ -15,15 +15,15 @@ import {
   query,
 } from "firebase/firestore";
 import { db } from "../ConfigFiles/firebase_Config";
-import LoadingArrows from "../Components/Loading_Arrows";
+import LoadingArrows from "../Loading/Loading_Arrows";
 import { useRef } from "react";
 import { CgClose } from "react-icons/cg";
 import { IoIosWarning } from "react-icons/io";
-import LoadingSpinner from "../Components/Loading_Spinner";
+import LoadingSpinner from "../Loading/Loading_Spinner";
 import { rejectMessage } from "../Script";
 import { ClipLoader } from "react-spinners";
 import { AuthUseContext } from "../Utilities/Auth_Provider";
-import { replace, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { MdEdit } from "react-icons/md";
 
 const Employees = () => {
@@ -44,7 +44,7 @@ const Employees = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    isDeleteModalOpen
+    isDeleteModalOpen || isEditModalOpen.editModalOpen
       ? (document.body.style.overflowY = "hidden")
       : (document.body.style.overflowY = "scroll");
 
@@ -59,7 +59,7 @@ const Employees = () => {
     };
     document.addEventListener("scroll", employeeScrollHandler);
     return () => document.removeEventListener("scroll", employeeScrollHandler);
-  }, [employees, isDeleteModalOpen]);
+  }, [employees, isDeleteModalOpen, isEditModalOpen.editModalOpen]);
 
   useEffect(() => {
     setEmployeeLoading(true);
@@ -151,6 +151,10 @@ const Employees = () => {
   const employeeEditHandler = () => {
     setEditEmployeeId(isEditModalOpen.employeeID);
     navigate("/employee_edit");
+    setIsEditModalOpen({
+      editModalOpen: false,
+      employeeID: null,
+    });
   };
 
   return (
@@ -180,8 +184,9 @@ const Employees = () => {
             }
           >
             {" "}
+            <p>    {employeeSelectID.length}</p>
             <p>
-              {employeeSelectID.length}
+          
 
               {employeeSelectID.length === employees?.length
                 ? " UnSelect all"
@@ -212,8 +217,6 @@ const Employees = () => {
         </div>
       </div>
 
-      {/* Delete Modal */}
-      {/* Delete Modal */}
       {/* Delete Modal */}
       {/* Delete Modal */}
 
@@ -276,11 +279,7 @@ const Employees = () => {
 
       {/* Delete Modal */}
       {/* Delete Modal */}
-      {/* Delete Modal */}
-      {/* Delete Modal */}
 
-      {/* Edit Modal */}
-      {/* Edit Modal */}
       {/* Edit Modal */}
       {/* Edit Modal */}
 
@@ -351,8 +350,6 @@ const Employees = () => {
 
       {/* Edit Modal */}
       {/* Edit Modal */}
-      {/* Edit Modal */}
-      {/* Edit Modal */}
 
       <ul className="flex flex-wrap justify-evenly items-center p-2 w-full h-full min-h-[70svh] list-none gap-y-12 mt-5 gap-6">
         <>
@@ -420,18 +417,6 @@ const Employees = () => {
                         </div>
                       </div>
 
-                      <button
-                        className="bg-[#32a655] text-colorOne cursor-pointer border-0 relative px-[15px] py-[5px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
-                        onClick={() => {
-                          setIsEditModalOpen({
-                            editModalOpen: true,
-                            employeeID: Id,
-                          });
-                        }}
-                      >
-                        <MdEdit /> Edit
-                      </button>
-
                       <span
                         className="w-[25px] h-[25px] relative bg-colorTwo dark:bg-colorOne cursor-pointer flex justify-center items-center rounded-sm"
                         id={`${Id}`}
@@ -487,9 +472,22 @@ const Employees = () => {
                       </li>
                     </ul>
 
-                    {data?.employeeEdited && (
-                      <div className="w-full flex justify-end p-4">Edited</div>
-                    )}
+                    <div className="w-full flex flex-row justify-between items-center p-4">
+                      {data?.employeeEdited && (
+                        <p className="opacity-50">Edited</p>
+                      )}
+                      <button
+                        className="bg-[#32a655] text-colorOne cursor-pointer border-0 relative px-[15px] py-[5px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
+                        onClick={() => {
+                          setIsEditModalOpen({
+                            editModalOpen: true,
+                            employeeID: Id,
+                          });
+                        }}
+                      >
+                        <MdEdit /> Edit
+                      </button>
+                    </div>
                   </div>
                 </React.Fragment>
               );

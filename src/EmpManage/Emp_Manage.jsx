@@ -5,9 +5,8 @@ import { AuthUseContext } from "../Utilities/Auth_Provider";
 
 const Emp_Manage = () => {
   const { isAdminLogged, isUserLogged } = AuthUseContext();
-
-  console.log(isAdminLogged, isUserLogged);
-
+  console.log(isAdminLogged,'<<<<============ isAdminLogged')
+  console.log(isUserLogged,'<<<<============ isUserLogged')
   return (
     <Fragment>
       <div className="w-full h-[100svh] flex flex-col justify-center items-center gap-5">

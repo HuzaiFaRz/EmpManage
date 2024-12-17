@@ -72,15 +72,15 @@ const LogIn = () => {
 
   return (
     <Fragment>
-      <div className="absolute top-0 right-0 p-5">
+      <div className="w-full h-[10svh] flex flex-row justify-center items-center">
         <ThemeChangerButton />
       </div>
       <div
-        className={`Log_In_Page w-full h-[100svh] flex flex-col justify-center items-center p-2  ${ThemeLightToDark}`}
+        className={`Log_In_Page w-full h-[90svh] flex flex-col justify-center items-center p-2 ${ThemeLightToDark}`}
       >
         <form
           className={`Log_In_Form flex flex-col items-center justify-evenly gap-4 w-[500px] max-w-full p-8 border border-colorTwo dark:border-colorOne
-            
+
             ${logInLoading && "select-none cursor-not-allowed"}`}
           onSubmit={handleSubmit(logIn_Form_Handler)}
         >
@@ -111,7 +111,7 @@ const LogIn = () => {
                       value:
                         ID === "logInEmail"
                           ? "huzaifa.admin.a@gmail.com"
-                          : "AdminA@Pass",
+                          : "",
                     })}
                   />
 

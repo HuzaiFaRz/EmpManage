@@ -9,7 +9,7 @@ import {
   ThemeDarkToLight,
   ThemeLightToDark,
 } from "../Script";
-import LoadingArrows from "../Components/Loading_Arrows";
+import LoadingArrows from "../Loading/Loading_Arrows";
 import { IoIosWarning } from "react-icons/io";
 import { ClipLoader } from "react-spinners";
 import { BiArrowFromLeft } from "react-icons/bi";

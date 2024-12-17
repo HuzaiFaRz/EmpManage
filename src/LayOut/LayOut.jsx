@@ -4,7 +4,7 @@ import ThemeChangerButton from "../ThemeChanger/Theme_Changer_Button";
 
 import { MdDashboard } from "react-icons/md";
 import { IoIosPersonAdd } from "react-icons/io";
-import { FaBookReader } from "react-icons/fa";
+import { FaBookReader, FaUsers } from "react-icons/fa";
 import { rejectMessage, resolveMessage, ThemeDarkToLight } from "../Script";
 import { ImProfile } from "react-icons/im";
 import { signOut } from "firebase/auth";
@@ -12,22 +12,29 @@ import { auth } from "../ConfigFiles/firebase_Config";
 import { CgClose } from "react-icons/cg";
 import { ClipLoader } from "react-spinners";
 import { IoLogOut } from "react-icons/io5";
+import { AuthUseContext } from "../Utilities/Auth_Provider";
 
 const LayOut = () => {
+  const { isAdminLogged, isUserLogged } = AuthUseContext();
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [logOutModal, setLogOutModal] = useState(false);
   const [logOutLoading, setLogOutLoading] = useState(false);
-  const sideBarsLinks = [
-    { name: "Profile", to: "profile" },
-    { name: "Dashboard", to: "dashBoard" },
-    { name: "Employees", to: "employees" },
-    { name: "Add Employee", to: "employee_add" },
-  ];
   useEffect(() => {
     isSideBarOpen
       ? (document.body.style.overflowY = "hidden")
       : (document.body.style.overflowY = "scroll");
   }, [isSideBarOpen]);
+
+  const sideBarsLinks = [
+    { name: "Profile", to: "profile" },
+    { name: "Dashboard", to: "dashBoard" },
+    { name: "Employees", to: "employees" },
+  ];
+
+  if (isAdminLogged !== null) {
+    sideBarsLinks.push({ name: "Users", to: "users" });
+    sideBarsLinks.push({ name: "Add Employee", to: "employee_add" });
+  }
 
   const logOutHandler = async () => {
     try {
@@ -84,29 +91,38 @@ const LayOut = () => {
             Employee Management System
           </h2>
           <div className="space-y-8 w-full flex flex-col">
-            {sideBarsLinks.map((link, index) => (
-              <React.Fragment key={index}>
-                <NavLink
-                  onClick={() => {
-                    setIsSideBarOpen(!isSideBarOpen);
-                  }}
-                  key={link.name}
-                  to={link.to}
-                  className={`py-1 sm:py-3 px-1 sm:px-3 w-full hover:bg-colorTwo hover:text-colorOne dark:hover:bg-colorOne dark:hover:text-colorTwo rounded-lg text-sm sm:text-lg flex flex-row justify-start items-center gap-5`}
-                >
-                  {link.name === "Dashboard" ? (
-                    <MdDashboard size={25} />
-                  ) : link.name === "Profile" ? (
-                    <ImProfile size={25} />
-                  ) : link.name === "Employees" ? (
-                    <FaBookReader size={25} />
-                  ) : link.name === "Add Employee" ? (
-                    <IoIosPersonAdd size={25} />
-                  ) : undefined}{" "}
-                  {link.name}
-                </NavLink>
-              </React.Fragment>
-            ))}
+            {sideBarsLinks.map((link, index) => {
+              return (
+                <React.Fragment key={index}>
+                  <NavLink
+                    onClick={() => {
+                      setIsSideBarOpen(!isSideBarOpen);
+                    }}
+                    key={link?.name}
+                    to={link?.to}
+                    className={`py-1 sm:py-3 px-1 sm:px-3 w-full hover:bg-colorTwo hover:text-colorOne dark:hover:bg-colorOne dark:hover:text-colorTwo rounded-lg text-sm sm:text-lg flex flex-row justify-start items-center gap-5`}
+                  >
+                    {link.name === "Dashboard" ? (
+                      <MdDashboard size={25} />
+                    ) : link.name === "Profile" ? (
+                      <ImProfile size={25} />
+                    ) : link.name === "Employees" ? (
+                      <FaBookReader size={25} />
+                    ) : null}
+
+                    {isAdminLogged && link.name === "Add Employee" && (
+                      <IoIosPersonAdd size={25} />
+                    )}
+
+                    {isAdminLogged && link.name === "Users" && (
+                      <FaUsers size={25} />
+                    )}
+
+                    {link?.name}
+                  </NavLink>
+                </React.Fragment>
+              );
+            })}
           </div>
         </div>
 

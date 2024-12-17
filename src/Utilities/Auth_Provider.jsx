@@ -14,16 +14,18 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       setAuthLoading(false);
-      if (!user) {
+      if (user) {
+        if (user?.email === "huzaifa.admin.a@gmail.com") {
+          setIsAdminLogged(user);
+          setIsUserLogged(null);
+        } else {
+          setIsUserLogged(user);
+          setIsAdminLogged(null);
+        }
+      } else {
         setIsUserLogged(null);
         setIsAdminLogged(null);
       }
-      if (user.email !== "huzaifa.admin.a@gmail.com") {
-        setIsUserLogged(user);
-        setIsAdminLogged(null);
-      }
-      setIsAdminLogged(user);
-      setIsUserLogged(null);
     });
   }, [authLoading]);
 

@@ -13,6 +13,7 @@ import ProtectedRoute from "../ProtectedRoutes/Protected_Route.jsx";
 import Profile from "../Profile/Profile.jsx";
 import LayOut from "../LayOut/LayOut.jsx";
 import Sign_Up from "../Auth/Sign_Up.jsx";
+import Users from "../Auth/Users/Users.jsx";
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
                 <Route path="employee_edit" element={<EmployeeEdit />} />
                 <Route path="employee_add" element={<Employee_Add />} />
                 <Route path="employees" element={<Employees />} />
+                <Route path="users" element={<Users />} />
               </Route>
             </Route>
           </Routes>
