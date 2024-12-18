@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import { Fragment, useState } from "react";
 import {
@@ -7,42 +7,59 @@ import {
   ThemeDarkToLight,
   ThemeLightToDark,
 } from "../Script";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { auth, db } from "../ConfigFiles/firebase_Config";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { db } from "../ConfigFiles/firebase_Config";
 import { IoIosWarning } from "react-icons/io";
 import { PiEyeClosedBold, PiEyeFill } from "react-icons/pi";
 import { ClipLoader } from "react-spinners";
-import { BiArrowFromLeft } from "react-icons/bi";
 import { useForm } from "react-hook-form";
 import ThemeChangerButton from "../ThemeChanger/Theme_Changer_Button";
 import LoadingArrows from "../Loading/Loading_Arrows";
 import { AuthUseContext } from "../Utilities/Auth_Provider";
-import { accessibility } from "@cloudinary/react";
 import { Tooltip } from "react-tooltip";
 import { MdEdit } from "react-icons/md";
+import { FaSave } from "react-icons/fa";
 
 const Profile = () => {
   const { isAdminLogged, isUserLogged } = AuthUseContext();
   const [currentLoggedData, setCurrentLoggedData] = useState();
-  const [profilePasswordEye, setprofilePasswordEye] = useState(false);
   const [profileContentLoading, setProfileContentLoading] = useState(false);
-  const [profileUpdatingLoading, setProfileUpdatingLoading] = useState(false);
-  const [profileUpdate, setProfileUpdate] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    setValue,
-
-    formState: { errors },
-  } = useForm();
-
-  const profileInputs = [
-    { ID: "profileName", Placeholder: "Name", Type: "text" },
-    { ID: "profileEmail", Placeholder: "Email", Type: "email" },
+  const [profileEditingLoading, setProfileEditingLoading] = useState(false);
+  const [isProfileEdit, setIsProfileEdit] = useState(false);
+  const profileInfoDivRef = useRef([]);
+  // useEffect(() => {
+  //   if (profileInfoDivRef.current) {
+  //     profileInfoDivRef.current.focus();
+  //   }
+  // }, []);
+  const [profileEditedValue, setProfileEditedValue] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const profileInfoDiv = [
     {
-      ID: "profilePassword",
-      Placeholder: "Password",
-      Type: profilePasswordEye ? "text" : "password",
+      id: "name",
+      label: "Name",
+      value: isAdminLogged
+        ? currentLoggedData?.adminName
+        : currentLoggedData?.signUpName,
+    },
+
+    {
+      id: "email",
+      label: "Email",
+      value: isAdminLogged
+        ? currentLoggedData?.adminEmail
+        : currentLoggedData?.signUpEmail,
+    },
+
+    {
+      id: "password",
+      label: "Password",
+      value: isAdminLogged
+        ? currentLoggedData?.adminPassword
+        : currentLoggedData?.signUpPassword,
     },
   ];
   useEffect(() => {
@@ -50,15 +67,13 @@ const Profile = () => {
       try {
         setProfileContentLoading(true);
         if (isAdminLogged) {
-          const currentLoggedCollection = doc(db, "Admin", isAdminLogged?.uid);
-          const currentLoggedResponse = await getDoc(currentLoggedCollection);
-          const data = currentLoggedResponse.data();
-          setCurrentLoggedData(data);
+          onSnapshot(doc(db, "Admin", isAdminLogged?.uid), (doc) => {
+            setCurrentLoggedData(doc.data());
+          });
         } else {
-          const currentLoggedCollection = doc(db, "Users", isUserLogged?.uid);
-          const currentLoggedResponse = await getDoc(currentLoggedCollection);
-          const data = currentLoggedResponse.data();
-          setCurrentLoggedData(data);
+          onSnapshot(doc(db, "Users", isUserLogged?.uid), (doc) => {
+            setCurrentLoggedData(doc.data());
+          });
         }
       } catch (error) {
         console.log(error);
@@ -73,70 +88,63 @@ const Profile = () => {
     return <LoadingArrows />;
   }
 
-  const profile_Updating_Form_Handler = async (profile_Updating_Form_Data) => {
+  const profile_Saving_Form_Handler = async () => {
     try {
       if (isAdminLogged) {
         const adminProfileEditCollection = doc(db, "Admin", isAdminLogged?.uid);
-        if (
-          profile_Updating_Form_Data.profileName !==
-          currentLoggedData?.adminName
-        ) {
-          console.log(profile_Updating_Form_Data.profileName);
-          await updateDoc(adminProfileEditCollection, {
-            adminName: profile_Updating_Form_Data.profileName,
-          });
+        if (!profileEditedValue.name || !profileEditedValue.password) {
+          rejectMessage("Fill Name and Password Field");
           return;
         }
-
-        // if (
-        //   profile_Updating_Form_Data.profilePassword ===
-        //   currentLoggedData?.adminPassword
-        // ) {
-        //   rejectMessage("No Changes Found");
-        // } else {
-        //   resolveMessage("Changes Found");
-        // }
-      } else {
-        if (
-          profile_Updating_Form_Data.profileName ===
-          currentLoggedData?.signUpName
-        ) {
-          rejectMessage("No Changes Found");
-        } else {
-          resolveMessage("Changes Found");
+        if (profileEditedValue.name !== currentLoggedData?.adminName) {
+          setProfileEditingLoading(true);
+          await updateDoc(adminProfileEditCollection, {
+            adminName: profileEditedValue.name,
+          });
+          resolveMessage("Your profile has been successfully updated");
+          return;
         }
-        if (
-          profile_Updating_Form_Data.profilePassword ===
-          currentLoggedData?.signUpPassword
-        ) {
-          rejectMessage("No Changes Found");
-        } else {
-          resolveMessage("Changes Found");
+        if (profileEditedValue.password !== currentLoggedData?.adminPassword) {
+          console.log(this);
+          return;
+        }
+      } else {
+        const userProfileEditCollection = doc(db, "Users", isUserLogged?.uid);
+        if (!profileEditedValue.name && !profileEditedValue.password) {
+          rejectMessage("Fill Name and Password Field");
+          return;
+        }
+        if (profileEditedValue.name !== currentLoggedData?.signUpName) {
+          setProfileEditingLoading(true);
+          await updateDoc(userProfileEditCollection, {
+            signUpName: profileEditedValue.name,
+          });
+          resolveMessage("Your profile has been successfully updated");
+          return;
         }
       }
     } catch (error) {
       console.log(error);
       rejectMessage(error.message);
+    } finally {
+      setProfileEditingLoading(false);
+      // setProfileUpdate(false);
     }
   };
-  let value;
-  profileInputs.forEach((input) => {
-    const { ID } = input;
 
-    value =
-      ID === "profileName"
-        ? isAdminLogged
-          ? currentLoggedData?.adminName
-          : currentLoggedData?.signUpName
-        : ID === "profileEmail"
-        ? isAdminLogged
-          ? currentLoggedData?.adminEmail
-          : currentLoggedData?.signUpEmail
-        : isAdminLogged
-        ? currentLoggedData?.adminPassword
-        : currentLoggedData?.signUpPassword;
-    setValue(ID, value);
-  });
+  const profile_Edit_Button_Handler = () => {
+    setIsProfileEdit(!isProfileEdit);
+    if (profileInfoDivRef.current) {
+      profileInfoDivRef.current.focus();
+    }
+  };
+
+  const profileEditValuesHandler = (e) => {
+    setProfileEditedValue((prevSetProfileEditedValue) => ({
+      ...prevSetProfileEditedValue,
+      [e.target.id]: e.target.textContent,
+    }));
+  };
 
   return (
     <Fragment>
@@ -146,136 +154,81 @@ const Profile = () => {
       <div
         className={`Profile_Page w-full h-[90svh] flex flex-col justify-center items-center p-2 ${ThemeLightToDark}`}
       >
-        <form
-          className={`Profile_Form flex flex-wrap items-center justify-evenly gap-4 w-[800px] max-w-full p-8 border border-colorTwo dark:border-colorOne
-
-            ${profileUpdatingLoading && "select-none cursor-not-allowed"}`}
-          onSubmit={handleSubmit(profile_Updating_Form_Handler)}
-        >
-          <h1 className="font-semibold tracking-tighter text-4xl w-[100%] py-2 text-center text-colorTwo dark:text-colorOne">
-            Profile
-          </h1>
-          {profileInputs.map((elem, index) => {
-            const { ID, Placeholder, Type } = elem;
-
+        <div className="Profile_Div flex flex-col items-start justify-around gap-4 w-full sm:w-[600px] h-[500px] max-w-full p-8 border border-colorTwo dark:border-colorOne">
+          {profileInfoDiv?.map((element, index) => {
+            const { label, value, id } = element;
             return (
               <React.Fragment key={index}>
-                <label
-                  htmlFor={ID}
-                  className={`flex flex-col items-start justify-center gap-2 font-normal text-colorTwo dark:text-colorOne ${
-                    ID === "profilePassword" && "relative overflow-hidden"
-                  } ${
-                    !profileUpdate && profileUpdatingLoading
-                      ? "cursor-not-allowed select-none"
-                      : null
-                  }
-                  `}
-                >
-                  {Placeholder}
-                  <input
-                    disabled={
-                      ID === "profileEmail" ||
-                      !profileUpdate ||
-                      (profileUpdatingLoading && true)
+                <div className="flex flex-row justify-start items-center gap-2 w-full">
+                  <span className="text-xl sm:text-3xl">{label}:</span>
+                  <span
+                    className={`text-lg sm:text-2xl border-b-2 border-colorTwo dark:border-colorOne px-1 rounded-sm w-[300px] whitespace-nowrap overflow-x-hidden  focus:outline-none focus:bg-gray-200 focus:dark:bg-gray-700 focus:shadow-md`}
+                    contentEditable={
+                      !isProfileEdit || id === "email" ? undefined : "true"
                     }
-                    type={Type}
-                    placeholder={Placeholder}
-                    id={Type === "file" ? ID : Placeholder}
-                    className={`p-2 bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo font-light tracking-[1px] placeholder:text-colorTwo dark:placeholder:text-colorOne focus:outline-0 w-[300px] ${
-                      ID === "profileEmail" && "profileEmailInput"
-                    } ${
-                      !profileUpdate && profileUpdatingLoading
-                        ? "cursor-not-allowed select-none"
-                        : null
-                    }`}
-                    {...register(ID, {
-                      required: `${Placeholder} is required.`,
-                      minLength: {
-                        value: ID === "profilePassword" ? 8 : undefined,
-                        message:
-                          ID === "profilePassword"
-                            ? "Password must be at least 8 characters"
-                            : undefined,
-                      },
-                      pattern: {
-                        value: /^[^\s]+(?:$|.*[^\s]+$)/,
-                        message: "Remove Blank Space",
-                      },
-                    })}
-                  />
-                  {ID === "profileEmail" && (
-                    <Tooltip
-                      anchorSelect=".profileEmailInput"
-                      id="profileEmailInput"
-                      content="Email editing is restricted for security purposes."
-                    />
-                  )}
-
-                  {ID === "profilePassword" && (
-                    <button
-                      className="absolute right-2 cursor-pointer"
-                      type="button"
-                      onClick={() => {
-                        setprofilePasswordEye(!profilePasswordEye);
-                      }}
-                    >
-                      {profilePasswordEye ? (
-                        <PiEyeFill size={22} />
-                      ) : (
-                        <PiEyeClosedBold size={22} />
-                      )}
-                    </button>
-                  )}
-
-                  <p
-                    className={`text-[#a63232] text-[13px] tracking-wider py-2 w-full h-[20px] flex items-center font-normal ${
-                      errors[ID]?.message &&
-                      "z-50 cursor-not-allowed select-none"
-                    }`}
-                    id="Error_Para"
+                    onInput={(e) => {
+                      profileEditValuesHandler(e);
+                    }}
+                    id={id}
+                    ref={
+                      isProfileEdit || id === "email"
+                        ? undefined
+                        : (el) => {
+                            profileInfoDivRef.current.push(el);
+                          }
+                    }
                   >
-                    {errors[ID] && (
-                      <span className="flex flex-row justify-center items-center gap-2">
-                        {" "}
-                        <IoIosWarning />
-                        {errors[ID]?.message}{" "}
-                      </span>
-                    )}
-                  </p>
-                </label>
+                    {!isProfileEdit || id === "email" ? value : ""}
+                  </span>
+                </div>
               </React.Fragment>
             );
           })}
-          <div className="w-full p-2 m-2 flex items-center justify-center">
+
+          <div className="flex flex-row justify-evenly items-center p-2 w-full">
             <button
-              type="submit"
+              type="button"
               className={` ${
-                profileUpdate ? "bg-[#a63232]" : "bg-[#32a655]"
+                isProfileEdit ? "bg-[#a63232]" : "bg-[#32a655]"
               } text-colorOne cursor-pointer border-0 relative px-[18px] py-[8px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2 ${
-                profileUpdatingLoading && "cursor-not-allowed"
+                profileEditingLoading && "cursor-not-allowed"
               }`}
               id="Sign_Up_Form_Submit_Button"
-              // disabled={profileUpdatingLoading && true}
-              onClick={() => {
-                setProfileUpdate(!profileUpdate);
-                console.log(profileUpdate);
-              }}
+              disabled={profileEditingLoading && true}
+              onClick={profile_Edit_Button_Handler}
             >
-              <span>{profileUpdate ? "Cancle" : "Edit Profile"}</span>
-              {profileUpdatingLoading ? (
-                <ClipLoader
-                  loading={profileUpdatingLoading}
-                  size={20}
-                  className="LoadingLoader"
-                />
-              ) : profileUpdate ? (
+              <span>{isProfileEdit ? "Cancle" : "Edit Profile"}</span>
+              {isProfileEdit ? (
                 <IoIosWarning size={20} />
               ) : (
                 <MdEdit size={20} />
               )}
             </button>
+
+            {isProfileEdit && (
+              <button
+                type="button"
+                className={`${ThemeDarkToLight} cursor-pointer border-0 relative px-[18px] py-[8px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2 ${
+                  profileEditingLoading && "cursor-not-allowed"
+                }`}
+                id="Sign_Up_Form_Submit_Button"
+                disabled={profileEditingLoading && true}
+                onClick={profile_Saving_Form_Handler}
+              >
+                <span>Save</span>
+                {profileEditingLoading ? (
+                  <ClipLoader
+                    loading={profileEditingLoading}
+                    size={20}
+                    className="LoadingLoader"
+                  />
+                ) : (
+                  <FaSave size={20} />
+                )}
+              </button>
+            )}
           </div>
-        </form>
+        </div>
       </div>
     </Fragment>
   );
