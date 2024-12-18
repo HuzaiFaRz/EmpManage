@@ -1,9 +1,14 @@
 import React, { useEffect } from "react";
 
 import { Fragment, useState } from "react";
-import { rejectMessage, ThemeDarkToLight, ThemeLightToDark } from "../Script";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../ConfigFiles/firebase_Config";
+import {
+  rejectMessage,
+  resolveMessage,
+  ThemeDarkToLight,
+  ThemeLightToDark,
+} from "../Script";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { auth, db } from "../ConfigFiles/firebase_Config";
 import { IoIosWarning } from "react-icons/io";
 import { PiEyeClosedBold, PiEyeFill } from "react-icons/pi";
 import { ClipLoader } from "react-spinners";
@@ -12,16 +17,22 @@ import { useForm } from "react-hook-form";
 import ThemeChangerButton from "../ThemeChanger/Theme_Changer_Button";
 import LoadingArrows from "../Loading/Loading_Arrows";
 import { AuthUseContext } from "../Utilities/Auth_Provider";
+import { accessibility } from "@cloudinary/react";
+import { Tooltip } from "react-tooltip";
+import { MdEdit } from "react-icons/md";
 
 const Profile = () => {
   const { isAdminLogged, isUserLogged } = AuthUseContext();
-  const [profilePasswordEye, setprofilePasswordEye] = useState(false);
-  const [profileUpdatingLoading, setProfileUpdatingLoading] = useState(false);
-  const [profileContentLoading, setProfileContentLoading] = useState(false);
   const [currentLoggedData, setCurrentLoggedData] = useState();
+  const [profilePasswordEye, setprofilePasswordEye] = useState(false);
+  const [profileContentLoading, setProfileContentLoading] = useState(false);
+  const [profileUpdatingLoading, setProfileUpdatingLoading] = useState(false);
+  const [profileUpdate, setProfileUpdate] = useState(false);
   const {
     register,
     handleSubmit,
+    setValue,
+
     formState: { errors },
   } = useForm();
 
@@ -34,7 +45,6 @@ const Profile = () => {
       Type: profilePasswordEye ? "text" : "password",
     },
   ];
-
   useEffect(() => {
     (async () => {
       try {
@@ -63,10 +73,70 @@ const Profile = () => {
     return <LoadingArrows />;
   }
 
-  const profile_Updating_Form_Handler = (profile_Updating_Form_Data) => {
-    console.log(profile_Updating_Form_Data);
-    console.log(currentLoggedData);
+  const profile_Updating_Form_Handler = async (profile_Updating_Form_Data) => {
+    try {
+      if (isAdminLogged) {
+        const adminProfileEditCollection = doc(db, "Admin", isAdminLogged?.uid);
+        if (
+          profile_Updating_Form_Data.profileName !==
+          currentLoggedData?.adminName
+        ) {
+          console.log(profile_Updating_Form_Data.profileName);
+          await updateDoc(adminProfileEditCollection, {
+            adminName: profile_Updating_Form_Data.profileName,
+          });
+          return;
+        }
+
+        // if (
+        //   profile_Updating_Form_Data.profilePassword ===
+        //   currentLoggedData?.adminPassword
+        // ) {
+        //   rejectMessage("No Changes Found");
+        // } else {
+        //   resolveMessage("Changes Found");
+        // }
+      } else {
+        if (
+          profile_Updating_Form_Data.profileName ===
+          currentLoggedData?.signUpName
+        ) {
+          rejectMessage("No Changes Found");
+        } else {
+          resolveMessage("Changes Found");
+        }
+        if (
+          profile_Updating_Form_Data.profilePassword ===
+          currentLoggedData?.signUpPassword
+        ) {
+          rejectMessage("No Changes Found");
+        } else {
+          resolveMessage("Changes Found");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      rejectMessage(error.message);
+    }
   };
+  let value;
+  profileInputs.forEach((input) => {
+    const { ID } = input;
+
+    value =
+      ID === "profileName"
+        ? isAdminLogged
+          ? currentLoggedData?.adminName
+          : currentLoggedData?.signUpName
+        : ID === "profileEmail"
+        ? isAdminLogged
+          ? currentLoggedData?.adminEmail
+          : currentLoggedData?.signUpEmail
+        : isAdminLogged
+        ? currentLoggedData?.adminPassword
+        : currentLoggedData?.signUpPassword;
+    setValue(ID, value);
+  });
 
   return (
     <Fragment>
@@ -87,37 +157,36 @@ const Profile = () => {
           </h1>
           {profileInputs.map((elem, index) => {
             const { ID, Placeholder, Type } = elem;
+
             return (
               <React.Fragment key={index}>
                 <label
                   htmlFor={ID}
                   className={`flex flex-col items-start justify-center gap-2 font-normal text-colorTwo dark:text-colorOne ${
                     ID === "profilePassword" && "relative overflow-hidden"
-                  } ${profileUpdatingLoading && "cursor-not-allowed"}`}
+                  } ${
+                    !profileUpdate && profileUpdatingLoading
+                      ? "cursor-not-allowed select-none"
+                      : null
+                  }
+                  `}
                 >
                   {Placeholder}
                   <input
-                    disabled={profileUpdatingLoading && true}
+                    disabled={
+                      ID === "profileEmail" ||
+                      !profileUpdate ||
+                      (profileUpdatingLoading && true)
+                    }
                     type={Type}
                     placeholder={Placeholder}
-                    value={
-                      ID === "profileName"
-                        ? isAdminLogged
-                          ? currentLoggedData?.adminName
-                          : currentLoggedData?.signUpName
-                        : ID === "profileEmail"
-                        ? isAdminLogged
-                          ? currentLoggedData?.adminEmail
-                          : currentLoggedData?.signUpEmail
-                        : ID === "profilePassword"
-                        ? isAdminLogged
-                          ? currentLoggedData?.adminPassword
-                          : currentLoggedData?.signUpPassword
-                        : null
-                    }
                     id={Type === "file" ? ID : Placeholder}
                     className={`p-2 bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo font-light tracking-[1px] placeholder:text-colorTwo dark:placeholder:text-colorOne focus:outline-0 w-[300px] ${
-                      profileUpdatingLoading && "cursor-not-allowed"
+                      ID === "profileEmail" && "profileEmailInput"
+                    } ${
+                      !profileUpdate && profileUpdatingLoading
+                        ? "cursor-not-allowed select-none"
+                        : null
                     }`}
                     {...register(ID, {
                       required: `${Placeholder} is required.`,
@@ -132,27 +201,14 @@ const Profile = () => {
                         value: /^[^\s]+(?:$|.*[^\s]+$)/,
                         message: "Remove Blank Space",
                       },
-                      value:
-                        ID === "profileName"
-                          ? isAdminLogged
-                            ? currentLoggedData?.adminName
-                            : currentLoggedData?.signUpName
-                          : ID === "profileEmail"
-                          ? isAdminLogged
-                            ? currentLoggedData?.adminEmail
-                            : currentLoggedData?.signUpEmail
-                          : ID === "profilePassword"
-                          ? isAdminLogged
-                            ? currentLoggedData?.adminPassword
-                            : currentLoggedData?.signUpPassword
-                          : null,
                     })}
-                    hidden={Type === "file" && true}
                   />
-                  {Type === "file" && (
-                    <div className="p-2 cursor-pointer bg-transparent border border-colorTwo color-light_Bg font-light tracking-[1px] dark:border-colorOne w-[300px]">
-                      Profile
-                    </div>
+                  {ID === "profileEmail" && (
+                    <Tooltip
+                      anchorSelect=".profileEmailInput"
+                      id="profileEmailInput"
+                      content="Email editing is restricted for security purposes."
+                    />
                   )}
 
                   {ID === "profilePassword" && (
@@ -193,22 +249,29 @@ const Profile = () => {
           <div className="w-full p-2 m-2 flex items-center justify-center">
             <button
               type="submit"
-              className={`cursor-pointer ${ThemeDarkToLight} border-0 px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5 ${
+              className={` ${
+                profileUpdate ? "bg-[#a63232]" : "bg-[#32a655]"
+              } text-colorOne cursor-pointer border-0 relative px-[18px] py-[8px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2 ${
                 profileUpdatingLoading && "cursor-not-allowed"
               }`}
               id="Sign_Up_Form_Submit_Button"
-              disabled={profileUpdatingLoading && true}
+              // disabled={profileUpdatingLoading && true}
+              onClick={() => {
+                setProfileUpdate(!profileUpdate);
+                console.log(profileUpdate);
+              }}
             >
-              <span>Update Profile</span>
-
+              <span>{profileUpdate ? "Cancle" : "Edit Profile"}</span>
               {profileUpdatingLoading ? (
                 <ClipLoader
                   loading={profileUpdatingLoading}
                   size={20}
                   className="LoadingLoader"
                 />
+              ) : profileUpdate ? (
+                <IoIosWarning size={20} />
               ) : (
-                <BiArrowFromLeft size={20} />
+                <MdEdit size={20} />
               )}
             </button>
           </div>

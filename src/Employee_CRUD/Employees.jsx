@@ -184,10 +184,8 @@ const Employees = () => {
             }
           >
             {" "}
-            <p>    {employeeSelectID.length}</p>
+            <p> {employeeSelectID.length}</p>
             <p>
-          
-
               {employeeSelectID.length === employees?.length
                 ? " UnSelect all"
                 : " Select all"}
