@@ -35,6 +35,7 @@ const Employee_Add = () => {
     { ID: "employeeCity", Placeholder: "City", Type: "text" },
     { ID: "employeeAge", Placeholder: "Age", Type: "number" },
     { ID: "employeeProfession", Placeholder: "Profession", Type: "text" },
+    { ID: "employeeSalary", Placeholder: "Salary", Type: "number" },
     {
       ID: "employeeExperience",
       Placeholder: "Experience",
@@ -88,12 +89,14 @@ const Employee_Add = () => {
       employee_Added_Data.employeeProfile = url;
       employee_Added_Data.employeeAddingTime = serverTimestamp();
       employee_Added_Data.role = "Employee";
+      const randomNumber = Math.floor(Math.random() * 2);
+      employee_Added_Data.status = randomNumber === 1 ? "active" : "Unactive";
       await addDoc(collection(db, "Employees"), employee_Added_Data);
       resolveMessage("Employee Added");
       // reset();
     } catch (error) {
       console.log(error);
-      rejectMessage("Failed to add Employee");
+      rejectMessage("Failed to add Employee try Again");
     } finally {
       dismissLoadingMessage();
       setEmployeeAddLoading(false);

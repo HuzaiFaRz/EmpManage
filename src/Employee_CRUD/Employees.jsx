@@ -40,7 +40,7 @@ const Employees = () => {
   const [scrollCount, setScrollCount] = useState(3);
   const [employeeLoading, setEmployeeLoading] = useState(false);
   const [employeeDeleteLoading, setEmployeeDeleteLoading] = useState(false);
-  const { setEditEmployeeId } = AuthUseContext();
+  const { setEditEmployeeId, isAdminLogged, isUserLogged } = AuthUseContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -201,125 +201,96 @@ const Employees = () => {
               }}
             />
           </button>
-          <button
-            className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative text-[13px] sm:text-[15px] flex flex-row hover:rounded-xl transition-all justify-center items-center gap-1 px-3 py-2 sm:px-6"
-            disabled={
-              employeeSelectID.length === 0 && employees?.length === 0 && true
-            }
-            onClick={() => {
-              employeeSelectID.length === 0 || setIsDeleteModalOpen(true);
-            }}
-          >
-            <IoIosWarning /> Delete
-          </button>
+          {isAdminLogged && (
+            <button
+              className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative text-[13px] sm:text-[15px] flex flex-row hover:rounded-xl transition-all justify-center items-center gap-1 px-3 py-2 sm:px-6"
+              disabled={
+                employeeSelectID.length === 0 && employees?.length === 0 && true
+              }
+              onClick={() => {
+                employeeSelectID.length === 0 || setIsDeleteModalOpen(true);
+              }}
+            >
+              <IoIosWarning /> Delete
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Delete Modal */}
-      {/* Delete Modal */}
+      {isAdminLogged && (
+        <>
+          {/* Delete Modal */}
+          {/* Delete Modal */}
 
-      <div
-        className={`modal w-full h-[100svh] z-[80] fixed top-0 left-0 bg-colorTwo backdrop-blur-lg bg-opacity-50 ${
-          isDeleteModalOpen ? "flex" : "hidden"
-        } justify-center items-center`}
-        onClick={() => {
-          setIsDeleteModalOpen(false);
-        }}
-      >
-        {" "}
-      </div>
-
-      <div
-        className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[300px] rounded-sm cursor-pointer z-[100] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-center ${
-          isDeleteModalOpen ? "flex" : "hidden"
-        }`}
-      >
-        <div className="modal-header flex flex-row justify-between items-center p-2 w-full">
-          <div></div>
-          <CgClose
-            size={25}
-            onClick={() => {
-              setIsDeleteModalOpen(false);
-            }}
-          />
-        </div>
-        <div className="modal-body w-full flex text-center justify-center items-center">
-          <span className="text-sm sm:text-lg font-bold p-5">
-            Are you sure you want to delete {employeeSelectID.length} selected
-            employees?
-          </span>
-        </div>
-        <div className="modal-footer flex flex-row justify-evenly gap-5 items-center p-2 mb-5 w-full">
-          <button
-            className="bg-[#5cb85c] text-colorOne cursor-pointer border-0 px-[15px] py-[8px] text-[13px] sm:text-[15px] hover:rounded-xl transition-all"
+          <div
+            className={`modal w-full h-[100svh] z-[80] fixed top-0 left-0 bg-colorTwo backdrop-blur-lg bg-opacity-50 ${
+              isDeleteModalOpen ? "flex" : "hidden"
+            } justify-center items-center`}
             onClick={() => {
               setIsDeleteModalOpen(false);
             }}
           >
-            Cancle
-          </button>
-          <button
-            className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative px-[15px] py-[8px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
-            disabled={
-              employeeSelectID.length === 0 && employees?.length === 0 && true
-            }
-            onClick={employeeDeleteHandler}
+            {" "}
+          </div>
+
+          <div
+            className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[300px] rounded-sm cursor-pointer z-[100] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-center ${
+              isDeleteModalOpen ? "flex" : "hidden"
+            }`}
           >
-            {employeeDeleteLoading ? (
-              <ClipLoader color="white" size={20} />
-            ) : (
-              <IoIosWarning size={20} />
-            )}{" "}
-            Delete
-          </button>
-        </div>
-      </div>
+            <div className="modal-header flex flex-row justify-between items-center p-2 w-full">
+              <div></div>
+              <CgClose
+                size={25}
+                onClick={() => {
+                  setIsDeleteModalOpen(false);
+                }}
+              />
+            </div>
+            <div className="modal-body w-full flex text-center justify-center items-center">
+              <span className="text-sm sm:text-lg font-bold p-5">
+                Are you sure you want to delete {employeeSelectID.length}{" "}
+                selected employees?
+              </span>
+            </div>
+            <div className="modal-footer flex flex-row justify-evenly gap-5 items-center p-2 mb-5 w-full">
+              <button
+                className="bg-[#5cb85c] text-colorOne cursor-pointer border-0 px-[15px] py-[8px] text-[13px] sm:text-[15px] hover:rounded-xl transition-all"
+                onClick={() => {
+                  setIsDeleteModalOpen(false);
+                }}
+              >
+                Cancle
+              </button>
+              <button
+                className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative px-[15px] py-[8px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
+                disabled={
+                  employeeSelectID.length === 0 &&
+                  employees?.length === 0 &&
+                  true
+                }
+                onClick={employeeDeleteHandler}
+              >
+                {employeeDeleteLoading ? (
+                  <ClipLoader color="white" size={20} />
+                ) : (
+                  <IoIosWarning size={20} />
+                )}{" "}
+                Delete
+              </button>
+            </div>
+          </div>
 
-      {/* Delete Modal */}
-      {/* Delete Modal */}
+          {/* Delete Modal */}
+          {/* Delete Modal */}
 
-      {/* Edit Modal */}
-      {/* Edit Modal */}
+          {/* Edit Modal */}
+          {/* Edit Modal */}
 
-      <div
-        className={`modal w-full h-[100svh] z-[80] fixed top-0 left-0 bg-colorTwo backdrop-blur-lg bg-opacity-50 ${
-          isEditModalOpen.editModalOpen ? "flex" : "hidden"
-        } justify-center items-center`}
-        onClick={() => {
-          setIsEditModalOpen({
-            editModalOpen: false,
-            employeeID: null,
-          });
-        }}
-      >
-        {" "}
-      </div>
-
-      <div
-        className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[300px] rounded-sm cursor-pointer z-[100] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-center ${
-          isEditModalOpen.editModalOpen ? "flex" : "hidden"
-        }`}
-      >
-        <div className="modal-header flex flex-row justify-between items-center p-2 w-full">
-          <div></div>
-          <CgClose
-            size={25}
-            onClick={() => {
-              setIsEditModalOpen({
-                editModalOpen: false,
-                employeeID: null,
-              });
-            }}
-          />
-        </div>
-        <div className="modal-body w-full flex text-center justify-center items-center">
-          <span className="text-sm sm:text-lg font-bold p-5">
-            Are you sure you want to Edit a employee?
-          </span>
-        </div>
-        <div className="modal-footer flex flex-row justify-evenly gap-5 items-center p-2 mb-5 w-full">
-          <button
-            className="bg-[#5cb85c] text-colorOne cursor-pointer border-0 px-[15px] py-[8px] text-[13px] sm:text-[15px] hover:rounded-xl transition-all"
+          <div
+            className={`modal w-full h-[100svh] z-[80] fixed top-0 left-0 bg-colorTwo backdrop-blur-lg bg-opacity-50 ${
+              isEditModalOpen.editModalOpen ? "flex" : "hidden"
+            } justify-center items-center`}
             onClick={() => {
               setIsEditModalOpen({
                 editModalOpen: false,
@@ -327,27 +298,69 @@ const Employees = () => {
               });
             }}
           >
-            Cancle
-          </button>
-          <button
-            className="bg-[#32a662] text-colorOne cursor-pointer border-0 relative px-[15px] py-[8px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
-            disabled={
-              employeeSelectID.length === 0 && employees?.length === 0 && true
-            }
-            onClick={employeeEditHandler}
-          >
-            {employeeDeleteLoading ? (
-              <ClipLoader color="white" size={20} />
-            ) : (
-              <MdEdit size={20} />
-            )}{" "}
-            Edit
-          </button>
-        </div>
-      </div>
+            {" "}
+          </div>
 
-      {/* Edit Modal */}
-      {/* Edit Modal */}
+          <div
+            className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[300px] rounded-sm cursor-pointer z-[100] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-center ${
+              isEditModalOpen.editModalOpen ? "flex" : "hidden"
+            }`}
+          >
+            <div className="modal-header flex flex-row justify-between items-center p-2 w-full">
+              <div></div>
+              <CgClose
+                size={25}
+                onClick={() => {
+                  setIsEditModalOpen({
+                    editModalOpen: false,
+                    employeeID: null,
+                  });
+                }}
+              />
+            </div>
+            <div className="modal-body w-full flex text-center justify-center items-center">
+              <span className="text-sm sm:text-lg font-bold p-5">
+                Are you sure you want to Edit a employee?
+              </span>
+            </div>
+            <div className="modal-footer flex flex-row justify-evenly gap-5 items-center p-2 mb-5 w-full">
+              <button
+                className="bg-[#5cb85c] text-colorOne cursor-pointer border-0 px-[15px] py-[8px] text-[13px] sm:text-[15px] hover:rounded-xl transition-all"
+                onClick={() => {
+                  setIsEditModalOpen({
+                    editModalOpen: false,
+                    employeeID: null,
+                  });
+                }}
+              >
+                Cancle
+              </button>
+              <button
+                className="bg-[#32a662] text-colorOne cursor-pointer border-0 relative px-[15px] py-[8px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
+                disabled={
+                  employeeSelectID.length === 0 &&
+                  employees?.length === 0 &&
+                  true
+                }
+                onClick={employeeEditHandler}
+              >
+                {employeeDeleteLoading ? (
+                  <ClipLoader color="white" size={20} />
+                ) : (
+                  <MdEdit size={20} />
+                )}{" "}
+                Edit
+              </button>
+            </div>
+          </div>
+
+          {/* Edit Modal */}
+          {/* Edit Modal */}
+        </>
+      )}
+
+      {/* Delete Modal */}
+      {/* Delete Modal */}
 
       <ul className="flex flex-wrap justify-evenly items-center p-2 w-full h-full min-h-[70svh] list-none gap-y-12 mt-5 gap-6">
         <>
@@ -369,6 +382,8 @@ const Employees = () => {
                 employeeName,
                 employeeProfession,
                 employeeProfile,
+                employeeSalary,
+                employeeStatus,
                 role,
               } = data;
               const { seconds, nanoseconds } = data.employeeAddingTime;
@@ -464,6 +479,12 @@ const Employees = () => {
                       </li>
                       <li className="capitalize flex flex-row justify-start items-center gap-1">
                         <span className="font-bold text-sm sm:text-lg">
+                          Salary:{" "}
+                        </span>{" "}
+                        <p> {employeeSalary}</p>
+                      </li>
+                      <li className="capitalize flex flex-row justify-start items-center gap-1">
+                        <span className="font-bold text-sm sm:text-lg">
                           Apply time:{" "}
                         </span>{" "}
                         <p> {employeeAddingTimeConvert}</p>
@@ -471,20 +492,34 @@ const Employees = () => {
                     </ul>
 
                     <div className="w-full flex flex-row justify-between items-center p-4">
-                      {data?.employeeEdited && (
-                        <p className="opacity-50">Edited</p>
-                      )}
-                      <button
-                        className="bg-[#32a655] text-colorOne cursor-pointer border-0 relative px-[15px] py-[5px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
-                        onClick={() => {
-                          setIsEditModalOpen({
-                            editModalOpen: true,
-                            employeeID: Id,
-                          });
-                        }}
+                      <p className="opacity-50">
+                        {" "}
+                        {data?.employeeEdited && "Edited"}
+                      </p>
+
+                      <p
+                        className={`${
+                          employeeStatus === "active"
+                            ? "text-colorOne bg-green-500"
+                            : "text-colorOne bg-red-500 "
+                        } py-1 px-5 text-sm rounded-xl font-medium tracking-wider`}
                       >
-                        <MdEdit /> Edit
-                      </button>
+                        {employeeStatus}
+                      </p>
+
+                      {isAdminLogged && (
+                        <button
+                          className="bg-[#32a655] text-colorOne cursor-pointer border-0 relative px-[15px] py-[5px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
+                          onClick={() => {
+                            setIsEditModalOpen({
+                              editModalOpen: true,
+                              employeeID: Id,
+                            });
+                          }}
+                        >
+                          <MdEdit /> Edit
+                        </button>
+                      )}
                     </div>
                   </div>
                 </React.Fragment>

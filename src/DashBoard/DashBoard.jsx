@@ -91,14 +91,14 @@ const DashBoard = () => {
 
           <div className="flex flex-col justify-between items-start gap-10">
             <>
-              <h1 className="text-2xl sm:text-[7vw] text-colorTwo dark:text-colorOne">
+              <h1 className="text-2xl sm:text-[4vw] text-colorTwo dark:text-colorOne">
                 Hi!{" "}
                 {isAdminLogged
                   ? currentLoggedData?.adminName
                   : currentLoggedData?.signUpName}
               </h1>
               <div
-                className={`text-sm sm:text-3xl p-1 sm:p-3 rounded-sm shadow-2xl focus:outline-none ${ThemeDarkToLight}`}
+                className={`text-sm sm:text-xl p-1 sm:p-2 rounded-sm shadow-2xl focus:outline-none ${ThemeDarkToLight}`}
               >
                 {isAdminLogged
                   ? currentLoggedData?.adminEmail
@@ -113,7 +113,7 @@ const DashBoard = () => {
               className={`w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] bg-colorTwo dark:bg-colorOne relative rounded-full`}
             >
               <PieChart
-                data={data}
+                data={totalData !== 0 && data}
                 animate
                 animationDuration={1000}
                 animationEasing="ease-out"
@@ -133,7 +133,7 @@ const DashBoard = () => {
               />
             </div>
           ) : (
-            <div className="w-full h-[300px] text-colorOne text-5xl flex justify-center items-center">
+            <div className="w-full h-[300px] text-colorTwo dark:text-colorOne text-5xl flex justify-center items-center">
               EmpManage
             </div>
           )}

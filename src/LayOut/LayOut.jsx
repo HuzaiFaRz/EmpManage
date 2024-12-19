@@ -73,7 +73,13 @@ const LayOut = () => {
             <span className="w-[40px] h-[2px] dark:bg-colorOne bg-colorTwo"></span>
           </div>
 
-          <Link to={"/"} className="text-lg sm:text-2xl font-semibold">
+          <Link
+            to={"/"}
+            className="text-lg sm:text-2xl font-semibold"
+            onClick={() => {
+              setIsSideBarOpen(false);
+            }}
+          >
             EmpManage
           </Link>
         </div>
@@ -96,7 +102,7 @@ const LayOut = () => {
                 <React.Fragment key={index}>
                   <NavLink
                     onClick={() => {
-                      setIsSideBarOpen(!isSideBarOpen);
+                      setIsSideBarOpen(false);
                     }}
                     key={link?.name}
                     to={link?.to}
@@ -143,7 +149,7 @@ const LayOut = () => {
           isSideBarOpen ? "block" : "hidden"
         }`}
         onClick={() => {
-          setIsSideBarOpen(!isSideBarOpen);
+          setIsSideBarOpen(false);
         }}
       ></div>
 
@@ -159,7 +165,7 @@ const LayOut = () => {
       </div>
 
       <div
-        className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[300px] rounded-sm cursor-pointer z-[300] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-center ${
+        className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[300px] rounded-sm cursor-pointer z-[300] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-center ${
           logOutModal ? "flex" : "hidden"
         }`}
       >

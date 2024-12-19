@@ -36,6 +36,7 @@ const EmployeeEdit = () => {
     },
     { ID: "employeeCity", Placeholder: "City", Type: "text" },
     { ID: "employeeAge", Placeholder: "Age", Type: "number" },
+    { ID: "employeeSalary", Placeholder: "Salary", Type: "number" },
     {
       ID: "employeeProfession",
       Placeholder: "Profession",
@@ -46,6 +47,7 @@ const EmployeeEdit = () => {
       Placeholder: "Experience",
       Type: "number",
     },
+    { ID: "employeeStatus", Placeholder: "Status", Type: "text" },
   ];
   const {
     register,
@@ -53,6 +55,8 @@ const EmployeeEdit = () => {
     setValue,
     formState: { errors },
   } = useForm();
+
+  console.log(employeeEditData);
 
   useEffect(() => {
     if (editEmployeeId === null) {

@@ -258,7 +258,7 @@ const Users = () => {
             <LoadingArrows />
           ) : users?.length === 0 ? (
             <h1 className="text-xl text-colorTwo dark:text-colorOne">
-              No Employee Found
+              No User Found
             </h1>
           ) : (
             users?.map((data, index) => {

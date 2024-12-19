@@ -1,13 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-
 const MessageStyle = {
   style: { width: "100%", lineHeight: "20px" },
   autoClose: 2000,
   theme: "dark",
   position: "top-center",
-  draggablePercent: 60,
 };
 
 const ThemeLightToDark =
@@ -44,5 +42,4 @@ export {
   ThemeLightToDark,
   ThemeDarkToLight,
   MessageStyle,
-  
 };

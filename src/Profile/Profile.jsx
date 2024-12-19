@@ -18,10 +18,12 @@ import { Tooltip } from "react-tooltip";
 import { MdEdit } from "react-icons/md";
 import { FaSave } from "react-icons/fa";
 import {
+  reauthenticateWithCredential,
   signInWithEmailAndPassword,
   updatePassword,
   updateProfile,
 } from "firebase/auth";
+import { EmailAuthProvider } from "firebase/auth/web-extension";
 
 const Profile = () => {
   const { isAdminLogged, isUserLogged } = AuthUseContext();
@@ -88,14 +90,13 @@ const Profile = () => {
   const profile_Edit_Button_Handler = () => {
     setIsProfileEdit(!isProfileEdit);
     if (!isProfileEdit) {
-      profileInfoDiv?.forEach((element) => {
+      profileInfoDiv.forEach((element) => {
         const { value, id } = element;
         setProfileEditedValue((prevSetProfileEditedValue) => ({
           ...prevSetProfileEditedValue,
           [id]: value,
         }));
       });
-      return;
     }
   };
 
@@ -135,20 +136,20 @@ const Profile = () => {
         }
         if (profileEditedValue.password !== currentLoggedData?.adminPassword) {
           const currentUser = auth.currentUser;
-          await updateProfile(currentUser, {
-            displayName: currentLoggedData?.adminName,
-            photoURL: currentLoggedData?.adminProfileURL,
-          });
+          const credential = EmailAuthProvider.credential(
+            currentUser.email,
+            currentLoggedData.adminPassword
+          );
           await signInWithEmailAndPassword(
             auth,
-            currentLoggedData?.adminEmail,
-            currentLoggedData?.adminPassword
+            currentLoggedData.adminEmail,
+            currentLoggedData.adminPassword
           );
+          await reauthenticateWithCredential(currentUser, credential);
           await updatePassword(currentUser, profileEditedValue.password);
           await updateDoc(adminProfileEditCollection, {
             adminPassword: profileEditedValue.password,
           });
-          location.reload();
         }
         resolveMessage("Your profile has been successfully updated");
       } catch (error) {
@@ -160,21 +161,37 @@ const Profile = () => {
       }
     } else {
       const userProfileEditCollection = doc(db, "Users", isUserLogged?.uid);
-      if (profileEditedValue.name !== currentLoggedData?.signUpName) {
-        try {
-          setProfileEditingLoading(true);
+      try {
+        setProfileEditingLoading(true);
+        if (profileEditedValue.name !== currentLoggedData?.signUpName) {
           await updateDoc(userProfileEditCollection, {
             signUpName: profileEditedValue.name,
           });
-          resolveMessage("Your profile has been successfully updated");
-        } catch (error) {
-          console.log(error);
-          rejectMessage(error.message);
-        } finally {
-          setProfileEditingLoading(false);
-          setIsProfileEdit(false);
         }
-        return;
+        if (profileEditedValue.password !== currentLoggedData?.signUpPassword) {
+          const currentUser = auth.currentUser;
+          const credential = EmailAuthProvider.credential(
+            currentUser.email,
+            currentLoggedData.signUpPassword
+          );
+          await signInWithEmailAndPassword(
+            auth,
+            currentLoggedData.signUpEmail,
+            currentLoggedData.signUpPassword
+          );
+          await reauthenticateWithCredential(currentUser, credential);
+          await updatePassword(currentUser, profileEditedValue.password);
+          await updateDoc(userProfileEditCollection, {
+            signUpPassword: profileEditedValue.password,
+          });
+        }
+        resolveMessage("Your profile has been successfully updated");
+      } catch (error) {
+        console.log(error);
+        rejectMessage(error.message);
+      } finally {
+        setProfileEditingLoading(false);
+        setIsProfileEdit(false);
       }
     }
   };
@@ -210,7 +227,7 @@ const Profile = () => {
                     }
                     id={id}
                   >
-                    {value}
+                    {isProfileEdit && id !== "email" ? undefined : value}
                   </span>
                 </div>
 
@@ -218,7 +235,7 @@ const Profile = () => {
                   <Tooltip
                     anchorSelect=".emailToolTip"
                     id="emailToolTip"
-                    content="Generte Unique ID"
+                    content="Email editing is restricted for security purposes."
                   />
                 )}
               </React.Fragment>

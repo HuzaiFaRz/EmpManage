@@ -99,12 +99,12 @@ const Sign_Up = () => {
         <ThemeChangerButton />
       </div>
       <div
-        className={`Sign_Up_Page w-full h-[90svh] flex flex-col justify-center items-center p-2 ${ThemeLightToDark}`}
+        className={`Sign_Up_Page w-full h-[90svh] mt-[10svh] xs:mt-0 flex flex-col justify-center items-center p-2 ${ThemeLightToDark}`}
       >
         <form
-          className={`Sign_Up_Form flex flex-wrap items-center justify-evenly gap-4 w-[800px] max-w-full p-8 border border-colorTwo dark:border-colorOne
-            
-            ${signUpLoading && "select-none cursor-not-allowed"}`}
+          className={`Sign_Up_Form flex flex-wrap items-center justify-evenly gap-4 w-[800px] max-w-full p-8 border border-colorTwo dark:border-colorOne ${
+            signUpLoading && "select-none cursor-not-allowed"
+          }`}
           onSubmit={handleSubmit(sign_Up_Form_Handler)}
         >
           <h1 className="font-semibold tracking-tighter text-4xl w-[100%] py-2 text-center text-colorTwo dark:text-colorOne">
