@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 
 import { Fragment, useState } from "react";
 import {
@@ -10,19 +10,15 @@ import {
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { auth, db } from "../ConfigFiles/firebase_Config";
 import { IoIosWarning } from "react-icons/io";
-import { PiEyeClosedBold, PiEyeFill } from "react-icons/pi";
 import { ClipLoader } from "react-spinners";
-import { useForm } from "react-hook-form";
 import ThemeChangerButton from "../ThemeChanger/Theme_Changer_Button";
 import LoadingArrows from "../Loading/Loading_Arrows";
 import { AuthUseContext } from "../Utilities/Auth_Provider";
 import { Tooltip } from "react-tooltip";
 import { MdEdit } from "react-icons/md";
 import { FaSave } from "react-icons/fa";
-import firebase from "firebase/compat/app";
 import {
   signInWithEmailAndPassword,
-  updateCurrentUser,
   updatePassword,
   updateProfile,
 } from "firebase/auth";
