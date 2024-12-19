@@ -8,7 +8,7 @@ import {
   ThemeLightToDark,
 } from "../Script";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
-import { db } from "../ConfigFiles/firebase_Config";
+import { auth, db } from "../ConfigFiles/firebase_Config";
 import { IoIosWarning } from "react-icons/io";
 import { PiEyeClosedBold, PiEyeFill } from "react-icons/pi";
 import { ClipLoader } from "react-spinners";
@@ -19,6 +19,13 @@ import { AuthUseContext } from "../Utilities/Auth_Provider";
 import { Tooltip } from "react-tooltip";
 import { MdEdit } from "react-icons/md";
 import { FaSave } from "react-icons/fa";
+import firebase from "firebase/compat/app";
+import {
+  signInWithEmailAndPassword,
+  updateCurrentUser,
+  updatePassword,
+  updateProfile,
+} from "firebase/auth";
 
 const Profile = () => {
   const { isAdminLogged, isUserLogged } = AuthUseContext();
@@ -26,12 +33,6 @@ const Profile = () => {
   const [profileContentLoading, setProfileContentLoading] = useState(false);
   const [profileEditingLoading, setProfileEditingLoading] = useState(false);
   const [isProfileEdit, setIsProfileEdit] = useState(false);
-  const profileInfoDivRef = useRef([]);
-  // useEffect(() => {
-  //   if (profileInfoDivRef.current) {
-  //     profileInfoDivRef.current.focus();
-  //   }
-  // }, []);
   const [profileEditedValue, setProfileEditedValue] = useState({
     name: "",
     email: "",
@@ -84,58 +85,21 @@ const Profile = () => {
     })();
   }, [isAdminLogged, isUserLogged?.uid]);
 
-  if (profileContentLoading) {
+  if (profileContentLoading || currentLoggedData === undefined) {
     return <LoadingArrows />;
   }
 
-  const profile_Saving_Form_Handler = async () => {
-    try {
-      if (isAdminLogged) {
-        const adminProfileEditCollection = doc(db, "Admin", isAdminLogged?.uid);
-        if (!profileEditedValue.name || !profileEditedValue.password) {
-          rejectMessage("Fill Name and Password Field");
-          return;
-        }
-        if (profileEditedValue.name !== currentLoggedData?.adminName) {
-          setProfileEditingLoading(true);
-          await updateDoc(adminProfileEditCollection, {
-            adminName: profileEditedValue.name,
-          });
-          resolveMessage("Your profile has been successfully updated");
-          return;
-        }
-        if (profileEditedValue.password !== currentLoggedData?.adminPassword) {
-          console.log(this);
-          return;
-        }
-      } else {
-        const userProfileEditCollection = doc(db, "Users", isUserLogged?.uid);
-        if (!profileEditedValue.name && !profileEditedValue.password) {
-          rejectMessage("Fill Name and Password Field");
-          return;
-        }
-        if (profileEditedValue.name !== currentLoggedData?.signUpName) {
-          setProfileEditingLoading(true);
-          await updateDoc(userProfileEditCollection, {
-            signUpName: profileEditedValue.name,
-          });
-          resolveMessage("Your profile has been successfully updated");
-          return;
-        }
-      }
-    } catch (error) {
-      console.log(error);
-      rejectMessage(error.message);
-    } finally {
-      setProfileEditingLoading(false);
-      // setProfileUpdate(false);
-    }
-  };
-
   const profile_Edit_Button_Handler = () => {
     setIsProfileEdit(!isProfileEdit);
-    if (profileInfoDivRef.current) {
-      profileInfoDivRef.current.focus();
+    if (!isProfileEdit) {
+      profileInfoDiv?.forEach((element) => {
+        const { value, id } = element;
+        setProfileEditedValue((prevSetProfileEditedValue) => ({
+          ...prevSetProfileEditedValue,
+          [id]: value,
+        }));
+      });
+      return;
     }
   };
 
@@ -146,6 +110,79 @@ const Profile = () => {
     }));
   };
 
+  const profile_Saving_Form_Handler = async () => {
+    if (!profileEditedValue.name) {
+      rejectMessage("Name Field Required");
+      return;
+    } else if (!profileEditedValue.password) {
+      rejectMessage("Password Field Required");
+      return;
+    } else if (profileEditedValue.password.length < 8) {
+      rejectMessage("Passowrd at Least Eight Charactor");
+      return;
+    } else if (
+      /^\s*$/.test(profileEditedValue.name) ||
+      /\s/.test(profileEditedValue.password)
+    ) {
+      rejectMessage("Remove any Blank Space");
+      return;
+    }
+
+    if (isAdminLogged) {
+      const adminProfileEditCollection = doc(db, "Admin", isAdminLogged?.uid);
+      try {
+        setProfileEditingLoading(true);
+        if (profileEditedValue.name !== currentLoggedData?.adminName) {
+          await updateDoc(adminProfileEditCollection, {
+            adminName: profileEditedValue.name,
+          });
+        }
+        if (profileEditedValue.password !== currentLoggedData?.adminPassword) {
+          const currentUser = auth.currentUser;
+          await updateProfile(currentUser, {
+            displayName: currentLoggedData?.adminName,
+            photoURL: currentLoggedData?.adminProfileURL,
+          });
+          await signInWithEmailAndPassword(
+            auth,
+            currentLoggedData?.adminEmail,
+            currentLoggedData?.adminPassword
+          );
+          await updatePassword(currentUser, profileEditedValue.password);
+          await updateDoc(adminProfileEditCollection, {
+            adminPassword: profileEditedValue.password,
+          });
+          location.reload();
+        }
+        resolveMessage("Your profile has been successfully updated");
+      } catch (error) {
+        console.log(error);
+        rejectMessage(error.message);
+      } finally {
+        setProfileEditingLoading(false);
+        setIsProfileEdit(false);
+      }
+    } else {
+      const userProfileEditCollection = doc(db, "Users", isUserLogged?.uid);
+      if (profileEditedValue.name !== currentLoggedData?.signUpName) {
+        try {
+          setProfileEditingLoading(true);
+          await updateDoc(userProfileEditCollection, {
+            signUpName: profileEditedValue.name,
+          });
+          resolveMessage("Your profile has been successfully updated");
+        } catch (error) {
+          console.log(error);
+          rejectMessage(error.message);
+        } finally {
+          setProfileEditingLoading(false);
+          setIsProfileEdit(false);
+        }
+        return;
+      }
+    }
+  };
+
   return (
     <Fragment>
       <div className="w-full h-[10svh] flex flex-row justify-center items-center">
@@ -154,33 +191,40 @@ const Profile = () => {
       <div
         className={`Profile_Page w-full h-[90svh] flex flex-col justify-center items-center p-2 ${ThemeLightToDark}`}
       >
-        <div className="Profile_Div flex flex-col items-start justify-around gap-4 w-full sm:w-[600px] h-[500px] max-w-full p-8 border border-colorTwo dark:border-colorOne">
+        <div className="Profile_Div flex flex-col items-center justify-around gap-4 w-full sm:w-[600px] h-[500px] max-w-full p-8 border border-colorTwo dark:border-colorOne">
           {profileInfoDiv?.map((element, index) => {
             const { label, value, id } = element;
             return (
               <React.Fragment key={index}>
-                <div className="flex flex-row justify-start items-center gap-2 w-full">
+                <div className="flex flex-row justify-start items-start gap-2 w-full">
                   <span className="text-xl sm:text-3xl">{label}:</span>
                   <span
-                    className={`text-lg sm:text-2xl border-b-2 border-colorTwo dark:border-colorOne px-1 rounded-sm w-[300px] whitespace-nowrap overflow-x-hidden  focus:outline-none focus:bg-gray-200 focus:dark:bg-gray-700 focus:shadow-md`}
+                    className={`text-lg sm:text-2xl border-b-2 border-colorTwo dark:border-colorOne px-1 rounded-sm w-[300px] whitespace-nowrap overflow-x-hidden focus:outline-none focus:bg-gray-200 focus:dark:bg-gray-700 focus:shadow-md ${
+                      !isProfileEdit || (id === "email" && "emailToolTip")
+                    }`}
                     contentEditable={
                       !isProfileEdit || id === "email" ? undefined : "true"
                     }
-                    onInput={(e) => {
-                      profileEditValuesHandler(e);
-                    }}
-                    id={id}
-                    ref={
-                      isProfileEdit || id === "email"
+                    onInput={
+                      !isProfileEdit || id === "email"
                         ? undefined
-                        : (el) => {
-                            profileInfoDivRef.current.push(el);
+                        : (e) => {
+                            profileEditValuesHandler(e);
                           }
                     }
+                    id={id}
                   >
-                    {!isProfileEdit || id === "email" ? value : ""}
+                    {value}
                   </span>
                 </div>
+
+                {id === "email" || !isProfileEdit || (
+                  <Tooltip
+                    anchorSelect=".emailToolTip"
+                    id="emailToolTip"
+                    content="Generte Unique ID"
+                  />
+                )}
               </React.Fragment>
             );
           })}
