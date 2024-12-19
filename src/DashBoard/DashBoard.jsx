@@ -13,6 +13,7 @@ const DashBoard = () => {
   const [allEmployeesGetting, setAllEmployeesGetting] = useState([]);
   const [allUsersGetting, setAllUsersGetting] = useState([]);
   useEffect(() => {
+    document.title = "EmpManage | | DashBoard ";
     (async () => {
       try {
         setDashBoardContentLoading(true);
@@ -85,11 +86,11 @@ const DashBoard = () => {
                 ? currentLoggedData?.adminProfileURL
                 : currentLoggedData?.signUpProfile
             }
-            className="w-[150px] sm:w-[300px] h-[150px] sm:h-[300px] rounded-full object-cover object-center"
+            className="w-[150px] sm:w-[200px] h-[150px] sm:h-[200px] rounded-full object-cover object-center border-2 dark:border-colorOne border-colorTwo"
             alt="Profile"
           />
 
-          <div className="flex flex-col justify-between items-start gap-10">
+          <div className="flex flex-col justify-between items-start gap-6">
             <>
               <h1 className="text-2xl sm:text-[4vw] text-colorTwo dark:text-colorOne">
                 Hi!{" "}

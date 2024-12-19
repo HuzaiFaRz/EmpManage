@@ -1,8 +1,11 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { ThemeDarkToLight } from "../Script";
 import { auth } from "../ConfigFiles/firebase_Config";
 
 const Emp_Manage = () => {
+  useEffect(() => {
+    document.title = "EmpManage";
+  }, []);
   return (
     <Fragment>
       <div className="w-full h-[100svh] flex flex-col justify-center items-center gap-5">

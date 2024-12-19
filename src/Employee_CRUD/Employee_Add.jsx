@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   dismissLoadingMessage,
   loadingMessage,
@@ -53,6 +53,10 @@ const Employee_Add = () => {
     reset,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    document.title = "EmpManage | | Employee Add";
+  }, []);
 
   const employee_ID_Handler = () => {
     const id = uuid().slice(0, 15);

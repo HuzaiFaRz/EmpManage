@@ -7,18 +7,24 @@ import { IoIosPersonAdd } from "react-icons/io";
 import { FaBookReader, FaUsers } from "react-icons/fa";
 import { rejectMessage, resolveMessage, ThemeDarkToLight } from "../Script";
 import { ImProfile } from "react-icons/im";
-import { signOut } from "firebase/auth";
-import { auth } from "../ConfigFiles/firebase_Config";
+import { deleteUser, signOut } from "firebase/auth";
+import { auth, db } from "../ConfigFiles/firebase_Config";
 import { CgClose } from "react-icons/cg";
 import { ClipLoader } from "react-spinners";
 import { IoLogOut } from "react-icons/io5";
 import { AuthUseContext } from "../Utilities/Auth_Provider";
+import { BiLogOut } from "react-icons/bi";
+import { RiDeleteBinFill } from "react-icons/ri";
+import { deleteDoc, doc } from "firebase/firestore";
+import { Tooltip } from "react-tooltip";
 
 const LayOut = () => {
   const { isAdminLogged, isUserLogged } = AuthUseContext();
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [logOutModal, setLogOutModal] = useState(false);
   const [logOutLoading, setLogOutLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   useEffect(() => {
     isSideBarOpen
       ? (document.body.style.overflowY = "hidden")
@@ -47,6 +53,24 @@ const LayOut = () => {
     } finally {
       setLogOutLoading(false);
       setLogOutModal(false);
+      setIsSideBarOpen(false);
+    }
+  };
+
+  const deleteHandler = async () => {
+    try {
+      const user = auth.currentUser;
+      const userRef = doc(db, "Users", user?.uid);
+      setDeleteLoading(true);
+      await deleteUser(user);
+      await deleteDoc(userRef);
+      resolveMessage("Account Delete SuccessFully");
+    } catch (error) {
+      console.log(error);
+      rejectMessage(error.message);
+    } finally {
+      setDeleteLoading(false);
+      setDeleteModal(false);
       setIsSideBarOpen(false);
     }
   };
@@ -132,14 +156,28 @@ const LayOut = () => {
           </div>
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex flex-row items-center justify-between p-2">
           <button
-            className={`logOutBtn p-2 sm:p-3 ${ThemeDarkToLight} rounded-md w-20 sm:w-28`}
+            className={`deleteAccountBtn p-2 px-5 bg-[#ff3333] text-colorOne  rounded-md flex items-center justify-between gap-3 deleteAccountToolTip`}
+            disabled={isAdminLogged && true}
+            onClick={() => {
+              setDeleteModal(true);
+            }}
+          >
+            <Tooltip
+              anchorSelect=".deleteAccountToolTip"
+              id="deleteAccountToolTip"
+              content="You Are Admin"
+            />
+            <RiDeleteBinFill size={20} className="fill-white" /> Delete Account
+          </button>
+          <button
+            className={`logOutBtn p-2 px-5 bg-black text-colorOne rounded-md flex items-center justify-between gap-3 hover:rounded-xl transition-all`}
             onClick={() => {
               setLogOutModal(true);
             }}
           >
-            Log out
+            <BiLogOut size={20} className="fill-white" /> Log out
           </button>
         </div>
       </div>
@@ -152,6 +190,10 @@ const LayOut = () => {
           setIsSideBarOpen(false);
         }}
       ></div>
+
+      {/* Log Out Modal */}
+      {/* Log Out Modal */}
+      {/* Log Out Modal */}
 
       <div
         className={`modal w-full h-[100svh] z-[200] fixed top-0 left-0 bg-colorTwo backdrop-blur-lg bg-opacity-50 ${
@@ -180,12 +222,13 @@ const LayOut = () => {
         </div>
         <div className="modal-body w-full flex text-center justify-center items-center">
           <span className="text-sm sm:text-lg font-bold p-5">
-            Do you Really Logout {auth?.currentUser?.email}
+            Do you Really Logout {auth?.currentUser?.email} ?
           </span>
         </div>
         <div className="modal-footer flex flex-row justify-evenly gap-5 items-center p-2 mb-5 w-full">
           <button
             className="bg-[#5cb85c] text-colorOne cursor-pointer border-0 px-[15px] py-[8px] text-[15px] hover:rounded-xl transition-all"
+            disabled={logOutLoading && true}
             onClick={() => {
               setLogOutModal(false);
             }}
@@ -193,7 +236,7 @@ const LayOut = () => {
             Cancle
           </button>
           <button
-            className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative px-[15px] py-[8px] text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
+            className="logOutBtn p-2 px-5 bg-black text-colorOne rounded-md flex items-center justify-between gap-3 hover:rounded-xl transition-all"
             disabled={logOutLoading && true}
             onClick={logOutHandler}
           >
@@ -206,6 +249,76 @@ const LayOut = () => {
           </button>
         </div>
       </div>
+
+      {/* Log Out Modal */}
+      {/* Log Out Modal */}
+      {/* Log Out Modal */}
+
+      {/* Delete Modal */}
+      {/* Delete Modal */}
+      {/* Delete Modal */}
+
+      {isUserLogged && (
+        <>
+          <div
+            className={`modal w-full h-[100svh] z-[200] fixed top-0 left-0 bg-colorTwo backdrop-blur-lg bg-opacity-50 ${
+              deleteModal ? "flex" : "hidden"
+            } justify-center items-center`}
+            onClick={() => {
+              setDeleteModal(false);
+            }}
+          >
+            {" "}
+          </div>
+          <div
+            className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[300px] rounded-sm cursor-pointer z-[300] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-center ${
+              deleteModal ? "flex" : "hidden"
+            }`}
+          >
+            <div className="modal-header flex flex-row justify-between items-center p-2 w-full">
+              <div></div>
+              <CgClose
+                size={25}
+                onClick={() => {
+                  setDeleteModal(false);
+                }}
+              />
+            </div>
+
+            <div className="modal-body w-full flex text-center justify-center items-center">
+              <span className="text-sm sm:text-lg font-bold p-5">
+                Do you Really Delete {auth?.currentUser?.email} ?
+              </span>
+            </div>
+            <div className="modal-footer flex flex-row justify-evenly gap-5 items-center p-2 mb-5 w-full">
+              <button
+                className="bg-[#5cb85c] text-colorOne cursor-pointer border-0 px-[15px] py-[8px] text-[15px] hover:rounded-xl transition-all"
+                disabled={deleteLoading && true}
+                onClick={() => {
+                  setDeleteModal(false);
+                }}
+              >
+                Cancle
+              </button>
+              <button
+                className="deleteAccountBtn p-2 px-5 bg-[#ff3333] text-colorOne  rounded-md flex items-center justify-between gap-3"
+                disabled={deleteLoading && true}
+                onClick={deleteHandler}
+              >
+                {deleteLoading ? (
+                  <ClipLoader color="white" size={20} />
+                ) : (
+                  <RiDeleteBinFill size={20} />
+                )}{" "}
+                Delete
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+      {/* Delete Modal */}
+      {/* Delete Modal */}
+      {/* Delete Modal */}
       <Outlet />
     </Fragment>
   );

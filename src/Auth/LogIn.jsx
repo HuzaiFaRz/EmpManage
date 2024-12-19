@@ -30,6 +30,7 @@ const LogIn = () => {
     },
   ];
   useEffect(() => {
+    document.title = "EmpManage | | Login";
     if (isAdminLogged !== null && isUserLogged !== null) {
       return <Navigate to="/login" replace />;
     }

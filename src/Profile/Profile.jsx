@@ -31,6 +31,9 @@ const Profile = () => {
   const [profileContentLoading, setProfileContentLoading] = useState(false);
   const [profileEditingLoading, setProfileEditingLoading] = useState(false);
   const [isProfileEdit, setIsProfileEdit] = useState(false);
+  useEffect(() => {
+    document.title = "EmpManage | | Profile";
+  }, []);
   const [profileEditedValue, setProfileEditedValue] = useState({
     name: "",
     email: "",

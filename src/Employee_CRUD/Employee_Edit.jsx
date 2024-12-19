@@ -22,6 +22,10 @@ const EmployeeEdit = () => {
     useState(false);
   const [employeeEditingLoading, setEmployeeEditingLoading] = useState(false);
   const [employeeEditData, setEmployeeEditData] = useState(false);
+  
+    useEffect(() => {
+      document.title = "EmpManage | | Employee Edit";
+    }, []);
   const employeeEditInputs = [
     { ID: "employeeName", Placeholder: "Name", Type: "text" },
     {
@@ -49,6 +53,8 @@ const EmployeeEdit = () => {
     },
     { ID: "employeeStatus", Placeholder: "Status", Type: "text" },
   ];
+
+
   const {
     register,
     handleSubmit,

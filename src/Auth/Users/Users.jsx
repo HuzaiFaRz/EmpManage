@@ -35,6 +35,7 @@ const Users = () => {
   const [userDeleteLoading, setUserDeleteLoading] = useState(false);
 
   useEffect(() => {
+    document.title = "EmpManage | | Users";
     isDeleteModalOpen
       ? (document.body.style.overflowY = "hidden")
       : (document.body.style.overflowY = "scroll");
@@ -224,8 +225,7 @@ const Users = () => {
         </div>
         <div className="modal-body w-full flex text-center justify-center items-center">
           <span className="text-sm sm:text-lg font-bold p-5">
-            Are you sure you want to delete {userSelectID.length} selected
-            User?
+            Are you sure you want to delete {userSelectID.length} selected User?
           </span>
         </div>
         <div className="modal-footer flex flex-row justify-evenly gap-5 items-center p-2 mb-5 w-full">

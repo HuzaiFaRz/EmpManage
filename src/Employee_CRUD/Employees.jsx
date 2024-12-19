@@ -40,10 +40,12 @@ const Employees = () => {
   const [scrollCount, setScrollCount] = useState(3);
   const [employeeLoading, setEmployeeLoading] = useState(false);
   const [employeeDeleteLoading, setEmployeeDeleteLoading] = useState(false);
-  const { setEditEmployeeId, isAdminLogged, isUserLogged } = AuthUseContext();
+  const { setEditEmployeeId, isAdminLogged } = AuthUseContext();
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = "EmpManage | | Employees";
+
     isDeleteModalOpen || isEditModalOpen.editModalOpen
       ? (document.body.style.overflowY = "hidden")
       : (document.body.style.overflowY = "scroll");

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { cloudinaryConfig } from "../ConfigFiles/Cloudinary_Config";
 import {
   dismissLoadingMessage,
@@ -29,7 +29,9 @@ const Sign_Up = () => {
     reset,
     formState: { errors },
   } = useForm();
-
+  useEffect(() => {
+    document.title = "EmpManage | | SignUp";
+  }, []);
   const signUpInputs = [
     { ID: "signUpName", Placeholder: "Name", Type: "text" },
     { ID: "signUpEmail", Placeholder: "Email", Type: "email" },
