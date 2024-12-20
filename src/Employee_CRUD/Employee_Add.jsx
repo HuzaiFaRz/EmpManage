@@ -111,7 +111,7 @@ const Employee_Add = () => {
   return (
     <Fragment>
       <div
-        className={`Employee_Add_Page w-full h-full md:h-[90svh]  flex flex-col justify-center items-center p-2 mt-[10svh] ${ThemeLightToDark}`}
+        className={`Employee_Add_Page w-full h-full md:h-[90svh] flex flex-col justify-center items-center p-2 mt-[10svh] ${ThemeLightToDark}`}
       >
         <form
           className={`Employee_Add_Form flex flex-wrap items-center justify-evenly gap-4 w-[1000px] max-w-full p-8 border border-colorTwo dark:border-colorOne

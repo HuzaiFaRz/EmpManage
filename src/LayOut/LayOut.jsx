@@ -156,9 +156,9 @@ const LayOut = () => {
           </div>
         </div>
 
-        <div className="flex flex-row items-center justify-between p-2">
+        <div className="flex flex-col sm:flex-row items-center justify-between p-2 gap-5">
           <button
-            className={`deleteAccountBtn p-2 px-5 bg-[#ff3333] text-colorOne  rounded-md flex items-center justify-between gap-3 deleteAccountToolTip`}
+            className={`deleteAccountBtn py-2 px-5 bg-[#ff3333] text-colorOne rounded-md flex items-center justify-between gap-3 deleteAccountToolTip`}
             disabled={isAdminLogged && true}
             onClick={() => {
               setDeleteModal(true);
@@ -172,7 +172,7 @@ const LayOut = () => {
             <RiDeleteBinFill size={20} className="fill-white" /> Delete Account
           </button>
           <button
-            className={`logOutBtn p-2 px-5 bg-black text-colorOne rounded-md flex items-center justify-between gap-3 hover:rounded-xl transition-all`}
+            className={`logOutBtn py-2 px-5 bg-black text-colorOne rounded-md flex items-center justify-between gap-3 hover:rounded-xl transition-all`}
             onClick={() => {
               setLogOutModal(true);
             }}
@@ -207,7 +207,7 @@ const LayOut = () => {
       </div>
 
       <div
-        className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[300px] rounded-sm cursor-pointer z-[300] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-center ${
+        className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[200px] rounded-sm cursor-pointer z-[300] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-center ${
           logOutModal ? "flex" : "hidden"
         }`}
       >
@@ -271,7 +271,7 @@ const LayOut = () => {
             {" "}
           </div>
           <div
-            className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[300px] rounded-sm cursor-pointer z-[300] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-center ${
+            className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[200px] rounded-sm cursor-pointer z-[300] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-center ${
               deleteModal ? "flex" : "hidden"
             }`}
           >

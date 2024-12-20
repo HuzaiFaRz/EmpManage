@@ -78,7 +78,7 @@ const DashBoard = () => {
 
   return (
     <Fragment>
-      <div className="w-full h-[100svh] flex flex-col justify-center items-center gap-5">
+      <div className="w-full h-[90svh] mt-[10svh] flex flex-col justify-center items-center gap-5">
         <div className="dashboard_header w-full p-3 flex flex-row justify-start items-center gap-4">
           <img
             src={
@@ -86,7 +86,7 @@ const DashBoard = () => {
                 ? currentLoggedData?.adminProfileURL
                 : currentLoggedData?.signUpProfile
             }
-            className="w-[150px] sm:w-[200px] h-[150px] sm:h-[200px] rounded-full object-cover object-center border-2 dark:border-colorOne border-colorTwo"
+            className="w-[150px] sm:w-[300px] h-[150px] sm:h-[300px] rounded-full object-cover object-center border-2 dark:border-colorOne border-colorTwo"
             alt="Profile"
           />
 

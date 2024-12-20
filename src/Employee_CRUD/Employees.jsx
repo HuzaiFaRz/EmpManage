@@ -236,7 +236,7 @@ const Employees = () => {
           </div>
 
           <div
-            className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[300px] rounded-sm cursor-pointer z-[100] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-center ${
+            className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[200px] rounded-sm cursor-pointer z-[100] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-center ${
               isDeleteModalOpen ? "flex" : "hidden"
             }`}
           >
@@ -304,7 +304,7 @@ const Employees = () => {
           </div>
 
           <div
-            className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[300px] rounded-sm cursor-pointer z-[100] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-center ${
+            className={`${ThemeDarkToLight} w-full sm:w-[600px] h-[200px] rounded-sm cursor-pointer z-[100] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-between items-center ${
               isEditModalOpen.editModalOpen ? "flex" : "hidden"
             }`}
           >
