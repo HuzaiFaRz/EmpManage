@@ -494,33 +494,35 @@ const Employees = () => {
                     </ul>
 
                     <div className="w-full flex flex-row justify-between items-center p-4">
-                      <p className="opacity-50">
-                        {" "}
-                        {data?.employeeEdited && "Edited"}
-                      </p>
-
-                      <p
-                        className={`${
-                          employeeStatus === "active"
-                            ? "text-colorOne bg-green-500"
-                            : "text-colorOne bg-red-500 "
-                        } py-1 px-5 text-sm rounded-xl font-medium tracking-wider`}
-                      >
-                        {employeeStatus}
-                      </p>
-
                       {isAdminLogged && (
-                        <button
-                          className="bg-[#32a655] text-colorOne cursor-pointer border-0 relative px-[15px] py-[5px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
-                          onClick={() => {
-                            setIsEditModalOpen({
-                              editModalOpen: true,
-                              employeeID: Id,
-                            });
-                          }}
-                        >
-                          <MdEdit /> Edit
-                        </button>
+                        <>
+                          <p className="opacity-50">
+                            {" "}
+                            {data?.employeeEdited && "Edited"}
+                          </p>
+
+                          <p
+                            className={`${
+                              employeeStatus === "active"
+                                ? "text-colorOne bg-green-500"
+                                : "text-colorOne bg-red-500 "
+                            } py-1 px-5 text-sm rounded-xl font-medium tracking-wider`}
+                          >
+                            {employeeStatus}
+                          </p>
+
+                          <button
+                            className="bg-[#32a655] text-colorOne cursor-pointer border-0 relative px-[15px] py-[5px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
+                            onClick={() => {
+                              setIsEditModalOpen({
+                                editModalOpen: true,
+                                employeeID: Id,
+                              });
+                            }}
+                          >
+                            <MdEdit /> Edit
+                          </button>
+                        </>
                       )}
                     </div>
                   </div>

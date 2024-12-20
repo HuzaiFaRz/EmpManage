@@ -14,7 +14,7 @@ import { ClipLoader } from "react-spinners";
 import { IoLogOut } from "react-icons/io5";
 import { AuthUseContext } from "../Utilities/Auth_Provider";
 import { BiLogOut } from "react-icons/bi";
-import { RiDeleteBinFill } from "react-icons/ri";
+import { RiDeleteBinFill, RiFeedbackFill } from "react-icons/ri";
 import { deleteDoc, doc } from "firebase/firestore";
 import { Tooltip } from "react-tooltip";
 
@@ -35,6 +35,7 @@ const LayOut = () => {
     { name: "Profile", to: "profile" },
     { name: "Dashboard", to: "dashBoard" },
     { name: "Employees", to: "employees" },
+    { name: "Feedback", to: "feedback" },
   ];
 
   if (isAdminLogged !== null) {
@@ -138,6 +139,8 @@ const LayOut = () => {
                       <ImProfile size={25} />
                     ) : link.name === "Employees" ? (
                       <FaBookReader size={25} />
+                    ) : link.name === "Feedback" ? (
+                      <RiFeedbackFill size={25} />
                     ) : null}
 
                     {isAdminLogged && link.name === "Add Employee" && (
