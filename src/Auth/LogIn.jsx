@@ -109,8 +109,6 @@ const LogIn = () => {
                     }`}
                     {...register(ID, {
                       required: `${Placeholder} is required.`,
-                      value:
-                        ID === "logInEmail" ? "huzaifa.admin.a@gmail.com" : "",
                     })}
                   />
 
