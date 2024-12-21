@@ -45,6 +45,14 @@ const Feedback = () => {
     document.title = "EmpManage | | FeedBack";
   }, []);
 
+
+  useEffect(()=>{
+    (async()=>{
+      const feedBackCollection = collection(db,'FeedBack',auth.currentUser.uid)
+      await 
+    })()
+  })
+
   const feedback_Form_Handler = async (feedback_Data) => {
     try {
       event.preventDefault();
