@@ -123,7 +123,7 @@ const Users = () => {
   const userDeleteHandler = async () => {
     try {
       userSelectID.forEach(async (data) => {
-        const docRef = doc(db, "Employees", data);
+        const docRef = doc(db, "Users", data);
         setUserDeleteLoading(true);
         await deleteDoc(docRef);
       });
@@ -146,7 +146,7 @@ const Users = () => {
     >
       <div className="User_Header flex flex-wrap w-full p-2  justify-evenly items-center gap-5">
         <h1 className="font-semibold tracking-tighter text-4xl py-2 text-center text-colorTwo dark:text-colorOne w-full">
-          Employees
+          Users
         </h1>
 
         <div className="flex flex-wrap justify-evenly items-center w-full p-5 gap-5">
@@ -262,7 +262,7 @@ const Users = () => {
             </h1>
           ) : (
             users?.map((data, index) => {
-              const { signUpEmail, signUpName, signUpProfile, Id } = data;
+              const { signUpEmail, signUpName,  Id } = data;
               const { seconds, nanoseconds } = data.signUpAddingTime;
               const employeeAddingTimeConvert = new Date(
                 seconds * 1000 + nanoseconds / 1000000
@@ -289,11 +289,11 @@ const Users = () => {
                   >
                     <div className="flex flex-row justify-between items-center p-3">
                       <div className="flex flex-row justify-center items-center gap-3">
-                        <img
-                          src={signUpProfile}
-                          alt={`${signUpName}'s profile`}
-                          className="w-14 h-14 sm:w-20 sm:h-20 rounded-full object-cover border-2 dark:border-colorOne border-colorTwo"
-                        />
+                        <div
+                          className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold ${ThemeDarkToLight}`}
+                        >
+                          {signUpName?.charAt(0).toUpperCase()}
+                        </div>
                         <div className="flex flex-col justify-center items-start">
                           <h2
                             className="text-lg font-bold tracking-wide"

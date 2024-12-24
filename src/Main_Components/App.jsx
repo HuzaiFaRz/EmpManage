@@ -14,7 +14,8 @@ import Profile from "../Profile/Profile.jsx";
 import LayOut from "../LayOut/LayOut.jsx";
 import Sign_Up from "../Auth/Sign_Up.jsx";
 import Users from "../Auth/Users/Users.jsx";
-import Feedback from "../Feedback/Feedback.jsx";
+import FeedBack from "../FeedBack/FeedBack.jsx";
+import FeedBacks from "../FeedBacks/FeedBacks.jsx";
 
 const App = () => {
   return (
@@ -37,7 +38,8 @@ const App = () => {
                 <Route path="employee_edit" element={<EmployeeEdit />} />
                 <Route path="employee_add" element={<Employee_Add />} />
                 <Route path="employees" element={<Employees />} />
-                <Route path="feedback" element={<Feedback />} />
+                <Route path="feedback" element={<FeedBack />} />
+                <Route path="feedbacks" element={<FeedBacks />} />
                 <Route path="users" element={<Users />} />
               </Route>
             </Route>

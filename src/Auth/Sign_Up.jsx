@@ -40,46 +40,19 @@ const Sign_Up = () => {
       Placeholder: "Password",
       Type: signUpPasswordEye ? "text" : "password",
     },
-
-    {
-      ID: "signUpProfile",
-      Placeholder: "Profile Pic",
-      Type: "file",
-    },
   ];
 
   const sign_Up_Form_Handler = async (sign_Up_Data) => {
     try {
       event.preventDefault();
-      if (!sign_Up_Data.signUpProfile[0].type.includes("image")) {
-        rejectMessage("Profile Extension Not Supported");
-        return;
-      }
       loadingMessage("Wait...");
       setSignUpLoading(true);
-      const signUpProfile = sign_Up_Data.signUpProfile[0];
-      const signUpProfileData = new FormData();
-
-      signUpProfileData.append("file", signUpProfile);
-      signUpProfileData.append("upload_preset", cloudinaryConfig.uploadPreset);
-
-      signUpProfileData.append("folder", "EmpManage/UserProfilePics");
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
-        { method: "POST", body: signUpProfileData }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to upload profile image");
-      }
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         sign_Up_Data.signUpEmail,
         sign_Up_Data.signUpPassword
       );
       const { uid } = userCredential.user;
-      const data = await response.json();
-      const { url } = data;
-      sign_Up_Data.signUpProfile = url;
       sign_Up_Data.signUpAddingTime = serverTimestamp();
       sign_Up_Data.role = "User";
       await setDoc(doc(db, "Users", uid), sign_Up_Data);
@@ -127,7 +100,7 @@ const Sign_Up = () => {
                     disabled={signUpLoading && true}
                     type={Type}
                     placeholder={Placeholder}
-                    id={Type === "file" ? ID : Placeholder}
+                    id={Placeholder}
                     className={`p-2 bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo font-light tracking-[1px] placeholder:text-colorTwo dark:placeholder:text-colorOne focus:outline-0 w-[300px] ${
                       signUpLoading && "cursor-not-allowed"
                     }`}
@@ -145,13 +118,7 @@ const Sign_Up = () => {
                         message: "Remove Blank Space",
                       },
                     })}
-                    hidden={Type === "file" && true}
                   />
-                  {Type === "file" && (
-                    <div className="p-2 cursor-pointer bg-transparent border border-colorTwo color-light_Bg font-light tracking-[1px] dark:border-colorOne w-[300px]">
-                      Profile
-                    </div>
-                  )}
 
                   {ID === "signUpPassword" && (
                     <button

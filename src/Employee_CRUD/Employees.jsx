@@ -213,7 +213,7 @@ const Employees = () => {
                 employeeSelectID.length === 0 || setIsDeleteModalOpen(true);
               }}
             >
-              <IoIosWarning /> Delete
+              Delete
             </button>
           )}
         </div>

@@ -79,27 +79,25 @@ const DashBoard = () => {
   return (
     <Fragment>
       <div className="w-full h-[90svh] mt-[10svh] flex flex-col justify-center items-center gap-5">
-        <div className="dashboard_header w-full p-3 flex flex-row justify-start items-center gap-4">
-          <img
-            src={
-              isAdminLogged
-                ? currentLoggedData?.adminProfileURL
-                : currentLoggedData?.signUpProfile
-            }
-            className="w-[150px] sm:w-[300px] h-[150px] sm:h-[300px] rounded-full object-cover object-center border-2 dark:border-colorOne border-colorTwo"
-            alt="Profile"
-          />
+        <div className="dashboard_header w-full flex flex-col sm:flex-row justify-center sm:justify-start items-center gap-10 h-[500px]">
+          {isAdminLogged && (
+            <img
+              src={currentLoggedData?.adminProfileURL}
+              className="w-[250px] h-[250px] sm:w-[300px] sm:h-[300px] rounded-full object-cover object-center border-2 dark:border-colorOne border-colorTwo ml-10"
+              alt="Profile"
+            />
+          )}
 
-          <div className="flex flex-col justify-between items-start gap-6">
+          <div className="flex flex-col justify-center items-center gap-10 h-full">
             <>
-              <h1 className="text-2xl sm:text-[4vw] text-colorTwo dark:text-colorOne">
+              <h1 className="text-4xl sm:text-[5vw] text-colorTwo dark:text-colorOne">
                 Hi!{" "}
                 {isAdminLogged
                   ? currentLoggedData?.adminName
                   : currentLoggedData?.signUpName}
               </h1>
               <div
-                className={`text-sm sm:text-xl p-1 sm:p-2 rounded-sm shadow-2xl focus:outline-none ${ThemeDarkToLight}`}
+                className={`text-4xl sm:text-[2vw] w-full py-1 rounded-sm shadow-2xl focus:outline-none px-5 text-center ${ThemeDarkToLight}`}
               >
                 {isAdminLogged
                   ? currentLoggedData?.adminEmail
@@ -108,6 +106,7 @@ const DashBoard = () => {
             </>
           </div>
         </div>
+
         <div className="dashboard_Body">
           {isAdminLogged ? (
             <div

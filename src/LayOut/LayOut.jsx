@@ -35,12 +35,14 @@ const LayOut = () => {
     { name: "Profile", to: "profile" },
     { name: "Dashboard", to: "dashBoard" },
     { name: "Employees", to: "employees" },
-    { name: "Feedback", to: "feedback" },
   ];
 
-  if (isAdminLogged !== null) {
-    sideBarsLinks.push({ name: "Users", to: "users" });
+  if (isAdminLogged === null) {
+    sideBarsLinks.push({ name: "Feedback", to: "feedback" });
+  } else {
     sideBarsLinks.push({ name: "Add Employee", to: "employee_add" });
+    sideBarsLinks.push({ name: "Users", to: "users" });
+    sideBarsLinks.push({ name: "Feedbacks", to: "feedbacks" });
   }
 
   const logOutHandler = async () => {
@@ -113,7 +115,7 @@ const LayOut = () => {
       </nav>
 
       <div
-        className={`dark:bg-colorTwo bg-colorOne dark:text-colorOne text-colorTwo p-4 h-[90svh] flex flex-col justify-between w-[80%] md:w-[50%] z-[100] fixed top-[10svh] bottom-0 transition-all ${
+        className={`dark:bg-colorTwo bg-colorOne dark:text-colorOne text-colorTwo p-4 h-[90dvh] flex flex-col justify-between w-[80%] md:w-[50%] z-[100] fixed top-[10svh] bottom-0 transition-all ${
           isSideBarOpen ? "left-[0%]" : "left-[-80%]"
         }`}
       >
@@ -139,7 +141,7 @@ const LayOut = () => {
                       <ImProfile size={25} />
                     ) : link.name === "Employees" ? (
                       <FaBookReader size={25} />
-                    ) : link.name === "Feedback" ? (
+                    ) : isUserLogged && link.name === "Feedback" ? (
                       <RiFeedbackFill size={25} />
                     ) : null}
 
@@ -149,6 +151,10 @@ const LayOut = () => {
 
                     {isAdminLogged && link.name === "Users" && (
                       <FaUsers size={25} />
+                    )}
+
+                    {isAdminLogged && link.name === "Feedbacks" && (
+                      <RiFeedbackFill size={25} />
                     )}
 
                     {link?.name}

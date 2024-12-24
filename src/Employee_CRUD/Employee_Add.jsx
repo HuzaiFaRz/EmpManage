@@ -92,9 +92,8 @@ const Employee_Add = () => {
       employee_Added_Data.employeeProfilePublicID = public_id;
       employee_Added_Data.employeeProfile = url;
       employee_Added_Data.employeeAddingTime = serverTimestamp();
-      employee_Added_Data.role = "Employee";
       const randomNumber = Math.floor(Math.random() * 2);
-      employee_Added_Data.status = randomNumber === 1 ? "active" : "Unactive";
+      employee_Added_Data.employeeStatus = randomNumber === 1 ? "active" : "Unactive";
       await addDoc(collection(db, "Employees"), employee_Added_Data);
       resolveMessage("Employee Added");
       // reset();
