@@ -1,14 +1,14 @@
 import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
-import { db } from "../ConfigFiles/firebase_Config";
+import { db } from "../Config-Files/firebase_Config";
 import LoadingArrows from "../Loading/Loading_Arrows";
 import {
   rejectMessage,
   resolveMessage,
   ThemeDarkToLight,
   ThemeLightToDark,
-} from "../Script";
+} from "../Script/index";
 import { ClipLoader } from "react-spinners";
 import { IoIosWarning } from "react-icons/io";
 
@@ -95,7 +95,7 @@ const FeedBacks = () => {
             <React.Fragment key={index}>
               <div
                 key={index}
-                className="rounded-lg shadow-xl flex flex-col justify-between w-full xs:w-[400px] h-[200px] border-2 border-colorTwo dark:border-colorOne p-5 capitalize relative overflow-hidden"
+                className="rounded-lg shadow-xl flex flex-col justify-between w-full xs:w-[400px] border-2 border-colorTwo dark:border-colorOne p-5 capitalize relative overflow-hidden"
               >
                 {/* User Info */}
                 <div className="flex items-center mb-4">
@@ -114,9 +114,11 @@ const FeedBacks = () => {
                   {feedBackEmail}
                 </span>
 
-                <p className="text-[18px]">{feedBackMessage}</p>
+                <p className="text-[15px] italic py-5 mb-5">
+                  {feedBackMessage}
+                </p>
 
-                <div className="flex flex-row justify-between items-center w-full">
+                <div className="flex flex-col sm:flex-row justify-between items-center w-full gap-y-4 sm:gap-0">
                   <span className="flex flex-row justify-center items-center gap-1">
                     {Array(feedbackRatingStar)
                       .fill(0)
@@ -124,20 +126,31 @@ const FeedBacks = () => {
                         <FaStar key={i} className="text-yellow-400" size={18} />
                       ))}
                   </span>
-                  <button
-                    className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative text-[13px] flex flex-row hover:rounded-xl transition-all justify-center items-center gap-1 px-3 py-2 sm:px-6"
-                    disabled={feedBackDeleteLoading && true}
-                    onClick={() => {
-                      deleteHandler(feedback.id);
-                    }}
-                  >
-                    {feedBackDeleteLoading ? (
-                      <ClipLoader color="white" size={15} />
-                    ) : (
-                      <IoIosWarning size={15} />
-                    )}{" "}
-                    Delete
-                  </button>
+                  <div className="flex flex-row justify-center items-center gap-5">
+                    <button
+                      // onClick={() => handleLikeUnlike(feedback.id)}
+                      className={`
+                        text-blue-500
+                     flex items-center gap-1`}
+                    >
+                      {true ? "Unlike" : "Like"}
+                    </button>
+
+                    <button
+                      className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative text-[13px] flex flex-row hover:rounded-xl transition-all justify-center items-center gap-1 px-3 py-2 sm:px-6"
+                      disabled={feedBackDeleteLoading && true}
+                      onClick={() => {
+                        deleteHandler(feedback.id);
+                      }}
+                    >
+                      {feedBackDeleteLoading ? (
+                        <ClipLoader color="white" size={15} />
+                      ) : (
+                        <IoIosWarning size={15} />
+                      )}{" "}
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             </React.Fragment>

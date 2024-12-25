@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { AuthUseContext } from "../Utilities/Auth_Provider";
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../ConfigFiles/firebase_Config";
+import { db } from "../Config-Files/firebase_Config";
 import {
   rejectMessage,
   resolveMessage,
@@ -15,17 +15,17 @@ import { ClipLoader } from "react-spinners";
 import { BiArrowFromLeft } from "react-icons/bi";
 import { useForm } from "react-hook-form";
 
-const EmployeeEdit = () => {
+const Employee_Edit = () => {
   const navigate = useNavigate();
   const { editEmployeeId } = AuthUseContext();
   const [employeeEditGettingLoading, setEmployeeEditGettingLoading] =
     useState(false);
   const [employeeEditingLoading, setEmployeeEditingLoading] = useState(false);
   const [employeeEditData, setEmployeeEditData] = useState(false);
-  
-    useEffect(() => {
-      document.title = "EmpManage | | Employee Edit";
-    }, []);
+
+  useEffect(() => {
+    document.title = "EmpManage | | Employee Edit";
+  }, []);
   const employeeEditInputs = [
     { ID: "employeeName", Placeholder: "Name", Type: "text" },
     {
@@ -53,7 +53,6 @@ const EmployeeEdit = () => {
     },
     { ID: "employeeStatus", Placeholder: "Status", Type: "text" },
   ];
-
 
   const {
     register,
@@ -235,4 +234,4 @@ const EmployeeEdit = () => {
   );
 };
 
-export default EmployeeEdit;
+export default Employee_Edit;

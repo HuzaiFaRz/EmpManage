@@ -10,10 +10,10 @@ import { BiArrowFromLeft } from "react-icons/bi";
 import { ClipLoader } from "react-spinners";
 import { PiEyeClosedBold, PiEyeFill } from "react-icons/pi";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../ConfigFiles/firebase_Config";
+import { auth } from "../Config-Files/firebase_Config";
 import { AuthUseContext } from "../Utilities/Auth_Provider";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import ThemeChangerButton from "../ThemeChanger/Theme_Changer_Button";
+import ThemeChangerButton from "../Theme-Changer/Theme_Changer_Button";
 
 const LogIn = () => {
   const navigate = useNavigate();

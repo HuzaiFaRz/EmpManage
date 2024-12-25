@@ -8,10 +8,10 @@ import {
   ThemeLightToDark,
 } from "../Script";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
-import { auth, db } from "../ConfigFiles/firebase_Config";
+import { auth, db } from "../Config-Files/firebase_Config";
 import { IoIosWarning } from "react-icons/io";
 import { ClipLoader } from "react-spinners";
-import ThemeChangerButton from "../ThemeChanger/Theme_Changer_Button";
+import ThemeChangerButton from "../Theme-Changer/Theme_Changer_Button";
 import LoadingArrows from "../Loading/Loading_Arrows";
 import { AuthUseContext } from "../Utilities/Auth_Provider";
 import { Tooltip } from "react-tooltip";

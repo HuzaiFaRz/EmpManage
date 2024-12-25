@@ -14,7 +14,7 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
-import { db } from "../ConfigFiles/firebase_Config";
+import { db } from "../Config-Files/firebase_Config";
 import LoadingArrows from "../Loading/Loading_Arrows";
 import { useRef } from "react";
 import { CgClose } from "react-icons/cg";

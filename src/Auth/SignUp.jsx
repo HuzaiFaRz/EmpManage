@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { cloudinaryConfig } from "../ConfigFiles/Cloudinary_Config";
 import {
   dismissLoadingMessage,
   loadingMessage,
@@ -9,7 +8,7 @@ import {
   ThemeLightToDark,
 } from "../Script";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
-import { auth, db } from "../ConfigFiles/firebase_Config";
+import { auth, db } from "../Config-Files/firebase_Config";
 import { IoIosWarning } from "react-icons/io";
 import { PiEyeClosedBold, PiEyeFill } from "react-icons/pi";
 import { ClipLoader } from "react-spinners";
@@ -17,9 +16,9 @@ import { BiArrowFromLeft } from "react-icons/bi";
 import { useForm } from "react-hook-form";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
-import ThemeChangerButton from "../ThemeChanger/Theme_Changer_Button";
+import ThemeChangerButton from "../Theme-Changer/Theme_Changer_Button";
 
-const Sign_Up = () => {
+const SignUp = () => {
   const [signUpLoading, setSignUpLoading] = useState(false);
   const [signUpPasswordEye, setSignUpPasswordEye] = useState(false);
   const navigate = useNavigate();
@@ -189,4 +188,4 @@ const Sign_Up = () => {
   );
 };
 
-export default Sign_Up;
+export default SignUp;

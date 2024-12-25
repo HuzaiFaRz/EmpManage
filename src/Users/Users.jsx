@@ -3,7 +3,7 @@ import {
   resolveMessage,
   ThemeDarkToLight,
   ThemeLightToDark,
-} from "../../Script/index";
+} from "../Script/index";
 import React, { useEffect, useState } from "react";
 import {
   collection,
@@ -14,13 +14,13 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
-import { db } from "../../ConfigFiles/firebase_Config";
-import LoadingArrows from "../../Loading/Loading_Arrows";
+import { db } from "../Config-Files/firebase_Config";
+import LoadingArrows from "../Loading/Loading_Arrows";
 import { useRef } from "react";
 import { CgClose } from "react-icons/cg";
 import { IoIosWarning } from "react-icons/io";
-import LoadingSpinner from "../../Loading/Loading_Spinner";
-import { rejectMessage } from "../../Script/index";
+import LoadingSpinner from "../Loading/Loading_Spinner";
+import { rejectMessage } from "../Script/index";
 import { ClipLoader } from "react-spinners";
 
 const Users = () => {
@@ -262,7 +262,7 @@ const Users = () => {
             </h1>
           ) : (
             users?.map((data, index) => {
-              const { signUpEmail, signUpName,  Id } = data;
+              const { signUpEmail, signUpName, Id } = data;
               const { seconds, nanoseconds } = data.signUpAddingTime;
               const employeeAddingTimeConvert = new Date(
                 seconds * 1000 + nanoseconds / 1000000

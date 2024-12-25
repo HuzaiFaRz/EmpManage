@@ -10,8 +10,8 @@ import { useForm } from "react-hook-form";
 import { rejectMessage, resolveMessage } from "../Script/index";
 import { ClipLoader } from "react-spinners";
 import { BiArrowFromLeft } from "react-icons/bi";
-import { cloudinaryConfig } from "../ConfigFiles/Cloudinary_Config";
-import { db } from "../ConfigFiles/firebase_Config";
+import { cloudinaryConfig } from "../Config-Files/Cloudinary_Config";
+import { db } from "../Config-Files/firebase_Config";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import uuid from "react-uuid";
 import { IoIosWarning } from "react-icons/io";
@@ -93,7 +93,8 @@ const Employee_Add = () => {
       employee_Added_Data.employeeProfile = url;
       employee_Added_Data.employeeAddingTime = serverTimestamp();
       const randomNumber = Math.floor(Math.random() * 2);
-      employee_Added_Data.employeeStatus = randomNumber === 1 ? "active" : "Unactive";
+      employee_Added_Data.employeeStatus =
+        randomNumber === 1 ? "active" : "Unactive";
       await addDoc(collection(db, "Employees"), employee_Added_Data);
       resolveMessage("Employee Added");
       // reset();

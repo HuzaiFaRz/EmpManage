@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
-import ThemeChangerButton from "../ThemeChanger/Theme_Changer_Button";
+import ThemeChangerButton from "../Theme-Changer/Theme_Changer_Button";
 
 import { MdDashboard } from "react-icons/md";
 import { IoIosPersonAdd } from "react-icons/io";
@@ -8,7 +8,7 @@ import { FaBookReader, FaUsers } from "react-icons/fa";
 import { rejectMessage, resolveMessage, ThemeDarkToLight } from "../Script";
 import { ImProfile } from "react-icons/im";
 import { deleteUser, signOut } from "firebase/auth";
-import { auth, db } from "../ConfigFiles/firebase_Config";
+import { auth, db } from "../Config-Files/firebase_Config";
 import { CgClose } from "react-icons/cg";
 import { ClipLoader } from "react-spinners";
 import { IoLogOut } from "react-icons/io5";

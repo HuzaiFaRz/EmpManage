@@ -1,6 +1,6 @@
 import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
 import { rejectMessage, ThemeDarkToLight } from "../Script";
-import { auth, db } from "../ConfigFiles/firebase_Config";
+import {  db } from "../Config-Files/firebase_Config";
 import { Fragment, useEffect, useState } from "react";
 import LoadingArrows from "../Loading/Loading_Arrows";
 import { PieChart } from "react-minimal-pie-chart";

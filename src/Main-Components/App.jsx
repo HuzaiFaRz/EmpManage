@@ -1,19 +1,18 @@
-// import DefaultProfilePic from "../assets/Images/Default_Profile_Pic.jpg";
+import { Fragment } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LogIn from "../Auth/LogIn.jsx";
 import DashBoard from "../DashBoard/DashBoard.jsx";
-import Employee_Add from "../Employee_CRUD/Employee_Add.jsx";
-import EmpManage from "../EmpManage/Emp_Manage.jsx";
-import AuthProvider from "../Utilities/Auth_Provider.jsx";
+import Employee_Add from "../Employee-CRUD/Employee_Add.jsx";
+import Emp_Manage from "../Emp-Manage/EmpManage.jsx";
+import Auth_Provider from "../Utilities/Auth_Provider.jsx";
 import { ToastContainer } from "react-toastify";
-import Employees from "../Employee_CRUD/Employees";
-import { Fragment } from "react";
-import EmployeeEdit from "../Employee_CRUD/Employee_Edit.jsx";
-import ProtectedRoute from "../ProtectedRoutes/Protected_Route.jsx";
+import Employees from "../Employee-CRUD/Employees.jsx";
+import Employee_Edit from "../Employee-CRUD/Employee_Edit.jsx";
+import Protected_Route from "../Protected-Routes/Protected_Route.jsx";
 import Profile from "../Profile/Profile.jsx";
 import LayOut from "../LayOut/LayOut.jsx";
-import Sign_Up from "../Auth/Sign_Up.jsx";
-import Users from "../Auth/Users/Users.jsx";
+import SignUp from "../Auth/SignUp.jsx";
+import Users from "../Users/Users.jsx";
 import FeedBack from "../FeedBack/FeedBack.jsx";
 import FeedBacks from "../FeedBacks/FeedBacks.jsx";
 
@@ -25,17 +24,17 @@ const App = () => {
         progressClassName="toastify__progress-bar"
         style={{ lineHeight: "20px" }}
       />
-      <AuthProvider>
+      <Auth_Provider>
         <BrowserRouter>
           <Routes>
             <Route path="login" element={<LogIn />} />
-            <Route path="sign_up" element={<Sign_Up />} />
-            <Route path="/" element={<ProtectedRoute />}>
+            <Route path="sign_up" element={<SignUp />} />
+            <Route path="/" element={<Protected_Route />}>
               <Route path="/" element={<LayOut />}>
-                <Route path="/" element={<EmpManage />} />
+                <Route path="/" element={<Emp_Manage />} />
                 <Route path="dashBoard" element={<DashBoard />} />
                 <Route path="profile" element={<Profile />} />
-                <Route path="employee_edit" element={<EmployeeEdit />} />
+                <Route path="employee_edit" element={<Employee_Edit />} />
                 <Route path="employee_add" element={<Employee_Add />} />
                 <Route path="employees" element={<Employees />} />
                 <Route path="feedback" element={<FeedBack />} />
@@ -45,7 +44,7 @@ const App = () => {
             </Route>
           </Routes>
         </BrowserRouter>
-      </AuthProvider>
+      </Auth_Provider>
     </Fragment>
   );
 };

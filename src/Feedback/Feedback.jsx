@@ -1,10 +1,12 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
-import { ThemeLightToDark } from "../Script/index";
+import {
+  ThemeLightToDark,
+  rejectMessage,
+  resolveMessage,
+} from "../Script/index";
 import { useForm } from "react-hook-form";
-
-import { rejectMessage, resolveMessage } from "../Script/index";
 import { ClipLoader } from "react-spinners";
-import { auth, db } from "../ConfigFiles/firebase_Config";
+import { auth, db } from "../Config-Files/firebase_Config";
 import {
   addDoc,
   collection,
@@ -114,7 +116,7 @@ const FeedBack = () => {
           <p className="text-lg capitalize">
             Your feedback helps us improve. Here’s what you shared:
           </p>
-          <div className="flex flex-col justify-center items-center gap-4">
+          <div className="flex flex-col justify-center items-center gap-2">
             <div className="flex flex-row justify-center items-center gap-3">
               {Array.from({
                 length: isFeedBackExist?.feedbackRatingStar,
@@ -123,7 +125,9 @@ const FeedBack = () => {
               })}
             </div>
 
-            <p className="italic text-xl">{isFeedBackExist?.feedBackMessage}</p>
+            <p className="italic text-xl px-5 mb-5 mt-5">
+              {isFeedBackExist?.feedBackMessage}
+            </p>
           </div>
 
           <Link
@@ -136,7 +140,7 @@ const FeedBack = () => {
             onClick={() => {
               setIsFeedBackExist(undefined);
             }}
-            className="cursor-pointer hover:underline underline-offset-8"
+            className="cursor-pointer underline underline-offset-8"
           >
             Submit Another Feedback
           </h5>
@@ -183,10 +187,6 @@ const FeedBack = () => {
                             }`}
                             {...register("feedBackMessage", {
                               required: `${Placeholder} is required.`,
-                              pattern: {
-                                value: /^[^\s]+(?:$|.*[^\s]+$)/,
-                                message: "Remove Blank Space",
-                              },
                             })}
                           ></textarea>
                         ) : (

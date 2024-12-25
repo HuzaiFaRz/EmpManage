@@ -2,7 +2,7 @@ import LoadingArrows from "../Loading/Loading_Arrows";
 import { AuthUseContext } from "../Utilities/Auth_Provider";
 import { Navigate, Outlet } from "react-router-dom";
 
-const ProtectedRoute = () => {
+const Protected_Route = () => {
   const { isAdminLogged, authLoading, isUserLogged } = AuthUseContext();
 
   if (authLoading) {
@@ -16,4 +16,4 @@ const ProtectedRoute = () => {
   return <Outlet />;
 };
 
-export default ProtectedRoute;
+export default Protected_Route;

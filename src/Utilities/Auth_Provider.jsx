@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-import { auth } from "../ConfigFiles/firebase_Config";
+import { auth } from "../Config-Files/firebase_Config";
 import { onAuthStateChanged } from "firebase/auth";
 
 const AuthCreateContext = createContext();
 export const AuthUseContext = () => useContext(AuthCreateContext);
-const AuthProvider = ({ children }) => {
+const Auth_Provider = ({ children }) => {
   const [isAdminLogged, setIsAdminLogged] = useState(null);
   const [isUserLogged, setIsUserLogged] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
@@ -47,4 +47,4 @@ const AuthProvider = ({ children }) => {
   );
 };
 
-export default AuthProvider;
+export default Auth_Provider;

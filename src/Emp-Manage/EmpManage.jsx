@@ -1,8 +1,8 @@
 import { Fragment, useEffect } from "react";
 import { ThemeDarkToLight } from "../Script";
-import { auth } from "../ConfigFiles/firebase_Config";
+import { auth } from "../Config-Files/firebase_Config";
 
-const Emp_Manage = () => {
+const EmpManage = () => {
   useEffect(() => {
     document.title = "EmpManage";
   }, []);
@@ -22,4 +22,4 @@ const Emp_Manage = () => {
   );
 };
 
-export default Emp_Manage;
+export default EmpManage;
