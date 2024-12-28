@@ -13,8 +13,8 @@ import Profile from "../Profile/Profile.jsx";
 import LayOut from "../LayOut/LayOut.jsx";
 import SignUp from "../Auth/SignUp.jsx";
 import Users from "../Users/Users.jsx";
-import FeedBack from "../FeedBack/FeedBack.jsx";
-import FeedBacks from "../FeedBacks/FeedBacks.jsx";
+import Feedback_Form from "../Feedback-Form/Feedback_Form.jsx";
+import All_Feedback from "../All-Feedback/All_Feedback.jsx";
 
 const App = () => {
   return (
@@ -37,8 +37,8 @@ const App = () => {
                 <Route path="employee_edit" element={<Employee_Edit />} />
                 <Route path="employee_add" element={<Employee_Add />} />
                 <Route path="employees" element={<Employees />} />
-                <Route path="feedback" element={<FeedBack />} />
-                <Route path="feedbacks" element={<FeedBacks />} />
+                <Route path="feedback" element={<Feedback_Form />} />
+                <Route path="feedbacks" element={<All_Feedback />} />
                 <Route path="users" element={<Users />} />
               </Route>
             </Route>

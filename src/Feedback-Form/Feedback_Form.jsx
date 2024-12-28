@@ -21,7 +21,7 @@ import { FaStar } from "react-icons/fa";
 import LoadingArrows from "../Loading/Loading_Arrows";
 import { Link } from "react-router-dom";
 
-const FeedBack = () => {
+const Feedback_Form = () => {
   const [feedBackLoading, setFeedBackLoadingLoading] = useState(false);
   const [isFeedBackExist, setIsFeedBackExist] = useState(undefined);
   const feedBackStarCount = useRef(0);
@@ -271,4 +271,4 @@ const FeedBack = () => {
   }
 };
 
-export default FeedBack;
+export default Feedback_Form;

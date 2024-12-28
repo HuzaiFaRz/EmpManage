@@ -12,7 +12,7 @@ import {
 import { ClipLoader } from "react-spinners";
 import { IoIosWarning } from "react-icons/io";
 
-const FeedBacks = () => {
+const All_Feedback = () => {
   const [feedBacksData, setFeedBacksData] = useState(null);
   const [feedBacksDataLoading, setFeedBacksDataLoading] = useState(false);
   const [feedBackDeleteLoading, setFeedBackDeleteLoading] = useState(false);
@@ -161,4 +161,4 @@ const FeedBacks = () => {
   );
 };
 
-export default FeedBacks;
+export default All_Feedback;
