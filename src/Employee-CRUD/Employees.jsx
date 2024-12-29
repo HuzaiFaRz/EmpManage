@@ -225,7 +225,7 @@ const Employees = () => {
           {/* Delete Modal */}
 
           <div
-            className={`modal w-full h-[100svh] z-[80] fixed top-0 left-0 bg-colorTwo backdrop-blur-lg bg-opacity-50 ${
+            className={`modal w-full h-[100dvh] z-[80] fixed top-0 left-0 bg-colorTwo backdrop-blur-lg bg-opacity-50 ${
               isDeleteModalOpen ? "flex" : "hidden"
             } justify-center items-center`}
             onClick={() => {
@@ -290,7 +290,7 @@ const Employees = () => {
           {/* Edit Modal */}
 
           <div
-            className={`modal w-full h-[100svh] z-[80] fixed top-0 left-0 bg-colorTwo backdrop-blur-lg bg-opacity-50 ${
+            className={`modal w-full h-[100dvh] z-[80] fixed top-0 left-0 bg-colorTwo backdrop-blur-lg bg-opacity-50 ${
               isEditModalOpen.editModalOpen ? "flex" : "hidden"
             } justify-center items-center`}
             onClick={() => {

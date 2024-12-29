@@ -97,7 +97,7 @@ const Employee_Add = () => {
         randomNumber === 1 ? "active" : "Unactive";
       await addDoc(collection(db, "Employees"), employee_Added_Data);
       resolveMessage("Employee Added");
-      // reset();
+      reset();
     } catch (error) {
       console.log(error);
       rejectMessage("Failed to add Employee try Again");

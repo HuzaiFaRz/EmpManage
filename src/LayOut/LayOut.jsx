@@ -205,7 +205,7 @@ const LayOut = () => {
       {/* Log Out Modal */}
 
       <div
-        className={`modal w-full h-[100svh] z-[200] fixed top-0 left-0 bg-colorTwo backdrop-blur-lg bg-opacity-50 ${
+        className={`modal w-full h-[100dvh] z-[200] fixed top-0 left-0 bg-colorTwo backdrop-blur-lg bg-opacity-50 ${
           logOutModal ? "flex" : "hidden"
         } justify-center items-center`}
         onClick={() => {

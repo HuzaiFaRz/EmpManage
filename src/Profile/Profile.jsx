@@ -21,7 +21,6 @@ import {
   reauthenticateWithCredential,
   signInWithEmailAndPassword,
   updatePassword,
-  updateProfile,
 } from "firebase/auth";
 import { EmailAuthProvider } from "firebase/auth/web-extension";
 
@@ -51,19 +50,18 @@ const Profile = () => {
     {
       id: "email",
       label: "Email",
-      value: isAdminLogged
-        ? currentLoggedData?.adminEmail
-        : currentLoggedData?.signUpEmail,
+      value: auth.currentUser.email,
     },
 
     {
       id: "password",
       label: "Password",
-      value: auth.currentUser.email,
+      value: isAdminLogged
+        ? currentLoggedData?.adminPassword
+        : currentLoggedData?.signUpPassword,
     },
   ];
 
-  console.log(auth.currentUser.email);
   useEffect(() => {
     (async () => {
       try {

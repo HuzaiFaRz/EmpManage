@@ -83,7 +83,7 @@ const DashBoard = () => {
           {isAdminLogged && (
             <img
               src={currentLoggedData?.adminProfileURL}
-              className="w-[250px] h-[250px] sm:w-[300px] sm:h-[300px] rounded-full object-cover object-center border-2 dark:border-colorOne border-colorTwo ml-10"
+              className="w-[150px] h-[150px] xs:w-[200px] xs:h-[200px] sm:w-[300px] sm:h-[300px] rounded-full object-cover object-center border-2 dark:border-colorOne border-colorTwo ml-10"
               alt="Profile"
             />
           )}
@@ -105,7 +105,7 @@ const DashBoard = () => {
                   : currentLoggedData?.signUpName}
               </h1>
               <div
-                className={`text-4xl sm:text-[2vw] w-full py-1 rounded-sm shadow-2xl focus:outline-none px-5 text-center ${ThemeDarkToLight}`}
+                className={`text-xl sm:text-[2vw] w-full py-1 rounded-sm shadow-2xl focus:outline-none px-5 text-center ${ThemeDarkToLight}`}
               >
                 {isAdminLogged
                   ? currentLoggedData?.adminEmail

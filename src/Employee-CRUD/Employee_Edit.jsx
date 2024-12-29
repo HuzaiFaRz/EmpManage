@@ -61,8 +61,6 @@ const Employee_Edit = () => {
     formState: { errors },
   } = useForm();
 
-  console.log(employeeEditData);
-
   useEffect(() => {
     if (editEmployeeId === null) {
       navigate("/employees", { replace: true });
@@ -105,9 +103,9 @@ const Employee_Edit = () => {
         employeeAge: employee_Edit_Data.employeeAge,
         employeeProfession: employee_Edit_Data.employeeProfession,
         employeeExperience: employee_Edit_Data.employeeExperience,
+        employeeStatus: employee_Edit_Data.employeeStatus,
         employeeEdited: true,
       });
-      console.log(employee_Edit_Data);
       resolveMessage("Employee Edited");
       navigate("/employees");
     } catch (error) {
