@@ -1,4 +1,10 @@
-import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { db } from "../Config-Files/firebase_Config";
@@ -9,19 +15,23 @@ import {
   ThemeDarkToLight,
   ThemeLightToDark,
 } from "../Script/index";
+
+import { AiFillDislike, AiFillLike } from "react-icons/ai";
+import { MdDelete } from "react-icons/md";
 import { ClipLoader } from "react-spinners";
-import { IoIosWarning } from "react-icons/io";
+import { Tooltip } from "react-tooltip";
 
 const All_Feedback = () => {
   const [feedBacksData, setFeedBacksData] = useState(null);
   const [feedBacksDataLoading, setFeedBacksDataLoading] = useState(false);
   const [feedBackDeleteLoading, setFeedBackDeleteLoading] = useState(false);
+  const [isFeebackLikedLoading, setIsFeebackLikedLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
         setFeedBacksDataLoading(true);
-        onSnapshot(collection(db, "FeedBack"), (querySnapshot) => {
+        onSnapshot(collection(db, "Feedback"), (querySnapshot) => {
           const response = querySnapshot.docs.map((e) => {
             return {
               id: e.id,
@@ -42,16 +52,29 @@ const All_Feedback = () => {
     return <LoadingArrows />;
   }
 
-  const deleteHandler = async (id) => {
+  const feedbackDeleteHandler = async (id) => {
     try {
       setFeedBackDeleteLoading(true);
-      await deleteDoc(doc(db, "FeedBack", id));
+      await deleteDoc(doc(db, "Feedback", id));
       resolveMessage("FeedBack Deleted");
     } catch (error) {
       console.log(error);
       rejectMessage(error.message);
     } finally {
       setFeedBackDeleteLoading(false);
+    }
+  };
+
+  const likeUnlikeHandler = async (id, feedbackLiked) => {
+    setIsFeebackLikedLoading(true);
+    try {
+      await updateDoc(doc(db, "Feedback", id), {
+        feedbackLiked: !feedbackLiked,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFeebackLikedLoading(false);
     }
   };
 
@@ -66,8 +89,7 @@ const All_Feedback = () => {
           No FeedBack
         </h1>
       )}
-
-      <div className="flex flex-wrap justify-evenly items-center w-full mt-10 gap-y-5">
+      <div className="flex flex-wrap justify-evenly items-center w-full mt-10 gap-y-8 p-2">
         {feedBacksData?.map((feedback, index) => {
           const {
             feedBackMessage,
@@ -75,8 +97,8 @@ const All_Feedback = () => {
             feedBackName,
             feedbackRatingStar,
             feedbackTime,
+            feedbackLiked,
           } = feedback;
-
           const { nanoseconds, seconds } = feedbackTime;
           const feedBackTimeConverted = new Date(
             seconds * 1000 + nanoseconds / 1000000
@@ -88,9 +110,6 @@ const All_Feedback = () => {
             month: "2-digit",
             day: "2-digit",
           });
-
-          console.log(feedback.id);
-
           return (
             <React.Fragment key={index}>
               <div
@@ -109,46 +128,67 @@ const All_Feedback = () => {
                     <p className="text-sm">{feedBackTimeConverted}</p>
                   </div>
                 </div>
-
                 <span className="lowercase absolute top-5 right-6 text-[13px] opacity-35">
                   {feedBackEmail}
                 </span>
-
-                <p className="text-[15px] italic py-5 mb-5">
+                <div className="text-[15px] italic py-5 mb-5 overflow-hidden text-ellipsis whitespace-normal break-words max-w-full">
                   {feedBackMessage}
-                </p>
+                </div>
 
                 <div className="flex flex-col sm:flex-row justify-between items-center w-full gap-y-4 sm:gap-0">
                   <span className="flex flex-row justify-center items-center gap-1">
-                    {Array(feedbackRatingStar)
-                      .fill(0)
-                      .map((_, i) => (
-                        <FaStar key={i} className="text-yellow-400" size={18} />
-                      ))}
+                    {feedbackRatingStar === 0 ? (
+                      <h4>No Star</h4>
+                    ) : (
+                      Array(feedbackRatingStar)
+                        .fill(0)
+                        .map((_, i) => (
+                          <FaStar
+                            key={i}
+                            className="text-yellow-400"
+                            size={18}
+                          />
+                        ))
+                    )}
                   </span>
                   <div className="flex flex-row justify-center items-center gap-5">
-                    <button
-                      // onClick={() => handleLikeUnlike(feedback.id)}
-                      className={`
-                        text-blue-500
-                     flex items-center gap-1`}
-                    >
-                      {true ? "Unlike" : "Like"}
+                    <button disabled={isFeebackLikedLoading && true}>
+                      {feedbackLiked ? (
+                        <AiFillLike
+                          color="lightblue"
+                          size={25}
+                          className="cursor-pointer"
+                          onClick={() =>
+                            likeUnlikeHandler(feedback.id, feedbackLiked)
+                          }
+                        />
+                      ) : (
+                        <AiFillDislike
+                          color="red"
+                          size={25}
+                          className="cursor-pointer"
+                          onClick={() =>
+                            likeUnlikeHandler(feedback.id, feedbackLiked)
+                          }
+                        />
+                      )}
                     </button>
 
+                    <Tooltip
+                      anchorSelect=".likeToolTip"
+                      id="likeToolTip"
+                      place="top"
+                      content="Generte Unique ID"
+                    />
+
                     <button
-                      className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative text-[13px] flex flex-row hover:rounded-xl transition-all justify-center items-center gap-1 px-3 py-2 sm:px-6"
+                      className="text-red-500 flex flex-row items-center justify-center"
                       disabled={feedBackDeleteLoading && true}
                       onClick={() => {
-                        deleteHandler(feedback.id);
+                        feedbackDeleteHandler(feedback.id);
                       }}
                     >
-                      {feedBackDeleteLoading ? (
-                        <ClipLoader color="white" size={15} />
-                      ) : (
-                        <IoIosWarning size={15} />
-                      )}{" "}
-                      Delete
+                      <MdDelete size={25} />
                     </button>
                   </div>
                 </div>

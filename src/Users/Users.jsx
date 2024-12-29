@@ -24,15 +24,15 @@ import { rejectMessage } from "../Script/index";
 import { ClipLoader } from "react-spinners";
 
 const Users = () => {
-  const [userSelectID, setUserSelectID] = useState([]);
+  const [usersSelectID, setUsersSelectID] = useState([]);
   const [users, setUsers] = useState();
-  const [userSearchInput, setUserSearchInput] = useState("");
-  const userCardRef = useRef([]);
-  const userNameRef = useRef([]);
+  const [usersSearchInput, setUserSearchInput] = useState("");
+  const usersCardRef = useRef([]);
+  const usersNameRef = useRef([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [scrollCount, setScrollCount] = useState(3);
-  const [userLoading, setUserLoading] = useState(false);
-  const [userDeleteLoading, setUserDeleteLoading] = useState(false);
+  const [usersLoading, setUsersLoading] = useState(false);
+  const [usersDeleteLoading, setUsersDeleteLoading] = useState(false);
 
   useEffect(() => {
     document.title = "EmpManage | | Users";
@@ -40,7 +40,7 @@ const Users = () => {
       ? (document.body.style.overflowY = "hidden")
       : (document.body.style.overflowY = "scroll");
 
-    const employeeScrollHandler = () => {
+    const usersScrollHandler = () => {
       if (
         window.scrollY + window.innerHeight >=
         document.documentElement.scrollHeight
@@ -49,12 +49,12 @@ const Users = () => {
         return;
       }
     };
-    document.addEventListener("scroll", employeeScrollHandler);
-    return () => document.removeEventListener("scroll", employeeScrollHandler);
+    document.addEventListener("scroll", usersScrollHandler);
+    return () => document.removeEventListener("scroll", usersScrollHandler);
   }, [users, isDeleteModalOpen]);
 
   useEffect(() => {
-    setUserLoading(true);
+    setUsersLoading(true);
     const employeessCollection = query(
       collection(db, "Users"),
       orderBy("signUpAddingTime", "asc"),
@@ -68,14 +68,14 @@ const Users = () => {
         };
       });
       setUsers(realTimeEmployee);
-      setUserLoading(false);
+      setUsersLoading(false);
     });
 
     return () => unsubscribe();
   }, [scrollCount]);
 
   const userSelectHandler = (Id) => {
-    setUserSelectID((prevSetUserSelectId) =>
+    setUsersSelectID((prevSetUserSelectId) =>
       prevSetUserSelectId?.includes(Id)
         ? prevSetUserSelectId.filter((existingId) => existingId !== Id)
         : [...prevSetUserSelectId, Id]
@@ -83,10 +83,10 @@ const Users = () => {
   };
 
   const userAllSelectHandler = () => {
-    if (userSelectID.length === users?.length) {
-      setUserSelectID([]);
+    if (usersSelectID.length === users?.length) {
+      setUsersSelectID([]);
     } else {
-      setUserSelectID(users.map((data) => data.Id));
+      setUsersSelectID(users.map((data) => data.Id));
     }
   };
 
@@ -95,9 +95,9 @@ const Users = () => {
       .toLowerCase()
       .replaceAll(" ", "");
     setUserSearchInput(employeeSearchInput);
-    userNameRef.current.forEach((data, index) => {
-      if (userCardRef.current[index]) {
-        const userCardElement = userCardRef.current[index];
+    usersNameRef.current.forEach((data, index) => {
+      if (usersCardRef.current[index]) {
+        const userCardElement = usersCardRef.current[index];
         if (data?.textContent.includes(employeeSearchInput)) {
           userCardElement.style.transition =
             "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
@@ -122,19 +122,19 @@ const Users = () => {
 
   const userDeleteHandler = async () => {
     try {
-      userSelectID.forEach(async (data) => {
+      usersSelectID.forEach(async (data) => {
         const docRef = doc(db, "Users", data);
-        setUserDeleteLoading(true);
+        setUsersDeleteLoading(true);
         await deleteDoc(docRef);
       });
-      setUserDeleteLoading(false);
-      setUserSelectID([]);
+      setUsersDeleteLoading(false);
+      setUsersSelectID([]);
       setIsDeleteModalOpen(false);
-      resolveMessage("Employee Deleted");
+      resolveMessage("User Deleted");
     } catch (error) {
       console.log(error);
-      setUserDeleteLoading(false);
-      setUserSelectID([]);
+      setUsersDeleteLoading(false);
+      setUsersSelectID([]);
       setIsDeleteModalOpen(false);
       rejectMessage(error.message);
     }
@@ -155,20 +155,20 @@ const Users = () => {
             id="employeeSearch"
             className="p-2 bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo font-light tracking-[1px] placeholder:text-colorTwo dark:placeholder:text-colorOne focus:outline-0 w-[300px]"
             placeholder="Search Employee By Name"
-            value={userSearchInput}
+            value={usersSearchInput}
             onChange={(event) => {
               userSearchHandler(event);
             }}
           />
           <button
             className={`${ThemeDarkToLight} cursor-pointer border-0 relative px-3 py-2 sm:px-6 text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-5`}
-            disabled={userSelectID.length === 0 && users?.length === 0 && true}
+            disabled={usersSelectID.length === 0 && users?.length === 0 && true}
           >
             {" "}
             <p>
-              {userSelectID.length}
+              {usersSelectID.length}
 
-              {userSelectID.length === users?.length
+              {usersSelectID.length === users?.length
                 ? " UnSelect all"
                 : " Select all"}
             </p>
@@ -185,9 +185,9 @@ const Users = () => {
           </button>
           <button
             className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative text-[13px] sm:text-[15px] flex flex-row hover:rounded-xl transition-all justify-center items-center gap-1 px-3 py-2 sm:px-6"
-            disabled={userSelectID.length === 0 && users?.length === 0 && true}
+            disabled={usersSelectID.length === 0 && users?.length === 0 && true}
             onClick={() => {
-              userSelectID.length === 0 || setIsDeleteModalOpen(true);
+              usersSelectID.length === 0 || setIsDeleteModalOpen(true);
             }}
           >
             <IoIosWarning /> Delete
@@ -225,7 +225,8 @@ const Users = () => {
         </div>
         <div className="modal-body w-full flex text-center justify-center items-center">
           <span className="text-sm sm:text-lg font-bold p-5">
-            Are you sure you want to delete {userSelectID.length} selected User?
+            Are you sure you want to delete {usersSelectID.length} selected
+            User?
           </span>
         </div>
         <div className="modal-footer flex flex-row justify-evenly gap-5 items-center p-2 mb-5 w-full">
@@ -239,10 +240,10 @@ const Users = () => {
           </button>
           <button
             className="bg-[#a63232] text-colorOne cursor-pointer border-0 relative px-[15px] py-[8px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2"
-            disabled={userSelectID.length === 0 && users?.length === 0 && true}
+            disabled={usersSelectID.length === 0 && users?.length === 0 && true}
             onClick={userDeleteHandler}
           >
-            {userDeleteLoading ? (
+            {usersDeleteLoading ? (
               <ClipLoader color="white" size={20} />
             ) : (
               <IoIosWarning size={20} />
@@ -264,7 +265,7 @@ const Users = () => {
             users?.map((data, index) => {
               const { signUpEmail, signUpName, Id } = data;
               const { seconds, nanoseconds } = data.signUpAddingTime;
-              const employeeAddingTimeConvert = new Date(
+              const signUpAddingTimeConvert = new Date(
                 seconds * 1000 + nanoseconds / 1000000
               )?.toLocaleString("en-US", {
                 hour: "numeric",
@@ -278,13 +279,13 @@ const Users = () => {
                 <React.Fragment key={index}>
                   <div
                     className={`w-full sm:w-[400px] rounded-sm bg-opacity-50 border-2 p-2 dark:text-colorOne text-colorTwo capitalize cursor-pointer ${
-                      userSelectID.includes(Id)
+                      usersSelectID.includes(Id)
                         ? "bg-gray-500"
                         : "border-colorTwo dark:border-colorOne"
                     }`}
                     id={`Card ${Id}`}
                     ref={(el) => {
-                      userCardRef.current.push(el);
+                      usersCardRef.current.push(el);
                     }}
                   >
                     <div className="flex flex-row justify-between items-center p-3">
@@ -298,7 +299,7 @@ const Users = () => {
                           <h2
                             className="text-lg font-bold tracking-wide"
                             ref={(el) => {
-                              userNameRef.current.push(el);
+                              usersNameRef.current.push(el);
                             }}
                           >
                             {signUpName}
@@ -310,7 +311,7 @@ const Users = () => {
                         className="w-[25px] h-[25px] relative bg-colorTwo dark:bg-colorOne cursor-pointer flex justify-center items-center rounded-sm"
                         id={`${Id}`}
                       >
-                        {userSelectID.includes(Id) && (
+                        {usersSelectID.includes(Id) && (
                           <FaCheck className="fill-colorOne dark:fill-colorTwo" />
                         )}
                         <input
@@ -334,7 +335,7 @@ const Users = () => {
                         <span className="font-bold text-sm sm:text-lg">
                           Apply time:{" "}
                         </span>{" "}
-                        <p> {employeeAddingTimeConvert}</p>
+                        <p> {signUpAddingTimeConvert}</p>
                       </li>
                     </ul>
                   </div>
@@ -343,7 +344,7 @@ const Users = () => {
             })
           )}
 
-          {userLoading && <LoadingSpinner />}
+          {usersLoading && <LoadingSpinner />}
         </>
       </ul>
     </div>

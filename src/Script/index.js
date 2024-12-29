@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 const MessageStyle = {
   style: { width: "100%", lineHeight: "20px" },
-  autoClose: 2000,
+  autoClose: 1000,
   theme: "dark",
   position: "top-center",
 };

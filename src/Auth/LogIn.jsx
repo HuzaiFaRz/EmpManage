@@ -165,7 +165,12 @@ const LogIn = () => {
           </div>
           <span className="flex flex-row gap-4">
             Don&apos;t Have an Acount?
-            <Link to={"/sign_up"} className="underline underline-offset-4">
+            <Link
+              to={"/sign_up"}
+              className={`underline underline-offset-4 ${
+                logInLoading && "disabled-link"
+              }`}
+            >
               Sign Up
             </Link>{" "}
           </span>

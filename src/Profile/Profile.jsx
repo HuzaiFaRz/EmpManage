@@ -59,11 +59,11 @@ const Profile = () => {
     {
       id: "password",
       label: "Password",
-      value: isAdminLogged
-        ? currentLoggedData?.adminPassword
-        : currentLoggedData?.signUpPassword,
+      value: auth.currentUser.email,
     },
   ];
+
+  console.log(auth.currentUser.email);
   useEffect(() => {
     (async () => {
       try {
@@ -216,8 +216,8 @@ const Profile = () => {
                   <span className="text-xl sm:text-3xl">{label}:</span>
                   <span
                     className={`text-lg sm:text-2xl border-b-2 border-colorTwo dark:border-colorOne px-1 rounded-sm w-[300px] whitespace-nowrap overflow-x-hidden focus:outline-none focus:bg-gray-200 focus:dark:bg-gray-700 focus:shadow-md ${
-                      !isProfileEdit || (id === "email" && "emailToolTip")
-                    }`}
+                      id === "email" && "lowercase"
+                    } ${!isProfileEdit || (id === "email" && "emailToolTip")}`}
                     contentEditable={
                       !isProfileEdit || id === "email" ? undefined : "true"
                     }

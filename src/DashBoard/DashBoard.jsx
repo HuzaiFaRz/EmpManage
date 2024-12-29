@@ -1,6 +1,6 @@
 import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
 import { rejectMessage, ThemeDarkToLight } from "../Script";
-import {  db } from "../Config-Files/firebase_Config";
+import { db } from "../Config-Files/firebase_Config";
 import { Fragment, useEffect, useState } from "react";
 import LoadingArrows from "../Loading/Loading_Arrows";
 import { PieChart } from "react-minimal-pie-chart";
@@ -79,7 +79,7 @@ const DashBoard = () => {
   return (
     <Fragment>
       <div className="w-full h-[90svh] mt-[10svh] flex flex-col justify-center items-center gap-5">
-        <div className="dashboard_header w-full flex flex-col sm:flex-row justify-center sm:justify-start items-center gap-10 h-[500px]">
+        <div className="dashboard_header w-full flex flex-col sm:flex-row justify-center items-center gap-10 h-[500px]">
           {isAdminLogged && (
             <img
               src={currentLoggedData?.adminProfileURL}
@@ -88,7 +88,15 @@ const DashBoard = () => {
             />
           )}
 
-          <div className="flex flex-col justify-center items-center gap-10 h-full">
+          {isUserLogged && (
+            <div
+              className={`w-[200px] h-[200px] rounded-full flex items-center justify-center text-5xl font-bold ${ThemeDarkToLight}`}
+            >
+              {currentLoggedData?.signUpName?.charAt(0).toUpperCase()}
+            </div>
+          )}
+
+          <div className="flex flex-col justify-center items-center gap-10">
             <>
               <h1 className="text-4xl sm:text-[5vw] text-colorTwo dark:text-colorOne">
                 Hi!{" "}
