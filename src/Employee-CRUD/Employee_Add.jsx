@@ -79,7 +79,7 @@ const Employee_Add = () => {
         "upload_preset",
         cloudinaryConfig.uploadPreset
       );
-      employeeProfileData.append("folder", "EmpManage/EmployeeProfilePics");
+      employeeProfileData.append("folder", "EmpManage");
       const response = await fetch(
         `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
         { method: "POST", body: employeeProfileData }
@@ -97,7 +97,7 @@ const Employee_Add = () => {
         randomNumber === 1 ? "active" : "Unactive";
       await addDoc(collection(db, "Employees"), employee_Added_Data);
       resolveMessage("Employee Added");
-      reset();
+      // reset();
     } catch (error) {
       console.log(error);
       rejectMessage("Failed to add Employee try Again");

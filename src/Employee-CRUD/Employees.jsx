@@ -109,22 +109,9 @@ const Employees = () => {
       if (employeeCardRef.current[index]) {
         const employeeCardElement = employeeCardRef.current[index];
         if (data?.textContent.includes(employeeSearchInput)) {
-          employeeCardElement.style.transition =
-            "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
-          employeeCardElement.style.opacity = "1";
-          employeeCardElement.style.width = "400px";
-          employeeCardElement.style.height = "auto";
-          employeeCardElement.style.overflow = "auto";
-          employeeCardElement.style.visibility = "visible";
+          employeeCardElement.style.display = "block";
         } else {
-          employeeCardElement.style.visibility = "hidden";
-          employeeCardElement.style.opacity = "0";
-          employeeCardElement.style.width = "0";
-          employeeCardElement.style.height = "0";
-          employeeCardElement.style.overflow = "hidden";
-          employeeCardElement.style.appearance = "none";
-          employeeCardElement.style.transition =
-            "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
+          employeeCardElement.style.display = "none";
         }
       }
     });

@@ -31,6 +31,7 @@ const Feedback_Form = () => {
   const [feedBackDeleteLoading, setFeedBackDeleteLoading] = useState(false);
   const [isFeedBackExistLoading, setIsFeedBackExistLoading] =
     useState(undefined);
+  const starRefs = useRef([]);
   const feedBackInputs = [
     { ID: "feedBackName", Placeholder: "Name", Type: "text" },
     { ID: "feedBackEmail", Placeholder: "Email", Type: "email" },
@@ -269,11 +270,17 @@ const Feedback_Form = () => {
                             type={Type}
                             placeholder={Placeholder}
                             id={ID}
+                            value={
+                              ID === "feedBackEmail"
+                                ? auth.currentUser.email
+                                : undefined
+                            }
                             className={`p-2 bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo font-light tracking-[1px] placeholder:text-colorTwo dark:placeholder:text-colorOne focus:outline-0 w-[300px] ${
                               feedBackLoading && "cursor-not-allowed"
                             }`}
                             {...register(ID, {
                               required: `${Placeholder} is required.`,
+
                               pattern: {
                                 value: /^[^\s]+(?:$|.*[^\s]+$)/,
                                 message: "Remove Blank Space",
@@ -306,13 +313,23 @@ const Feedback_Form = () => {
               <div className="flex flex-row justify-around items-center gap-0 w-full py-5 cursor-pointer p-5">
                 {Array.from({ length: 5 }).map((_, index) => {
                   return (
-                    <FaStar
+                    <button
+                      className={`${index}`}
                       key={index}
-                      size={30}
+                      ref={(element) => starRefs.current.push(element)}
                       onClick={(event) => {
-                        feedBackStarHandler(event, index);
+                        // feedBackStarHandler(event, index);
+                        // console.log(index);
+
+                        if (index <= 1) {
+                          starRefs.current[0].style.color = "#FFDF00";
+                          starRefs.current[1].style.color = "#FFDF00";
+                          console.log(starRefs.current[index]);
+                        }
                       }}
-                    />
+                    >
+           
+                    </button>
                   );
                 })}
               </div>

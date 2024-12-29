@@ -26,7 +26,7 @@ import { ClipLoader } from "react-spinners";
 const Users = () => {
   const [usersSelectID, setUsersSelectID] = useState([]);
   const [users, setUsers] = useState();
-  const [usersSearchInput, setUserSearchInput] = useState("");
+  const [usersSearchInput, setUsersSearchInput] = useState("");
   const usersCardRef = useRef([]);
   const usersNameRef = useRef([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -90,31 +90,18 @@ const Users = () => {
     }
   };
 
-  const userSearchHandler = (event) => {
-    const employeeSearchInput = event.target.value
+  const usersSearchHandler = (event) => {
+    const usersSearchInput = event.target.value
       .toLowerCase()
       .replaceAll(" ", "");
-    setUserSearchInput(employeeSearchInput);
+    setUsersSearchInput(usersSearchInput);
     usersNameRef.current.forEach((data, index) => {
       if (usersCardRef.current[index]) {
-        const userCardElement = usersCardRef.current[index];
-        if (data?.textContent.includes(employeeSearchInput)) {
-          userCardElement.style.transition =
-            "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
-          userCardElement.style.opacity = "1";
-          userCardElement.style.width = "400px";
-          userCardElement.style.height = "auto";
-          userCardElement.style.overflow = "auto";
-          userCardElement.style.visibility = "visible";
+        const usersCardElement = usersCardRef.current[index];
+        if (data.textContent.includes(usersSearchInput)) {
+          usersCardElement.style.display = "block";
         } else {
-          userCardElement.style.visibility = "hidden";
-          userCardElement.style.opacity = "0";
-          userCardElement.style.width = "0";
-          userCardElement.style.height = "0";
-          userCardElement.style.overflow = "hidden";
-          userCardElement.style.appearance = "none";
-          userCardElement.style.transition =
-            "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
+          usersCardElement.style.display = "none";
         }
       }
     });
@@ -157,7 +144,7 @@ const Users = () => {
             placeholder="Search Employee By Name"
             value={usersSearchInput}
             onChange={(event) => {
-              userSearchHandler(event);
+              usersSearchHandler(event);
             }}
           />
           <button
