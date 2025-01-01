@@ -27,11 +27,12 @@ import { AiFillDislike, AiFillLike } from "react-icons/ai";
 const Feedback_Form = () => {
   const [feedBackLoading, setFeedBackLoadingLoading] = useState(false);
   const [isFeedBackExist, setIsFeedBackExist] = useState(undefined);
-  const feedBackStarCount = useRef(0);
   const [feedBackDeleteLoading, setFeedBackDeleteLoading] = useState(false);
   const [isFeedBackExistLoading, setIsFeedBackExistLoading] =
     useState(undefined);
-  const starRefs = useRef([]);
+
+  const [ratingStar, setRatingStar] = useState(0);
+  const [ratingStarHover, setRatingStarHover] = useState(0);
   const feedBackInputs = [
     { ID: "feedBackName", Placeholder: "Name", Type: "text" },
     { ID: "feedBackEmail", Placeholder: "Email", Type: "email" },
@@ -72,19 +73,6 @@ const Feedback_Form = () => {
     })();
   }, []);
 
-  const feedBackStarHandler = (event) => {
-    event.currentTarget.classList.toggle("starActive");
-    if (event.currentTarget.classList.contains("starActive")) {
-      event.currentTarget.style.color = "#FFDF00";
-      feedBackStarCount.current = feedBackStarCount.current + 1;
-      console.log(feedBackStarCount.current);
-    } else {
-      feedBackStarCount.current = feedBackStarCount.current - 1;
-      event.currentTarget.style.color = "#fff";
-      console.log(feedBackStarCount.current);
-    }
-  };
-
   const feedback_Form_Handler = async (feedback_Data) => {
     try {
       event.preventDefault();
@@ -95,7 +83,7 @@ const Feedback_Form = () => {
         return;
       }
       setFeedBackLoadingLoading(true);
-      feedback_Data.feedbackRatingStar = feedBackStarCount.current;
+      feedback_Data.feedbackRatingStar = ratingStar;
       feedback_Data.feedbackTime = serverTimestamp();
       feedback_Data.feedbackLiked = false;
       await addDoc(collection(db, "Feedback"), feedback_Data);
@@ -310,26 +298,17 @@ const Feedback_Form = () => {
                 })}
               </div>
 
-              <div className="flex flex-row justify-around items-center gap-0 w-full py-5 cursor-pointer p-5">
+              <div className="flex flex-row justify-evenly items-center w-full py-5 cursor-pointer p-5">
                 {Array.from({ length: 5 }).map((_, index) => {
                   return (
-                    <button
-                      className={`${index}`}
+                    <FaStar
                       key={index}
-                      ref={(element) => starRefs.current.push(element)}
-                      onClick={(event) => {
-                        // feedBackStarHandler(event, index);
-                        // console.log(index);
-
-                        if (index <= 1) {
-                          starRefs.current[0].style.color = "#FFDF00";
-                          starRefs.current[1].style.color = "#FFDF00";
-                          console.log(starRefs.current[index]);
-                        }
-                      }}
-                    >
-           
-                    </button>
+                      onClick={() => setRatingStar(index + 1)}
+                      onMouseEnter={() => setRatingStarHover(index + 1)}
+                      onMouseLeave={() => setRatingStarHover(0)}
+                      size={25}
+                      color={index < ratingStar || index< ratingStarHover ? "yellow" : ""}
+                    />
                   );
                 })}
               </div>
