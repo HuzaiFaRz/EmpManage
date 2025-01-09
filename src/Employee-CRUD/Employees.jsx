@@ -179,9 +179,6 @@ const Employees = () => {
                 ? " UnSelect all"
                 : " Select all"}
             </p>
-            {/* {employees?.length === 0
-              ? "Selected"
-              :  */}
             <input
               type="checkbox"
               className="absolute w-full h-full opacity-0 cursor-pointer"

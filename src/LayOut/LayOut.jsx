@@ -173,11 +173,13 @@ const LayOut = () => {
               setDeleteModal(true);
             }}
           >
-            <Tooltip
-              anchorSelect=".deleteAccountToolTip"
-              id="deleteAccountToolTip"
-              content="You Are Admin"
-            />
+            {isAdminLogged && (
+              <Tooltip
+                anchorSelect=".deleteAccountToolTip"
+                id="deleteAccountToolTip"
+                content="You Are Admin"
+              />
+            )}
             <RiDeleteBinFill size={20} className="fill-white" /> Delete Account
           </button>
           <button
@@ -192,7 +194,7 @@ const LayOut = () => {
       </div>
 
       <div
-        className={`w-full h-[100svh] bg-none bg-opacity-50 filter fixed z-40 bg-colorTwo ${
+        className={`w-full h-[100svh] bg-none bg-opacity-50 filter fixed z-40 bg-black ${
           isSideBarOpen ? "block" : "hidden"
         }`}
         onClick={() => {

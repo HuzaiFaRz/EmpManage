@@ -96,17 +96,17 @@ const Users = () => {
       .replaceAll(" ", "");
     setUsersSearchInput(usersSearchInput);
     usersNameRef.current.forEach((data, index) => {
+      const userName = data?.textContent.toLowerCase().replaceAll(" ", "");
       if (usersCardRef.current[index]) {
-        const usersCardElement = usersCardRef.current[index];
-        if (data.textContent.includes(usersSearchInput)) {
-          usersCardElement.style.display = "block";
+        const userCardElement = usersCardRef.current[index];
+        if (userName.includes(usersSearchInput)) {
+          userCardElement.style.display = "block";
         } else {
-          usersCardElement.style.display = "none";
+          userCardElement.style.display = "none";
         }
       }
     });
   };
-
   const userDeleteHandler = async () => {
     try {
       usersSelectID.forEach(async (data) => {

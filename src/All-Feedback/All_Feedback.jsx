@@ -18,10 +18,11 @@ import {
 
 import { AiFillDislike, AiFillLike } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
-import { ClipLoader } from "react-spinners";
-import { Tooltip } from "react-tooltip";
+import { AuthUseContext } from "../Utilities/Auth_Provider";
+import { Link } from "react-router-dom";
 
 const All_Feedback = () => {
+  const { isAdminLogged, isUserLogged } = AuthUseContext();
   const [feedBacksData, setFeedBacksData] = useState(null);
   const [feedBacksDataLoading, setFeedBacksDataLoading] = useState(false);
   const [feedBackDeleteLoading, setFeedBackDeleteLoading] = useState(false);
@@ -79,7 +80,9 @@ const All_Feedback = () => {
   };
 
   return (
-    <div className={`w-full h-[90svh] ${ThemeLightToDark} mt-[10svh]`}>
+    <div
+      className={`w-full h-[90svh] ${ThemeLightToDark} mt-[10svh] flex flex-col justify-evenly items-center`}
+    >
       <h1 className="font-semibold tracking-tighter text-4xl w-[100%] py-2 text-center">
         FeedBacks
       </h1>
@@ -174,22 +177,17 @@ const All_Feedback = () => {
                       )}
                     </button>
 
-                    <Tooltip
-                      anchorSelect=".likeToolTip"
-                      id="likeToolTip"
-                      place="top"
-                      content="Generte Unique ID"
-                    />
-
-                    <button
-                      className="text-red-500 flex flex-row items-center justify-center"
-                      disabled={feedBackDeleteLoading && true}
-                      onClick={() => {
-                        feedbackDeleteHandler(feedback.id);
-                      }}
-                    >
-                      <MdDelete size={25} />
-                    </button>
+                    {isAdminLogged && (
+                      <button
+                        className="text-red-500 flex flex-row items-center justify-center"
+                        disabled={feedBackDeleteLoading && true}
+                        onClick={() => {
+                          feedbackDeleteHandler(feedback.id);
+                        }}
+                      >
+                        <MdDelete size={25} />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -197,6 +195,14 @@ const All_Feedback = () => {
           );
         })}
       </div>
+      {isUserLogged && (
+        <Link
+          to={"/feedback"}
+          className="underline underline-offset-4 hover:scale-105 transition-all mt-5 pb-5"
+        >
+          Back To Feedback
+        </Link>
+      )}
     </div>
   );
 };
