@@ -144,7 +144,6 @@ const Employee_Add = () => {
                     }`}
                     {...register(ID, {
                       required: `${Placeholder} is required.`,
-
                       max: {
                         value:
                           ID === "employeeAge"
@@ -159,7 +158,6 @@ const Employee_Add = () => {
                             ? "Experience must not exceed 20 years."
                             : null,
                       },
-
                       min: {
                         value:
                           ID === "employeeAge"

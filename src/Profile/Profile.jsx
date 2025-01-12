@@ -23,6 +23,7 @@ import {
   updatePassword,
 } from "firebase/auth";
 import { EmailAuthProvider } from "firebase/auth/web-extension";
+import { cloudinaryConfig } from "../Config-Files/Cloudinary_Config";
 
 const Profile = () => {
   const { isAdminLogged, isUserLogged } = AuthUseContext();
@@ -30,6 +31,8 @@ const Profile = () => {
   const [profileContentLoading, setProfileContentLoading] = useState(false);
   const [profileEditingLoading, setProfileEditingLoading] = useState(false);
   const [isProfileEdit, setIsProfileEdit] = useState(false);
+  const [viewProfileImage, setViewProfileImage] = useState(false);
+  const [newProfileImageFile, setNewProfileImageFile] = useState();
   useEffect(() => {
     document.title = "EmpManage | | Profile";
   }, []);
@@ -197,6 +200,17 @@ const Profile = () => {
     }
   };
 
+  const uploadNewProfileImageHandler = () => {
+    if (!newProfileImageFile[0].type.includes("image")) {
+      rejectMessage("Profile Extension Not Supported");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", newProfileImageFile[0]);
+    formData.append("upload_preset", cloudinaryConfig.uploadPreset);
+    formData.append("cloud_name", cloudinaryConfig.cloudName);
+  };
+
   return (
     <Fragment>
       <div className="w-full h-[10svh] flex flex-row justify-center items-center">
@@ -205,15 +219,72 @@ const Profile = () => {
       <div
         className={`Profile_Page w-full h-[90svh] flex flex-col justify-center items-center p-2 ${ThemeLightToDark}`}
       >
-        <div className="Profile_Div flex flex-col items-center justify-around gap-4 w-full sm:w-[600px] h-[500px] max-w-full p-8 border border-colorTwo dark:border-colorOne">
+        <div className="Profile_Div flex flex-col items-center justify-around gap-4 w-full sm:w-[600px] h-max max-w-full p-8 border border-colorTwo dark:border-colorOne">
+          {isAdminLogged && (
+            <>
+              <img
+                src={currentLoggedData?.adminProfileURL}
+                className={`rounded-full cursor-pointer ${
+                  viewProfileImage
+                    ? "absolute w-[500px] h-[500px] z-[5555]"
+                    : "w-[150px] h-[150px] static"
+                } `}
+              />
+              <div className="w-full flex justify-center gap-5">
+                {isProfileEdit && isAdminLogged ? (
+                  <>
+                    <button
+                      className={`bg-colorOne cursor-pointer border-0 px-4 py-2 hover:rounded-xl ${ThemeDarkToLight} relative text-sm`}
+                    >
+                      <input
+                        type={"file"}
+                        className="absolute top-0 left-0 opacity-0 w-full h-full cursor-pointer"
+                        onChange={(e) => {
+                          setNewProfileImageFile(e.target.files);
+                        }}
+                      />
+                      Upload a New Image
+                    </button>
+                    {newProfileImageFile?.length && (
+                      <button
+                        className={`bg-colorOne cursor-pointer border-0 px-4 py-2 hover:rounded-xl ${ThemeDarkToLight} relative text-sm`}
+                        onClick={uploadNewProfileImageHandler}
+                      >
+                        Set New Profile Picture
+                      </button>
+                    )}
+                  </>
+                ) : (
+                  <button
+                    className={`bg-colorOne cursor-pointer border-0 px-4 py-2 hover:rounded-xl ${ThemeDarkToLight}`}
+                    onClick={() => {
+                      setViewProfileImage(true);
+                    }}
+                  >
+                    View Image
+                  </button>
+                )}
+              </div>
+              <div
+                className={` w-full h-[100dvh] z-[80] fixed top-0 left-0 bg-colorTwo backdrop-blur-lg bg-opacity-50 ${
+                  viewProfileImage ? "flex" : "hidden"
+                } justify-center items-center`}
+                onClick={() => {
+                  setViewProfileImage(false);
+                }}
+              >
+                {" "}
+              </div>
+            </>
+          )}
           {profileInfoDiv?.map((element, index) => {
             const { label, value, id } = element;
             return (
               <React.Fragment key={index}>
-                <div className="flex flex-row justify-start items-start gap-2 w-full">
-                  <span className="text-xl sm:text-3xl">{label}:</span>
+                <div className="flex flex-col justify-center items-start gap-2 w-full">
+                  <span className="text-xl">{label}:</span>
                   <span
-                    className={`text-lg sm:text-2xl border-b-2 border-colorTwo dark:border-colorOne px-1 rounded-sm w-[300px] whitespace-nowrap overflow-x-hidden focus:outline-none focus:bg-gray-200 focus:dark:bg-gray-700 focus:shadow-md ${
+                    className={`text-lg border border-colorTwo dark:border-colorOne rounded-sm whitespace-nowrap overflow-x-hidden w-full px-3 py-2 ${
                       id === "email" && "lowercase"
                     } ${!isProfileEdit || (id === "email" && "emailToolTip")}`}
                     contentEditable={
@@ -248,7 +319,7 @@ const Profile = () => {
               type="button"
               className={` ${
                 isProfileEdit ? "bg-[#a63232]" : "bg-[#32a655]"
-              } text-colorOne cursor-pointer border-0 relative px-[18px] py-[8px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2 ${
+              } text-colorOne cursor-pointer border-0 px-4 py-2 flex hover:rounded-xl transition-all justify-center items-center gap-2 ${
                 profileEditingLoading && "cursor-not-allowed"
               }`}
               id="Sign_Up_Form_Submit_Button"
@@ -266,7 +337,7 @@ const Profile = () => {
             {isProfileEdit && (
               <button
                 type="button"
-                className={`${ThemeDarkToLight} cursor-pointer border-0 relative px-[18px] py-[8px] text-[13px] sm:text-[15px] flex hover:rounded-xl transition-all justify-center items-center gap-2 ${
+                className={`${ThemeDarkToLight} cursor-pointer border-0 px-4 py-2 flex hover:rounded-xl transition-all justify-center items-center gap-2 ${
                   profileEditingLoading && "cursor-not-allowed"
                 }`}
                 id="Sign_Up_Form_Submit_Button"

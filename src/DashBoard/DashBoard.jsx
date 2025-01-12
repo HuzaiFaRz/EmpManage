@@ -105,7 +105,7 @@ const DashBoard = () => {
                   : currentLoggedData?.signUpName}
               </h1>
               <div
-                className={`text-xl sm:text-[2vw] w-full py-1 rounded-sm shadow-2xl focus:outline-none px-5 text-center ${ThemeDarkToLight}`}
+                className={`text-xl sm:text-[2vw] w-full py-3 rounded-sm shadow-2xl focus:outline-none px-5 text-center ${ThemeDarkToLight}`}
               >
                 {isAdminLogged
                   ? currentLoggedData?.adminEmail
