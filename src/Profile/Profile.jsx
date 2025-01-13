@@ -24,12 +24,14 @@ import {
 } from "firebase/auth";
 import { EmailAuthProvider } from "firebase/auth/web-extension";
 import { cloudinaryConfig } from "../Config-Files/Cloudinary_Config";
+import axios from "axios";
 
 const Profile = () => {
   const { isAdminLogged, isUserLogged } = AuthUseContext();
   const [currentLoggedData, setCurrentLoggedData] = useState();
   const [profileContentLoading, setProfileContentLoading] = useState(false);
   const [profileEditingLoading, setProfileEditingLoading] = useState(false);
+  const [newProfileImageLoading, setNewProfileImageLoading] = useState(false);
   const [isProfileEdit, setIsProfileEdit] = useState(false);
   const [viewProfileImage, setViewProfileImage] = useState(false);
   const [newProfileImageFile, setNewProfileImageFile] = useState();
@@ -200,15 +202,35 @@ const Profile = () => {
     }
   };
 
-  const uploadNewProfileImageHandler = () => {
+  const uploadNewProfileImageHandler = async () => {
     if (!newProfileImageFile[0].type.includes("image")) {
       rejectMessage("Profile Extension Not Supported");
       return;
     }
-    const formData = new FormData();
-    formData.append("file", newProfileImageFile[0]);
-    formData.append("upload_preset", cloudinaryConfig.uploadPreset);
-    formData.append("cloud_name", cloudinaryConfig.cloudName);
+
+    try {
+      const adminProfileEditCollection = doc(db, "Admin", isAdminLogged?.uid);
+      const formData = new FormData();
+      formData.append("file", newProfileImageFile[0]);
+      formData.append("upload_preset", cloudinaryConfig.uploadPreset);
+      formData.append("cloud_name", cloudinaryConfig.cloudName);
+      setNewProfileImageLoading(true);
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
+        formData
+      );
+      await updateDoc(adminProfileEditCollection, {
+        adminProfileURL: response.data.url,
+      });
+      resolveMessage("Image uploaded successfully!");
+      setNewProfileImageFile(undefined);
+      setIsProfileEdit(false);
+    } catch (error) {
+      console.error(error);
+      rejectMessage("Error uploading image!");
+    } finally {
+      setNewProfileImageLoading(false);
+    }
   };
 
   return (
@@ -234,7 +256,11 @@ const Profile = () => {
                 {isProfileEdit && isAdminLogged ? (
                   <>
                     <button
-                      className={`bg-colorOne cursor-pointer border-0 px-4 py-2 hover:rounded-xl ${ThemeDarkToLight} relative text-sm`}
+                      className={`bg-green-500 cursor-pointer border-0 px-4 py-2 hover:rounded-xl relative text-sm flex justify-center items-center gap-2`}
+                      disabled={
+                        profileEditingLoading ||
+                        (newProfileImageLoading && true)
+                      }
                     >
                       <input
                         type={"file"}
@@ -244,13 +270,23 @@ const Profile = () => {
                         }}
                       />
                       Upload a New Image
+                      {newProfileImageLoading && (
+                        <ClipLoader size={20} color="white" />
+                      )}
                     </button>
                     {newProfileImageFile?.length && (
                       <button
-                        className={`bg-colorOne cursor-pointer border-0 px-4 py-2 hover:rounded-xl ${ThemeDarkToLight} relative text-sm`}
+                        className={`bg-blue-500 cursor-pointer border-0 px-4 py-2 hover:rounded-xl relative text-sm flex justify-center items-center gap-2`}
                         onClick={uploadNewProfileImageHandler}
+                        disabled={
+                          profileEditingLoading ||
+                          (newProfileImageLoading && true)
+                        }
                       >
-                        Set New Profile Picture
+                        Set New Profile Picture{" "}
+                        {newProfileImageLoading && (
+                          <ClipLoader size={20} color="white" />
+                        )}
                       </button>
                     )}
                   </>
@@ -323,7 +359,9 @@ const Profile = () => {
                 profileEditingLoading && "cursor-not-allowed"
               }`}
               id="Sign_Up_Form_Submit_Button"
-              disabled={profileEditingLoading && true}
+              disabled={
+                profileEditingLoading || (newProfileImageLoading && true)
+              }
               onClick={profile_Edit_Button_Handler}
             >
               <span>{isProfileEdit ? "Cancle" : "Edit Profile"}</span>
@@ -341,7 +379,9 @@ const Profile = () => {
                   profileEditingLoading && "cursor-not-allowed"
                 }`}
                 id="Sign_Up_Form_Submit_Button"
-                disabled={profileEditingLoading && true}
+                disabled={
+                  profileEditingLoading || (newProfileImageLoading && true)
+                }
                 onClick={profile_Saving_Form_Handler}
               >
                 <span>Save</span>

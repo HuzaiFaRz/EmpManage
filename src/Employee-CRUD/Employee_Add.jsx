@@ -18,6 +18,7 @@ import { IoIosWarning } from "react-icons/io";
 import { VscDebugRestart } from "react-icons/vsc";
 
 import { Tooltip } from "react-tooltip";
+import axios from "axios";
 
 const Employee_Add = () => {
   const [employeeAddLoading, setEmployeeAddLoading] = useState(false);
@@ -73,24 +74,15 @@ const Employee_Add = () => {
       loadingMessage("Employee Adding");
       setEmployeeAddLoading(true);
       const employeeProfile = employee_Added_Data.employeeProfile[0];
-      const employeeProfileData = new FormData();
-      employeeProfileData.append("file", employeeProfile);
-      employeeProfileData.append(
-        "upload_preset",
-        cloudinaryConfig.uploadPreset
-      );
-      employeeProfileData.append("folder", "EmpManage");
-      const response = await fetch(
+      const formData = new FormData();
+      formData.append("file", employeeProfile);
+      formData.append("upload_preset", cloudinaryConfig.uploadPreset);
+      formData.append("cloud_name", cloudinaryConfig.cloudName);
+      const response = await axios.post(
         `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
-        { method: "POST", body: employeeProfileData }
+        formData
       );
-      if (!response.ok) {
-        throw new Error(Error);
-      }
-      const data = await response.json();
-      const { url, public_id } = data;
-      employee_Added_Data.employeeProfilePublicID = public_id;
-      employee_Added_Data.employeeProfile = url;
+      employee_Added_Data.employeeProfile = response.data.url;
       employee_Added_Data.employeeAddingTime = serverTimestamp();
       const randomNumber = Math.floor(Math.random() * 2);
       employee_Added_Data.employeeStatus =
