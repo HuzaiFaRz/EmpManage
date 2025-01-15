@@ -7,7 +7,12 @@ import { IoIosPersonAdd } from "react-icons/io";
 import { FaBookReader, FaUsers } from "react-icons/fa";
 import { rejectMessage, resolveMessage, ThemeDarkToLight } from "../Script";
 import { ImProfile } from "react-icons/im";
-import { deleteUser, signOut } from "firebase/auth";
+import {
+  deleteUser,
+  reauthenticateWithCredential,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 import { auth, db } from "../Config-Files/firebase_Config";
 import { CgClose } from "react-icons/cg";
 import { ClipLoader } from "react-spinners";
@@ -15,8 +20,9 @@ import { IoLogOut } from "react-icons/io5";
 import { AuthUseContext } from "../Utilities/Auth_Provider";
 import { BiLogOut } from "react-icons/bi";
 import { RiDeleteBinFill, RiFeedbackFill } from "react-icons/ri";
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { Tooltip } from "react-tooltip";
+import { EmailAuthProvider } from "firebase/auth/web-extension";
 
 const LayOut = () => {
   const { isAdminLogged, isUserLogged } = AuthUseContext();
@@ -25,11 +31,30 @@ const LayOut = () => {
   const [logOutLoading, setLogOutLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [currentLoggedData, setCurrentLoggedData] = useState();
   useEffect(() => {
     isSideBarOpen
       ? (document.body.style.overflowY = "hidden")
       : (document.body.style.overflowY = "scroll");
   }, [isSideBarOpen]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        if (isAdminLogged) {
+          onSnapshot(doc(db, "Admin", isAdminLogged?.uid), (doc) => {
+            setCurrentLoggedData(doc.data());
+          });
+        } else {
+          onSnapshot(doc(db, "Users", isUserLogged?.uid), (doc) => {
+            setCurrentLoggedData(doc.data());
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [isAdminLogged, isUserLogged?.uid]);
 
   const sideBarsLinks = [
     { name: "Profile", to: "profile" },
@@ -65,6 +90,17 @@ const LayOut = () => {
       const user = auth.currentUser;
       const userRef = doc(db, "Users", user?.uid);
       setDeleteLoading(true);
+      const currentUser = auth.currentUser;
+      const credential = EmailAuthProvider.credential(
+        currentUser.email,
+        currentLoggedData.signUpPassword
+      );
+      await signInWithEmailAndPassword(
+        auth,
+        currentLoggedData.signUpEmail,
+        currentLoggedData.signUpPassword
+      );
+      await reauthenticateWithCredential(currentUser, credential);
       await deleteUser(user);
       await deleteDoc(userRef);
       resolveMessage("Account Delete SuccessFully");

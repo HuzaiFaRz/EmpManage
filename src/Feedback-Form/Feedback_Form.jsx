@@ -90,7 +90,6 @@ const Feedback_Form = () => {
       setFeedBackLoadingLoading(true);
       feedback_Data.feedbackRatingStar = ratingStar;
       feedback_Data.feedbackTime = serverTimestamp();
-      feedback_Data.feedbackLiked = false;
       await addDoc(collection(db, "Feedback"), feedback_Data);
       resolveMessage("Thank You 😉 For Your Feedback");
       setRatingStar(0);
@@ -171,23 +170,27 @@ const Feedback_Form = () => {
                 </div>
                 <div className="w-full flex justify-between items-center px-3">
                   <button>
-                    {feedbackLiked ? (
-                      <>
+                    {feedbackLiked !== undefined ? (
+                      feedbackLiked ? (
                         <AiFillLike
                           color="lightblue"
                           size={25}
                           className="cursor-pointer"
                         />
-                        <span>Liked</span>
-                      </>
+                      ) : (
+                        <AiFillDislike
+                          color="red"
+                          size={25}
+                          className="cursor-pointer"
+                        />
+                      )
                     ) : (
-                      <AiFillDislike
-                        color="red"
-                        size={25}
-                        className="cursor-pointer"
-                      />
+                      <div className="text-xs">
+                        Pending <br /> Approval
+                      </div>
                     )}
                   </button>
+
                   <div className="text-sm mb-2">{feedBackTimeConverted}</div>
 
                   <button

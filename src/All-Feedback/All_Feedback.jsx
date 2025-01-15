@@ -10,13 +10,13 @@ import { FaStar } from "react-icons/fa";
 import { db } from "../Config-Files/firebase_Config";
 import LoadingArrows from "../Loading/Loading_Arrows";
 import {
+  dismissLoadingMessage,
+  loadingMessage,
   rejectMessage,
   resolveMessage,
   ThemeDarkToLight,
   ThemeLightToDark,
 } from "../Script/index";
-
-import { AiFillDislike, AiFillLike } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
 import { AuthUseContext } from "../Utilities/Auth_Provider";
 import { Link } from "react-router-dom";
@@ -66,11 +66,11 @@ const All_Feedback = () => {
     }
   };
 
-  const likeUnlikeHandler = async (id, feedbackLiked) => {
+  const feedbackUnlikeHandler = async (id) => {
     setIsFeebackLikedLoading(true);
     try {
       await updateDoc(doc(db, "Feedback", id), {
-        feedbackLiked: !feedbackLiked,
+        feedbackLiked: false,
       });
     } catch (error) {
       console.log(error);
@@ -79,9 +79,24 @@ const All_Feedback = () => {
     }
   };
 
+  const feedbackLikeHandler = async (id) => {
+    setIsFeebackLikedLoading(true);
+    loadingMessage("Wait.....");
+    try {
+      await updateDoc(doc(db, "Feedback", id), {
+        feedbackLiked: true,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      dismissLoadingMessage();
+      setIsFeebackLikedLoading(false);
+    }
+  };
+
   return (
     <div
-      className={`w-full h-[90svh] ${ThemeLightToDark} mt-[10svh] flex flex-col justify-evenly items-center`}
+      className={`w-full h-[90svh] ${ThemeLightToDark} mt-[10svh] flex flex-col justify-start items-center`}
     >
       <h1 className="font-semibold tracking-tighter text-4xl w-[100%] py-2 text-center">
         FeedBacks
@@ -155,29 +170,21 @@ const All_Feedback = () => {
                     )}
                   </span>
                   <div className="flex flex-row justify-center items-center gap-5">
-                    <button disabled={isFeebackLikedLoading && true}>
-                      {feedbackLiked ? (
-                        <AiFillLike
-                          color="lightblue"
-                          size={25}
-                          className="cursor-pointer"
-                          onClick={() =>
-                            likeUnlikeHandler(feedback.id, feedbackLiked)
-                          }
-                        />
-                      ) : (
-                        <AiFillDislike
-                          color="red"
-                          size={25}
-                          className="cursor-pointer"
-                          onClick={() =>
-                            likeUnlikeHandler(feedback.id, feedbackLiked)
-                          }
-                        />
-                      )}
+                    <button
+                      className={`px-6 py-1 text-sm rounded-lg text-white ${
+                        feedbackLiked ? "bg-blue-800" : "bg-blue-400"
+                      }`}
+                      disabled={isFeebackLikedLoading && true}
+                      onClick={() => {
+                        feedbackLiked
+                          ? feedbackUnlikeHandler(feedback.id)
+                          : feedbackLikeHandler(feedback.id);
+                      }}
+                    >
+                      {feedbackLiked ? "Liked" : "Like"}
                     </button>
 
-                    {isAdminLogged && (
+                    {isUserLogged && (
                       <button
                         className="text-red-500 flex flex-row items-center justify-center"
                         disabled={feedBackDeleteLoading && true}

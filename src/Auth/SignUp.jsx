@@ -53,7 +53,6 @@ const SignUp = () => {
       );
       const { uid } = userCredential.user;
       sign_Up_Data.signUpAddingTime = serverTimestamp();
-      sign_Up_Data.role = "User";
       await setDoc(doc(db, "Users", uid), sign_Up_Data);
       reset();
       resolveMessage("SignUp SuccessFully");

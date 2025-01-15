@@ -246,10 +246,10 @@ const Profile = () => {
             <>
               <img
                 src={currentLoggedData?.adminProfileURL}
-                className={`rounded-full cursor-pointer ${
+                className={`rounded-sm cursor-pointer ${
                   viewProfileImage
-                    ? "absolute w-[500px] h-[500px] z-[5555]"
-                    : "w-[150px] h-[150px] static"
+                    ? "absolute h-[500px] z-[5555]"
+                    : "h-[150px] static"
                 } `}
               />
               <div className="w-full flex justify-center gap-5">
