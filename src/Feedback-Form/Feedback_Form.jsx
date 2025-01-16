@@ -123,7 +123,7 @@ const Feedback_Form = () => {
   if (isFeedBackExist) {
     return (
       <div
-        className={`FeedBack_Page w-full h-[90svh] flex gap-y-1 ${
+        className={`FeedBack_Page w-full h-[100dvh] flex gap-y-1 ${
           isFeedBackExist
             ? "flex-wrap justify-evenly"
             : "flex-col justify-center"
@@ -149,7 +149,7 @@ const Feedback_Form = () => {
           });
           return (
             <React.Fragment key={index}>
-              <div className="rounded-lg shadow-2xl flex flex-col justify-evenly items-center w-full sm:w-[400px] px-2 h-[400px]">
+              <div className="rounded-lg shadow-2xl flex flex-col justify-evenly items-center w-full sm:w-[400px] px-2 h-[400px] border">
                 <h2 className="text-2xl font-bold mb-4">Thank You!</h2>
                 <p className="text-sm capitalize w-full text-center">
                   Thank you for your feedback! We value your input. <br />{" "}
@@ -207,7 +207,7 @@ const Feedback_Form = () => {
             </React.Fragment>
           );
         })}
-        <div className="w-full flex justify-center mt-16 mb-16">
+        <div className="w-full flex justify-center">
           <h5
             className="bg-[#5cb85c]  text-colorOne cursor-pointer border-0 px-[15px] py-[10px] text-[13px] sm:text-[15px] hover:rounded-xl transition-all"
             onClick={() => setIsFeedBackExist(undefined)}
@@ -222,7 +222,7 @@ const Feedback_Form = () => {
   return (
     <Fragment>
       <div
-        className={`FeedBack_Page w-full h-[90svh] flex gap-y-1 ${
+        className={`FeedBack_Page w-full h-[100dvh] flex gap-y-1 ${
           isFeedBackExist
             ? "flex-wrap justify-evenly"
             : "flex-col justify-center"
