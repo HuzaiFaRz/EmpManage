@@ -173,11 +173,13 @@ const LayOut = () => {
               setDeleteModal(true);
             }}
           >
-            <Tooltip
-              anchorSelect=".deleteAccountToolTip"
-              id="deleteAccountToolTip"
-              content="You Are Admin"
-            />
+            {isAdminLogged && (
+              <Tooltip
+                anchorSelect=".deleteAccountToolTip"
+                id="deleteAccountToolTip"
+                content="You Are Admin"
+              />
+            )}
             <RiDeleteBinFill size={20} className="fill-white" /> Delete Account
           </button>
           <button

@@ -1,4 +1,3 @@
-
 import { toast } from "react-toastify";
 
 const MessageStyle = {
@@ -21,16 +20,15 @@ const resolveMessage = (message) => {
   toast.success(message, MessageStyle);
 };
 
-let loadingToastId;
-
-const loadingMessage = (message) => {
-  loadingToastId = toast.loading(message, MessageStyle);
+let toastId = null;
+const loadingMessage = (msg) => {
+  toastId = toast.loading(msg);
 };
 
 const dismissLoadingMessage = () => {
-  if (loadingToastId) {
-    toast.dismiss(loadingToastId);
-    loadingToastId = null;
+  if (toastId) {
+    toast.dismiss(toastId);
+    toastId = null; // reset
   }
 };
 
