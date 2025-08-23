@@ -294,6 +294,9 @@ const LayOut = () => {
               />
             </div>
 
+
+<></>
+
             <div className="modal-body w-full flex text-center justify-center items-center">
               <span className="text-sm sm:text-lg font-bold p-5">
                 Do you Really Delete {auth?.currentUser?.email} ?
