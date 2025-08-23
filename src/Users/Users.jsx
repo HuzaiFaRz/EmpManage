@@ -141,7 +141,7 @@ const Users = () => {
             type="text"
             id="employeeSearch"
             className="p-2 bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo font-light tracking-[1px] placeholder:text-colorTwo dark:placeholder:text-colorOne focus:outline-0 w-[300px]"
-            placeholder="Search Employee By Name"
+            placeholder="Search User By Name"
             value={usersSearchInput}
             onChange={(event) => {
               usersSearchHandler(event);

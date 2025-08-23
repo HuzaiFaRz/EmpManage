@@ -116,21 +116,23 @@ const All_Feedback = () => {
                 key={index}
                 className="rounded-lg shadow-xl flex flex-col justify-between w-full xs:w-[400px] border-2 border-colorTwo dark:border-colorOne p-5 capitalize relative overflow-hidden"
               >
+                <span className="lowercase absolute right-3 top-2 text-[13px] opacity-35 text-blue-100">
+                  {feedBackEmail}
+                </span>
+
                 {/* User Info */}
-                <div className="flex items-center mb-4">
+                <div className="flex items-center mb-4 mt-3">
                   <div
                     className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold ${ThemeDarkToLight}`}
                   >
                     {feedBackName?.charAt(0).toUpperCase()}
                   </div>
                   <div className="ml-3">
-                    <h2 className="text-lg">{feedBackName}</h2>
+                    <h2 className="text-md">{feedBackName}</h2>
                     <p className="text-sm">{feedBackTimeConverted}</p>
                   </div>
                 </div>
-                <span className="lowercase absolute top-5 right-6 text-[13px] opacity-35">
-                  {feedBackEmail}
-                </span>
+
                 <div className="text-[15px] italic py-5 mb-5 overflow-hidden text-ellipsis whitespace-normal break-words max-w-full">
                   {feedBackMessage}
                 </div>
