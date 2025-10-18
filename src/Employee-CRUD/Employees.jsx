@@ -370,7 +370,6 @@ const Employees = () => {
                 employeeExperience,
                 employeeName,
                 employeeProfession,
-                employeeProfile,
                 employeeSalary,
                 employeeStatus,
                 role,
@@ -401,11 +400,14 @@ const Employees = () => {
                   >
                     <div className="flex flex-row justify-between items-center p-3">
                       <div className="flex flex-row justify-center items-center gap-3">
-                        <img
+                        <div className="w-[60px] h-[60px] rounded-full bg-black flex justify-center items-center">
+                          {employeeName[0]}
+                        </div>
+                        {/* <img
                           src={employeeProfile}
                           alt={`${employeeName}'s profile`}
                           className="w-14 h-14 sm:w-20 sm:h-20 rounded-full object-cover border-2 dark:border-colorOne border-colorTwo"
-                        />
+                        /> */}
                         <div className="flex flex-col justify-center items-start">
                           <h2
                             className="text-lg font-bold tracking-wide"

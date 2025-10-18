@@ -41,11 +41,11 @@ const Employee_Add = () => {
       Placeholder: "Experience",
       Type: "number",
     },
-    {
-      ID: "employeeProfile",
-      Placeholder: "Profile Pic",
-      Type: "file",
-    },
+    // {
+    //   ID: "employeeProfile",
+    //   Placeholder: "Profile Pic",
+    //   Type: "file",
+    // },
   ];
   const {
     register,
@@ -66,31 +66,31 @@ const Employee_Add = () => {
   const employee_Add_Form_Handler = async (employee_Added_Data) => {
     try {
       event.preventDefault();
-      if (!employee_Added_Data.employeeProfile[0].type.includes("image")) {
-        rejectMessage("Profile Extension Not Supported");
-        return;
-      }
+      // if (!employee_Added_Data.employeeProfile[0].type.includes("image")) {
+      //   rejectMessage("Profile Extension Not Supported");
+      //   return;
+      // }
       loadingMessage("Employee Adding");
       setEmployeeAddLoading(true);
-      const employeeProfile = employee_Added_Data.employeeProfile[0];
-      const employeeProfileData = new FormData();
-      employeeProfileData.append("file", employeeProfile);
-      employeeProfileData.append(
-        "upload_preset",
-        cloudinaryConfig.uploadPreset
-      );
-      employeeProfileData.append("folder", "EmpManage");
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
-        { method: "POST", body: employeeProfileData }
-      );
-      if (!response.ok) {
-        throw new Error(Error);
-      }
-      const data = await response.json();
-      const { url, public_id } = data;
-      employee_Added_Data.employeeProfilePublicID = public_id;
-      employee_Added_Data.employeeProfile = url;
+      // const employeeProfile = employee_Added_Data.employeeProfile[0];
+      // const employeeProfileData = new FormData();
+      // employeeProfileData.append("file", employeeProfile);
+      // employeeProfileData.append(
+      //   "upload_preset",
+      //   cloudinaryConfig.uploadPreset
+      // );
+      // employeeProfileData.append("folder", "EmpManage");
+      // const response = await fetch(
+      //   `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
+      //   { method: "POST", body: employeeProfileData }
+      // // );
+      // if (!response.ok) {
+      //   throw new Error(Error);
+      // }
+      // const data = await response.json();
+      // const { url, public_id } = data;
+      // employee_Added_Data.employeeProfilePublicID = public_id;
+      // employee_Added_Data.employeeProfile = url;
       employee_Added_Data.employeeAddingTime = serverTimestamp();
       const randomNumber = Math.floor(Math.random() * 2);
       employee_Added_Data.employeeStatus =
@@ -102,6 +102,7 @@ const Employee_Add = () => {
       console.log(error);
       rejectMessage("Failed to add Employee try Again");
     } finally {
+      reset()
       dismissLoadingMessage();
       setEmployeeAddLoading(false);
       employee_ID_Handler();
