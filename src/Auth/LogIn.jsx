@@ -64,7 +64,7 @@ const LogIn = () => {
       navigate("/", { replace: true });
       // reset();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       rejectMessage(error.message);
     } finally {
       setLogInLoading(false);

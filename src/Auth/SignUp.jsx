@@ -59,7 +59,7 @@ const SignUp = () => {
       resolveMessage("SignUp SuccessFully");
       navigate("/login");
     } catch (error) {
-      console.log(error);
+      console.error(error);
       rejectMessage(error.message);
     } finally {
       dismissLoadingMessage();

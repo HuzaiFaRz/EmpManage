@@ -15,6 +15,7 @@ import SignUp from "../Auth/SignUp.jsx";
 import Users from "../Users/Users.jsx";
 import Feedback_Form from "../Feedback-Form/Feedback_Form.jsx";
 import All_Feedback from "../All-Feedback/All_Feedback.jsx";
+import Wrong_Route from "../Components/Wrong_Route.jsx";
 
 const App = () => {
   return (
@@ -42,6 +43,8 @@ const App = () => {
                 <Route path="users" element={<Users />} />
               </Route>
             </Route>
+            <Route path="*" element={<Wrong_Route />} />
+            <Route errorElement={<Wrong_Route />} />
           </Routes>
         </BrowserRouter>
       </Auth_Provider>
