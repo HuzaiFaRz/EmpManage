@@ -22,10 +22,12 @@ const Employee_Edit = () => {
     useState(false);
   const [employeeEditingLoading, setEmployeeEditingLoading] = useState(false);
   const [employeeEditData, setEmployeeEditData] = useState(false);
+  const [employeeStatus, setEmployeeStatus] = useState(null);
 
   useEffect(() => {
     document.title = "EmpManage | | Employee Edit";
   }, []);
+
   const employeeEditInputs = [
     { ID: "employeeName", Placeholder: "Name", Type: "text" },
     {
@@ -51,7 +53,7 @@ const Employee_Edit = () => {
       Placeholder: "Experience",
       Type: "number",
     },
-    { ID: "employeeStatus", Placeholder: "Status", Type: "text" },
+    { ID: "employeeStatus", Placeholder: "Status" },
   ];
 
   const {
@@ -71,6 +73,7 @@ const Employee_Edit = () => {
         const employeeEditDoc = doc(db, "Employees", editEmployeeId);
         setEmployeeEditGettingLoading(true);
         const editEmployee = await getDoc(employeeEditDoc);
+        setEmployeeStatus(editEmployee.data().employeeStatus);
         setEmployeeEditData(editEmployee.data());
       } catch (error) {
         console.log(error);
@@ -103,7 +106,8 @@ const Employee_Edit = () => {
         employeeAge: employee_Edit_Data.employeeAge,
         employeeProfession: employee_Edit_Data.employeeProfession,
         employeeExperience: employee_Edit_Data.employeeExperience,
-        employeeStatus: employee_Edit_Data.employeeStatus,
+        employeeSalary: employee_Edit_Data.employeeSalary,
+        employeeStatus: employeeStatus,
         employeeEdited: true,
       });
       resolveMessage("Employee Edited");
@@ -129,8 +133,10 @@ const Employee_Edit = () => {
           <h1 className="font-semibold tracking-tighter text-4xl w-[100%] py-2 text-center text-colorTwo dark:text-colorOne">
             Edit Employee
           </h1>
+
           {employeeEditInputs.map((elem, index) => {
             let { ID, Placeholder, Type } = elem;
+
             return (
               <React.Fragment key={index}>
                 <label
@@ -140,50 +146,71 @@ const Employee_Edit = () => {
                   } ${ID === "employeeID" && "relative overflow-hidden"}`}
                 >
                   {Placeholder}
-                  <input
-                    disabled={employeeEditingLoading && true}
-                    type={Type}
-                    placeholder={Placeholder}
-                    id={Type === "file" ? ID : Placeholder}
-                    className={`p-2 bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo font-light tracking-[1px] placeholder:text-colorTwo dark:placeholder:text-colorOne focus:outline-0 w-[300px] ${
-                      employeeEditingLoading && "cursor-not-allowed"
-                    }`}
-                    {...register(ID, {
-                      required: `${Placeholder} is required.`,
-                      max: {
-                        value:
-                          ID === "employeeAge"
-                            ? 40
-                            : ID === "employeeExperience"
-                            ? 20
-                            : null,
-                        message:
-                          ID === "employeeAge"
-                            ? "Age must not exceed 40 years."
-                            : ID === "employeeExperience"
-                            ? "Experience must not exceed 20 years."
-                            : null,
-                      },
-                      min: {
-                        value:
-                          ID === "employeeAge"
-                            ? 18
-                            : ID === "employeeExperience"
-                            ? 2
-                            : null,
-                        message:
-                          ID === "employeeAge"
-                            ? "Age must be 18+"
-                            : ID === "employeeExperience"
-                            ? "Experience too low"
-                            : null,
-                      },
-                      pattern: {
-                        value: /^[^\s]+(?:$|.*[^\s]+$)/,
-                        message: "Remove Blank Space",
-                      },
-                    })}
-                  />
+
+                  {ID === "employeeStatus" ? (
+                    <select
+                      name={Placeholder}
+                      id={ID}
+                      className="bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo outline-0 p-2 rounded-none"
+                      onChange={(e) => {
+                        setEmployeeStatus(e.target.value);
+                      }}
+                    >
+                      &nbsp;&nbsp;&nbsp;Select {Placeholder}
+                      <option value="active">Active</option>
+                      <option
+                        value="unactive"
+                        selected={employeeStatus === "unactive" && true}
+                      >
+                        unActive
+                      </option>
+                    </select>
+                  ) : (
+                    <input
+                      disabled={employeeEditingLoading && true}
+                      type={Type}
+                      placeholder={Placeholder}
+                      id={Type === "file" ? ID : Placeholder}
+                      className={`p-2 bg-transparent border border-colorTwo dark:border-colorOne color-colorTwo font-light tracking-[1px] placeholder:text-colorTwo dark:placeholder:text-colorOne focus:outline-0 w-[300px] ${
+                        employeeEditingLoading && "cursor-not-allowed"
+                      }`}
+                      {...register(ID, {
+                        required: `${Placeholder} is required.`,
+                        max: {
+                          value:
+                            ID === "employeeAge"
+                              ? 40
+                              : ID === "employeeExperience"
+                              ? 20
+                              : null,
+                          message:
+                            ID === "employeeAge"
+                              ? "Age must not exceed 40 years."
+                              : ID === "employeeExperience"
+                              ? "Experience must not exceed 20 years."
+                              : null,
+                        },
+                        min: {
+                          value:
+                            ID === "employeeAge"
+                              ? 18
+                              : ID === "employeeExperience"
+                              ? 2
+                              : null,
+                          message:
+                            ID === "employeeAge"
+                              ? "Age must be 18+"
+                              : ID === "employeeExperience"
+                              ? "Experience too low"
+                              : null,
+                        },
+                        pattern: {
+                          value: /^[^\s]+(?:$|.*[^\s]+$)/,
+                          message: "Remove Blank Space",
+                        },
+                      })}
+                    />
+                  )}
 
                   <p
                     className={`text-[#a63232] text-[13px] tracking-wider py-2 w-full h-[20px] flex items-center font-normal ${

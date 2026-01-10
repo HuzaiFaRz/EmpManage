@@ -7,7 +7,11 @@ import { IoIosPersonAdd } from "react-icons/io";
 import { FaBookReader, FaUsers } from "react-icons/fa";
 import { rejectMessage, resolveMessage, ThemeDarkToLight } from "../Script";
 import { ImProfile } from "react-icons/im";
-import { deleteUser, signOut } from "firebase/auth";
+import {
+  deleteUser,
+  reauthenticateWithCredential,
+  signOut,
+} from "firebase/auth";
 import { auth, db } from "../Config-Files/firebase_Config";
 import { CgClose } from "react-icons/cg";
 import { ClipLoader } from "react-spinners";
@@ -17,14 +21,17 @@ import { BiLogOut } from "react-icons/bi";
 import { RiDeleteBinFill, RiFeedbackFill } from "react-icons/ri";
 import { deleteDoc, doc } from "firebase/firestore";
 import { Tooltip } from "react-tooltip";
+import { EmailAuthProvider } from "firebase/auth/web-extension";
 
 const LayOut = () => {
-  const { isAdminLogged, isUserLogged } = AuthUseContext();
+  const { isAdminLogged, isUserLogged, userpass, setUserPass } =
+    AuthUseContext();
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [logOutModal, setLogOutModal] = useState(false);
   const [logOutLoading, setLogOutLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+
   useEffect(() => {
     isSideBarOpen
       ? (document.body.style.overflowY = "hidden")
@@ -64,6 +71,8 @@ const LayOut = () => {
     try {
       const user = auth.currentUser;
       const userRef = doc(db, "Users", user?.uid);
+      const credential = EmailAuthProvider.credential(user.email, userpass);
+      await reauthenticateWithCredential(user, credential);
       setDeleteLoading(true);
       await deleteUser(user);
       await deleteDoc(userRef);

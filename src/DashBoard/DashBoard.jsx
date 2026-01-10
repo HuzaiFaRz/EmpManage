@@ -120,25 +120,33 @@ const DashBoard = () => {
             <div
               className={`w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] bg-colorTwo dark:bg-colorOne relative rounded-full`}
             >
-              <PieChart
-                data={totalData !== 0 && data}
-                animate
-                animationDuration={1000}
-                animationEasing="ease-out"
-                label={({ dataEntry }) =>
-                  `${dataEntry.title}: ${Math.round(
-                    (dataEntry.value / totalData) * 100
-                  )}%`
-                }
-                labelStyle={{
-                  fontSize: "4px",
-                  color: "white",
-                  fontWeight: "bold",
-                }}
-                labelPosition={50}
-                radius={45}
-                className="absolute w-full h-full "
-              />
+              {data.every((e) => e.value === 0) ? (
+                <>
+                  <div className="absolute w-full h-full top-0 flex justify-center items-center text-[salmon] text-3xl">
+                    No Data
+                  </div>
+                </>
+              ) : (
+                <PieChart
+                  data={totalData !== 0 && data}
+                  animate
+                  animationDuration={1000}
+                  animationEasing="ease-out"
+                  label={({ dataEntry }) =>
+                    `${dataEntry.title}: ${Math.round(
+                      (dataEntry.value / totalData) * 100
+                    )}%`
+                  }
+                  labelStyle={{
+                    fontSize: "4px",
+                    color: "white",
+                    fontWeight: "bold",
+                  }}
+                  labelPosition={50}
+                  radius={45}
+                  className="absolute w-full h-full"
+                />
+              )}
             </div>
           ) : (
             <div className="w-full h-[300px] text-colorTwo dark:text-colorOne text-5xl flex justify-center items-center">
