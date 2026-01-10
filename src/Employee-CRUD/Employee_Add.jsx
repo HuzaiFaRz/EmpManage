@@ -92,9 +92,7 @@ const Employee_Add = () => {
       // employee_Added_Data.employeeProfilePublicID = public_id;
       // employee_Added_Data.employeeProfile = url;
       employee_Added_Data.employeeAddingTime = serverTimestamp();
-      const randomNumber = Math.floor(Math.random() * 2);
-      employee_Added_Data.employeeStatus =
-        randomNumber === 1 ? "active" : "Unactive";
+      employee_Added_Data.employeeStatus = "active";
       await addDoc(collection(db, "Employees"), employee_Added_Data);
       resolveMessage("Employee Added");
       // reset();
@@ -102,7 +100,7 @@ const Employee_Add = () => {
       console.log(error);
       rejectMessage("Failed to add Employee try Again");
     } finally {
-      reset()
+      reset();
       dismissLoadingMessage();
       setEmployeeAddLoading(false);
       employee_ID_Handler();

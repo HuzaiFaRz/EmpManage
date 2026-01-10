@@ -24,8 +24,7 @@ import { Tooltip } from "react-tooltip";
 import { EmailAuthProvider } from "firebase/auth/web-extension";
 
 const LayOut = () => {
-  const { isAdminLogged, isUserLogged, userpass, setUserPass } =
-    AuthUseContext();
+  const { isAdminLogged, isUserLogged, userpass } = AuthUseContext();
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [logOutModal, setLogOutModal] = useState(false);
   const [logOutLoading, setLogOutLoading] = useState(false);
