@@ -155,15 +155,15 @@ const Employee_Edit = () => {
                       onChange={(e) => {
                         setEmployeeStatus(e.target.value);
                       }}
+                        value={employeeStatus}
                     >
                       &nbsp;&nbsp;&nbsp;Select {Placeholder}
-                      <option value="active">Active</option>
                       <option
-                        value="unactive"
-                        selected={employeeStatus === "unactive" && true}
+                     
                       >
-                        unActive
+                        Active
                       </option>
+                      <option value="unactive">unActive</option>
                     </select>
                   ) : (
                     <input

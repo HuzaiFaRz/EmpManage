@@ -43,6 +43,8 @@ const Employees = () => {
   const { setEditEmployeeId, isAdminLogged } = AuthUseContext();
   const navigate = useNavigate();
 
+  console.log(employees);
+
   useEffect(() => {
     document.title = "EmpManage | | Employees";
 
@@ -492,7 +494,7 @@ const Employees = () => {
 
                           <p
                             className={`${
-                              employeeStatus === "active"
+                              employeeStatus === "Active"
                                 ? "text-colorOne bg-green-500"
                                 : "text-colorOne bg-red-500 "
                             } py-1 px-5 text-sm rounded-xl font-medium tracking-wider`}
