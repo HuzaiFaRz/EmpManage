@@ -494,7 +494,8 @@ const Employees = () => {
 
                           <p
                             className={`${
-                              employeeStatus === "active"
+                              employeeStatus === "active" ||
+                              employeeStatus === "Active"
                                 ? "text-colorOne bg-green-500"
                                 : "text-colorOne bg-red-500 "
                             } py-1 px-5 text-sm rounded-xl font-medium tracking-wider`}
