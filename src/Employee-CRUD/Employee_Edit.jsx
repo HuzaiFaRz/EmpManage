@@ -123,10 +123,10 @@ const Employee_Edit = () => {
   return (
     <Fragment>
       <div
-        className={`Employee_Edit_Page w-full h-full md:h-[90svh] flex flex-col justify-center items-center p-2 mt-[10svh] ${ThemeLightToDark}`}
+        className={`Employee_Edit_Page w-full h-full flex flex-col justify-center items-center p-2  ${ThemeLightToDark}`}
       >
         <form
-          className={`Employee_Edit_Form flex flex-wrap items-center justify-evenly gap-4 w-[1000px] max-w-full p-8 border border-colorTwo dark:border-colorOne
+          className={`Employee_Edit_Form flex flex-wrap items-center justify-evenly gap-4 w-full p-3 border border-colorTwo dark:border-colorOne
           ${employeeEditingLoading && "select-none cursor-not-allowed"}`}
           onSubmit={handleSubmit(employee_Edit_Form_Handler)}
         >

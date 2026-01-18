@@ -8,7 +8,7 @@ const EmpManage = () => {
   }, []);
   return (
     <Fragment>
-      <div className="w-full h-[100svh] flex flex-col justify-center items-center gap-5">
+      <div className="w-full h-dvh flex flex-col justify-center items-center gap-5">
         <h1 className="text-2xl sm:text-5xl text-colorTwo dark:text-colorOne">
           Welcome In EmpManage
         </h1>

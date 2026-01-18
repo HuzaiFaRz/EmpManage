@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { rejectMessage, resolveMessage } from "../Script/index";
 import { ClipLoader } from "react-spinners";
 import { BiArrowFromLeft } from "react-icons/bi";
-import { cloudinaryConfig } from "../Config-Files/Cloudinary_Config";
+// import { cloudinaryConfig } from "../Config-Files/Cloudinary_Config";
 import { db } from "../Config-Files/firebase_Config";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import uuid from "react-uuid";
@@ -110,10 +110,10 @@ const Employee_Add = () => {
   return (
     <Fragment>
       <div
-        className={`Employee_Add_Page w-full h-full md:h-[90svh] flex flex-col justify-center items-center p-2 mt-[10svh] ${ThemeLightToDark}`}
+        className={`Employee_Add_Page w-full h-full flex flex-col justify-center items-center p-2 ${ThemeLightToDark}`}
       >
         <form
-          className={`Employee_Add_Form flex flex-wrap items-center justify-evenly gap-4 w-[1000px] max-w-full p-8 border border-colorTwo dark:border-colorOne
+          className={`Employee_Add_Form flex flex-wrap items-center justify-evenly gap-4 w-full p-3 border border-colorTwo dark:border-colorOne
             
             ${employeeAddLoading && "select-none cursor-not-allowed"}`}
           onSubmit={handleSubmit(employee_Add_Form_Handler)}

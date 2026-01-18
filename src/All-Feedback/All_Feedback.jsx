@@ -18,7 +18,6 @@ import {
 
 import { AiFillDislike, AiFillLike } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
-import { ClipLoader } from "react-spinners";
 import { Tooltip } from "react-tooltip";
 
 const All_Feedback = () => {
@@ -79,7 +78,7 @@ const All_Feedback = () => {
   };
 
   return (
-    <div className={`w-full h-[90svh] ${ThemeLightToDark} mt-[10svh]`}>
+    <div className={`w-full h-dvh ${ThemeLightToDark}`}>
       <h1 className="font-semibold tracking-tighter text-4xl w-[100%] py-2 text-center">
         FeedBacks
       </h1>

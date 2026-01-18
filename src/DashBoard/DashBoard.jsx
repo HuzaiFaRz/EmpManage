@@ -78,7 +78,7 @@ const DashBoard = () => {
 
   return (
     <Fragment>
-      <div className="w-full h-[90svh] mt-[10svh] flex flex-col justify-center items-center gap-5">
+      <div className="w-full h-dvh flex flex-col justify-center items-center gap-5">
         <div className="dashboard_header w-full flex flex-col sm:flex-row justify-center items-center gap-10 h-[500px]">
           {isAdminLogged && (
             <img

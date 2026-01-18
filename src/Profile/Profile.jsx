@@ -11,7 +11,6 @@ import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { auth, db } from "../Config-Files/firebase_Config";
 import { IoIosWarning } from "react-icons/io";
 import { ClipLoader } from "react-spinners";
-import ThemeChangerButton from "../Theme-Changer/Theme_Changer_Button";
 import LoadingArrows from "../Loading/Loading_Arrows";
 import { AuthUseContext } from "../Utilities/Auth_Provider";
 import { Tooltip } from "react-tooltip";
@@ -199,11 +198,8 @@ const Profile = () => {
 
   return (
     <Fragment>
-      <div className="w-full h-[10svh] flex flex-row justify-center items-center">
-        <ThemeChangerButton />
-      </div>
       <div
-        className={`Profile_Page w-full h-[90svh] flex flex-col justify-center items-center p-2 ${ThemeLightToDark}`}
+        className={`Profile_Page w-full h-dvh flex flex-col justify-evenly items-center ${ThemeLightToDark}`}
       >
         <div className="Profile_Div flex flex-col items-center justify-around gap-4 w-full sm:w-[600px] h-[500px] max-w-full p-8 border border-colorTwo dark:border-colorOne">
           {profileInfoDiv?.map((element, index) => {

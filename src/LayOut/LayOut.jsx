@@ -88,10 +88,10 @@ const LayOut = () => {
 
   return (
     <Fragment>
-      <nav className="fixed top-0 w-full flex items-center justify-between bg-colorOne dark:bg-colorTwo dark:text-colorOne text-colorTwo px-5 py-3 h-[10svh] z-[50]">
+      <nav className="fixed top-0 w-full flex items-center justify-between bg-colorOne dark:bg-colorTwo dark:text-colorOne text-colorTwo px-2 py-3 h-[10svh] z-[50]">
         <div className="flex flex-row justify-center items-center h-full gap-5">
           <div
-            className={`w-[80px] h-full flex flex-col justify-center items-center gap-3 cursor-pointer scale-50 xs:scale-75 sm:scale-90 ${
+            className={`w-[80px] h-full flex flex-col justify-center items-center gap-3 cursor-pointer scale-75 sm:scale-90 ${
               isSideBarOpen ? "setIsSideBarOpen" : null
             }`}
             onClick={(e) => {
@@ -338,7 +338,9 @@ const LayOut = () => {
       {/* Delete Modal */}
       {/* Delete Modal */}
       {/* Delete Modal */}
-      <Outlet />
+      <main className="w-full h-full pt-[10svh]">
+        <Outlet />
+      </main>
     </Fragment>
   );
 };

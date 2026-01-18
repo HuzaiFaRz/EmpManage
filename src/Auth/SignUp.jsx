@@ -69,14 +69,14 @@ const SignUp = () => {
 
   return (
     <Fragment>
-      <div className="w-full h-[10svh] flex flex-row justify-center items-center">
-        <ThemeChangerButton />
-      </div>
+ 
       <div
-        className={`Sign_Up_Page w-full h-[90svh] mt-[10svh] xs:mt-0 flex flex-col justify-center items-center p-2 ${ThemeLightToDark}`}
+        className={`Sign_Up_Page w-full h-dvh flex flex-col justify-center items-center gap-5 p-2 ${ThemeLightToDark}`}
       >
+ <ThemeChangerButton />
+
         <form
-          className={`Sign_Up_Form flex flex-wrap items-center justify-evenly gap-4 w-[800px] max-w-full p-8 border border-colorTwo dark:border-colorOne ${
+          className={`Sign_Up_Form flex flex-wrap items-center justify-evenly gap-4 w-[800px] max-w-full p-4 border border-colorTwo dark:border-colorOne ${
             signUpLoading && "select-none cursor-not-allowed"
           }`}
           onSubmit={handleSubmit(sign_Up_Form_Handler)}

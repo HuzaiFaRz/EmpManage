@@ -38,7 +38,6 @@ const LogIn = () => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm();
 
@@ -50,7 +49,7 @@ const LogIn = () => {
       const loggedIn = await signInWithEmailAndPassword(
         auth,
         logInEmail,
-        logInPassword
+        logInPassword,
       );
       if (loggedIn.user.email === "huzaifa.admin.a@gmail.com") {
         setIsAdminLogged(loggedIn.user);
@@ -73,14 +72,12 @@ const LogIn = () => {
 
   return (
     <Fragment>
-      <div className="w-full h-[10svh] flex flex-row justify-center items-center">
-        <ThemeChangerButton />
-      </div>
       <div
-        className={`Log_In_Page w-full h-[90svh] flex flex-col justify-center items-center p-2 ${ThemeLightToDark}`}
+        className={`Log_In_Page w-full h-dvh flex flex-col justify-center items-center gap-5 p-2 ${ThemeLightToDark}`}
       >
+        <ThemeChangerButton />
         <form
-          className={`Log_In_Form flex flex-col items-center justify-evenly gap-4 w-[500px] max-w-full p-8 border border-colorTwo dark:border-colorOne
+          className={`Log_In_Form flex flex-col items-center justify-evenly gap-4 w-[500px] max-w-full p-4 border border-colorTwo dark:border-colorOne
 
             ${logInLoading && "select-none cursor-not-allowed"}`}
           onSubmit={handleSubmit(logIn_Form_Handler)}

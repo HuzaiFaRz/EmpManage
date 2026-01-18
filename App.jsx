@@ -1,21 +1,21 @@
 import { Fragment } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import LogIn from "../Auth/LogIn.jsx";
-import DashBoard from "../DashBoard/DashBoard.jsx";
-import Employee_Add from "../Employee-CRUD/Employee_Add.jsx";
-import Emp_Manage from "../Emp-Manage/EmpManage.jsx";
-import Auth_Provider from "../Utilities/Auth_Provider.jsx";
+import LogIn from "./src/Auth/LogIn.jsx";
+import DashBoard from "./src/DashBoard/DashBoard.jsx";
+import Employee_Add from "./src/Employee-CRUD/Employee_Add.jsx";
+import Emp_Manage from "./src/Emp-Manage/EmpManage.jsx";
+import Auth_Provider from "./src/Utilities/Auth_Provider.jsx";
 import { ToastContainer } from "react-toastify";
-import Employees from "../Employee-CRUD/Employees.jsx";
-import Employee_Edit from "../Employee-CRUD/Employee_Edit.jsx";
-import Protected_Route from "../Protected-Routes/Protected_Route.jsx";
-import Profile from "../Profile/Profile.jsx";
-import LayOut from "../LayOut/LayOut.jsx";
-import SignUp from "../Auth/SignUp.jsx";
-import Users from "../Users/Users.jsx";
-import Feedback_Form from "../Feedback-Form/Feedback_Form.jsx";
-import All_Feedback from "../All-Feedback/All_Feedback.jsx";
-import Wrong_Route from "../Components/Wrong_Route.jsx";
+import Employees from "./src/Employee-CRUD/Employees.jsx";
+import Employee_Edit from "./src/Employee-CRUD/Employee_Edit.jsx";
+import Protected_Route from "./src/Protected-Routes/Protected_Route.jsx";
+import Profile from "./src/Profile/Profile.jsx";
+import LayOut from "./src/LayOut/LayOut.jsx";
+import SignUp from "./src/Auth/SignUp.jsx";
+import Users from "./src/Users/Users.jsx";
+import Feedback_Form from "./src/Feedback-Form/Feedback_Form.jsx";
+import All_Feedback from "./src/All-Feedback/All_Feedback.jsx";
+import Wrong_Route from "./src/Components/Wrong_Route.jsx";
 
 const App = () => {
   return (
