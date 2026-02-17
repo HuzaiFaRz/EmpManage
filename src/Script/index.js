@@ -16,6 +16,7 @@ const ThemeDarkToLight =
 const rejectMessage = (message) => {
   toast.error(message, MessageStyle);
 };
+
 const resolveMessage = (message) => {
   toast.success(message, MessageStyle);
 };

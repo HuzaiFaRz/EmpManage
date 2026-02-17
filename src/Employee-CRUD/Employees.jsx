@@ -43,8 +43,6 @@ const Employees = () => {
   const { setEditEmployeeId, isAdminLogged } = AuthUseContext();
   const navigate = useNavigate();
 
-  console.log(employees);
-
   useEffect(() => {
     document.title = "EmpManage | | Employees";
 

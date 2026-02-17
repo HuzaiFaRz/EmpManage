@@ -6,6 +6,7 @@ const EmpManage = () => {
   useEffect(() => {
     document.title = "EmpManage";
   }, []);
+
   return (
     <Fragment>
       <div className="w-full h-dvh flex flex-col justify-center items-center gap-5">
